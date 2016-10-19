@@ -3,51 +3,8 @@ layout: post
 title: Java 中的比较运算符
 categories: Java
 description: Java 中的比较运算符里有没有什么陷阱呢？
-keywords: Java, Compare
+keywords: Java
 ---
-
-小菜鸟才学习 Java 没多久，这天要写一个存储长整形的列表，于是这样写：
-
-```java
-List<long> listData = new ArrayList<long>();
-```
-
-这时 Android Studio 不高兴了，在 long 下面打上红色波浪线，然后提示小菜鸟：
-
-```
-Type argument cannot be of primitive type
-```
-
-赶紧进 List 的定义看了一下，发现类型参数必须是引用类型，不能用原始数值类型。
-
-于是就改为：
-
-```java
-List<Long> listData = new ArrayList<Long>();
-```
-
-这时 Android Studio 不说什么了，于是小菜鸟很开心地继续往下写，往 listData 里添加了一些 long 类型的值，并且给它们排了序，如果发现它们中有相邻并且不相等的元素后执行一些操作：
-
-```java
-int size = listData.size();
-for (int i = 1; i < size; i++) {
-    if (listData.get(i - 1) != listData.get(i)) {
-        // do something
-    }
-}
-```
-
-这时 Android Studio 貌似又不高兴了，在 `!=` 上加上黄底色，指上去一看显示：
-
-```
-Number objects are compared using '!=', not 'equals()'
-```
-
-小菜鸟不高兴了，我比较两个 long 类型都非得用方法，不能用操作符了吗？（他脑子里的定势一直以为 List 的类型参数还是 long 呢），Java 就是比 C++ 矫情。想想 IDE 这里只是警告，并不是错误，所以也不加理会继续完成他的代码去了。
-
-但是到后来怎么运行结果都不太对，明明给 List 里添加的元素里有相等的，有些情况下应该不进入 if 才对，可是却每次比较完都进了 if。百思不得其解之后想起了 Android Studio 的警告，然后把 `!=` 改成 `!list.get(i -1).equals(listData.get(i))`，立马就好了。
-
-小菜鸟惭愧极了，基础不牢靠啊，赶紧翻出自己的 Java 入门书对应的章节看了一下，看完才恍然大悟，原来 Java 里的比较运算符里还有这么多小细节呢……不是把 C++ 里的经验直接照搬过来就行了的。
 
 ### Java 比较运算符里的一些细节
 
