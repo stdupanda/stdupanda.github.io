@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 关于博客
+title: 关于
 description: 不断学习不断进步
 keywords: 关于
 comments: false
@@ -47,4 +47,5 @@ permalink: /about/
     {% endfor %}
 </div>
 
+---
 Fored from [mzlogin](https://github.com/mzlogin/mzlogin.github.io) 2016-09-19, 基于 [DONGChuan](http://dongchuan.github.io/) 修改
