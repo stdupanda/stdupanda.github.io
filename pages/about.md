@@ -1,14 +1,14 @@
 ---
 layout: page
-title: About
+title: 关于博客
 description: 不断学习不断进步
-keywords: stdupanda
+keywords: 关于
 comments: false
 menu: 关于
 permalink: /about/
 ---
 
-使用github的博客，记录自己工作和生活的点点滴滴
+用github的博客记录自己工作和生活的点点滴滴
 
 
 ## 时常记住
@@ -22,7 +22,7 @@ permalink: /about/
 
 * GitHub：[@stdupanda](https://github.com/stdupanda)
 * 博客：[{{ site.title }}]({{ site.url }})
-* QQ: [@笑口常开](1197591680)
+* QQ：[@笑口常开](1197591680)
 
 ## Skill Keywords
 
@@ -47,4 +47,4 @@ permalink: /about/
     {% endfor %}
 </div>
 
-Fored from [mzlogin](https://github.com/mzlogin/mzlogin.github.io)2016-09-19,基于 [DONGChuan](http://dongchuan.github.io/) 修改
+Fored from [mzlogin](https://github.com/mzlogin/mzlogin.github.io) 2016-09-19, 基于 [DONGChuan](http://dongchuan.github.io/) 修改
