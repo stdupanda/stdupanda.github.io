@@ -1,6 +1,7 @@
 ##使用github的博客，记录自己工作和生活的点点滴滴
 
-Fored from [mzlogin](https://github.com/mzlogin/mzlogin.github.io)2016-09-19,基于 [DONGChuan](http://dongchuan.github.io/) 修改
+Fored from [mzlogin](https://github.com/mzlogin/mzlogin.github.io)2016-09-19,基于 [DONGChuan](http://dongchuan.github.io/) 修改,Wiki部分的`记多少快捷键会让脑袋爆炸呢？`保留自原作者[mzlogin](https://github.com/mzlogin/mzlogin.github.io)2016-09-19
+
 ## 概览
 
 * [Fork 指南](#fork-指南)
