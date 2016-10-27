@@ -6,7 +6,7 @@ description: Fragment中使用ButterKnife初始化view失败，查找问题并�
 keywords: Android, ButterKnife
 ---
 
-之前文章里写的**Android基本界面模型**文章里提过，在Fragment中使用ButterKnife初始化view会提示空指针异常的问题，经过哥们们一起分析，是我的一个缺乏经验的低级操作失误。
+之前文章里写的 **[Android基本界面模型](https://stdupanda.github.io/2016/10/19/viewpager+fragment%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E5%B7%A6%E5%8F%B3%E6%BB%91%E5%8A%A8/)** 里提过，在Fragment中使用ButterKnife初始化view会提示空指针异常的问题，经过哥们们一起分析，是我的一个缺乏经验的低级操作失误。
 
 # 代码中调用正常
 
@@ -60,7 +60,9 @@ public class FancyFragment extends Fragment {
 # Gradle 依赖库和插件配置
 不再列举，详情见[butterknife官网](http://jakewharton.github.io/butterknife/ "Go to butterknife！")
 
-- 重点在这里！在 Android Studio 的 Gradle 配置中中添加 ButterKnife 的依赖库！
+重点在这里！
+
+## 在 Gradle 配置中添加 ButterKnife 的依赖库
 
 `compile 'com.jakewharton:butterknife:8.4.0'`
 
@@ -83,7 +85,7 @@ apt 'com.jakewharton:butterknife-compiler:8.4.0'
 
 和通过IDE添加的结果不太一致，相差在 `compile`&`apt` 手动查了下,最后确定如下流程：
 
-1. In your **project-level** `build.gradle` file:
+-  In your **project-level** `build.gradle` file:
 
 ```
 buildscript {
@@ -96,7 +98,7 @@ buildscript {
 }
 ```
 
-2. In your **module-level** `build.gradle` file:
+-  In your **module-level** `build.gradle` file:
 
 ```
 apply plugin: 'android-apt'
@@ -110,7 +112,8 @@ dependencies {
    apt 'com.jakewharton:butterknife-compiler:8.0.1'
 }
 ```
-3. modify **module-level** `build.gradle` file
+
+-  modify **module-level** `build.gradle` file
 
 ```
 apply plugin: 'com.android.application'
