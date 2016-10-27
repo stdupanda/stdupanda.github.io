@@ -39,9 +39,9 @@ navs:
     href: /wiki/
     label: 维基
 
-#  -
-#    href: /links/
-#    label: 链接
+ # -
+ #   href: /links/
+ #   label: 链接
 
   -
     href: /about/
@@ -59,7 +59,7 @@ markdown: kramdown
 kramdown:
     input: GFM
 highlighter: rouge
-paginate: 8
+paginate: 6
 lsi: false
 quiet: false
 excerpt_separator: "\n\n"
