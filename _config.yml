@@ -59,7 +59,7 @@ markdown: kramdown
 kramdown:
     input: GFM
 highlighter: rouge
-paginate: 6
+paginate: 3
 lsi: false
 quiet: false
 excerpt_separator: "\n\n"
@@ -97,7 +97,7 @@ comments_provider: duoshuo
 duoshuo_username: stdupanda
 disqus_username: stdupanda
 # 在使用 disqus 的时候可点击显示多说评论框
-#lazy_load_duoshuo: true
+lazy_load_duoshuo: true
 
 # ---------------- #
 #    Analytics     #
