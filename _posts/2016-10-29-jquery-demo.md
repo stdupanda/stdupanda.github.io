@@ -50,7 +50,8 @@ $(".intro");//所有 class="intro" 的元素
 $(".intro.demo");//所有 <p> 元素
 $("p");//所有 class="intro" 且 class="demo" 的元素
 ```
-## element:
+
+## element
 
 ```javascript
 $("th,td,.intro");//所有带有匹配选择的元素
@@ -64,11 +65,13 @@ $("tr:odd");//所有奇数 <tr> 元素
 
 ```javascript
 $("th,td,.intro");//所有带有匹配选择的元素
-jQuery("#div_ChgProcess_PropForm0").find("textarea,input,select").each(function(){
+//以下为遍历指定id内子元素
+jQuery("#div").find("textarea,input,select").each(function(){
     jQuery(this).attr("disabled","disabled");
 });
+//.children(selector) 方法是返回匹配元素集合中每个元素的所有子元素（仅儿子辈）。参数可选，添加参数表示通过选择器进行过滤，对元素进行筛选。
+//.find(selector)方法是返回匹配元素集合中每个元素的后代。参数是必选的，可以为选择器、jQuery对象可元素来对元素进行筛选。
 ```
-
 
 # select 相关操作
 
