@@ -108,8 +108,8 @@ android {
 }
 
 dependencies {
-   compile 'com.jakewharton:butterknife:8.0.1'
-   apt 'com.jakewharton:butterknife-compiler:8.0.1'
+   compile 'com.jakewharton:butterknife:8.4.0'
+   apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }
 ```
 
@@ -134,3 +134,4 @@ compile与apt区别：是compile会编译到最后的APK或library，apt不会�
 
 ## 牢记！！！
 **完全对照官网说明写！省的浪费时间！**
+2016-11-05附记：版本更新后，直接按照作者github的readme文件内提示进行操作即可

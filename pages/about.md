@@ -23,7 +23,7 @@ permalink: /about/
 
 * GitHub：[@stdupanda](https://github.com/stdupanda)
 * 博客：[{{ site.title }}]({{ site.url }})
-* QQ：[@笑口常开](1197591680)
+* QQ：笑口常开 1197591680
 
 ## Skill Keywords
 
