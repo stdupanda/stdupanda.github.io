@@ -1,8 +1,8 @@
 ---
 layout: post
-title: 没用过的<%!%>标签
+title: 没用过的<%!...%>标签
 categories: Jsp
-description: 没用过的<%!%>标签
+description: 没用过的<%!...%>标签
 keywords: Jsp, java
 ---
 
