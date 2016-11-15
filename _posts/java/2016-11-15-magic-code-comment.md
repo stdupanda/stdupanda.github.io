@@ -3,10 +3,12 @@ layout: post
 title: 有格调的头注释
 categories: Java
 description: 有格调的头注释
-keywords: Java
+keywords: Java, 注释
 ---
 
 整理了一些日常发现的比较有格调的头注释，内容来自网络，如有侵权请联系本人github邮箱。
+
+[知乎...](//https://www.zhihu.com/question/29962541 "see detail in zhihu")
 
 # BlessYourCode
 
