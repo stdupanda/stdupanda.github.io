@@ -1,7 +1,7 @@
 ---
 layout: post
 title: jquery常见用法整理
-categories: jquery
+categories: javascript
 description: 整理jquery的常见用法
 keywords: jquery, javascript
 ---

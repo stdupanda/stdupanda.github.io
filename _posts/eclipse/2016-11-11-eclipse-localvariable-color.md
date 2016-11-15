@@ -3,7 +3,7 @@ layout: post
 title: Eclipse设置local variable颜色
 categories: Eclipse
 description: 低版本的eclipse设置local variable颜色
-keywords: Jsp, java
+keywords: Jsp, java, Eclipse
 ---
 
 用过高版本的Eclipse Luna,Mars,感觉速度上去了，界面好看了，编程的时候发现local variable颜色不再是黑色，而是酱黄色，感觉不错。于是想在Myeclipse10里也这样子设置下，记录下设置过程。
