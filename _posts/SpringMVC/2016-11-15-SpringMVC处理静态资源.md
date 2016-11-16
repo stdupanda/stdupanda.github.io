@@ -15,7 +15,7 @@ keywords: SpringMVC, java, JavaWeb, Spring, SSM
 
 # 两种经典解决办法
 
-**注：**推荐在`web.xml`中设置 `org.springframework.web.servlet.DispatcherServlet` 时设置 `<load-on-startup>` 为0或较小的值，使其拥有较高的优先级
+**注：**务必在`web.xml`中 `org.springframework.web.servlet.DispatcherServlet` <servlet>设置中增加 `<load-on-startup>` 并设置为0或较小的值，使其拥有较高的优先级。
 
 ## 使用 `<mvc:default-servlet-handler />`
 
