@@ -59,3 +59,9 @@ tvDel.setOnClickListener(new View.OnClickListener() {//删除
 
 alertDialog.show();
 ```
+
+## `Instant Run` 导致 `SugarORM` 初始化表异常
+
+项目中使用了 `SugarORM` 作为数据库操作中间件，但是在初始化安装 apk 的时候总是报错，之前没开启 `Instant Run` 的时候就正常。
+
+网上查了下，第一次安装 apk 时关闭 `Android Studio` 的 `Instant Run` 就OK了。
