@@ -32,6 +32,13 @@ void showExpireDate() {//点击弹出日期选择对话框
 
 ```
 
+## 使用完键盘后切换界面隐藏键盘
+
+使用完键盘后切换到新的界面有时候键盘不会隐藏，可以使用下面的代码隐藏键盘
+
+```java
+getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+```
 # 业务处理相关
 
 ## `getResources().getColor()` 过时
