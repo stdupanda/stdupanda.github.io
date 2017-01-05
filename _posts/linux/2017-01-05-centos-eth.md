@@ -43,8 +43,7 @@ nameserver 8.8.8.8
 
 # 重启网卡
 
-`/etc/init.d/network restart`
-
-`service network restart`
-
+```
+/etc/init.d/network restart
+service network restart
 ------
