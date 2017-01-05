@@ -46,4 +46,6 @@ nameserver 8.8.8.8
 ```
 /etc/init.d/network restart
 service network restart
+systemctl restart network
+systemctl status network -l
 ------
