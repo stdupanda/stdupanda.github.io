@@ -48,4 +48,5 @@ nameserver 8.8.8.8
 service network restart
 systemctl restart network
 systemctl status network -l
+```
 ------
