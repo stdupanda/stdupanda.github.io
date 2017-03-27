@@ -8,7 +8,7 @@ keywords: Java, mysql, oracle, 分页
 
 - oracle
 
-```
+```sql
 
 -- 分页查询格式：
 SELECT *
