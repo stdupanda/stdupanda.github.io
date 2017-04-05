@@ -1,6 +1,6 @@
 使用github的博客，记录自己工作和生活的点点滴滴
 
-[Live View :](https://stdupanda.github.io)
+[点击访问博客主页](https://stdupanda.github.io)
 
 [jekyll博客主题们](http://jekyllthemes.org/)
 
