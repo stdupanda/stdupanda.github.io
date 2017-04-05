@@ -74,3 +74,19 @@ alertDialog.show();
 项目中使用了 `SugarORM` 作为数据库操作中间件，但是在初始化安装 apk 的时候总是报错，之前没开启 `Instant Run` 的时候就正常。
 
 网上查了下，第一次安装 apk 时关闭 `Android Studio` 的 `Instant Run` 就OK了。
+
+## `TextView` 内文本太长不换行
+
+TextView 中加入如下配置项： 
+
+```xml
+android:maxLines="1"
+android:ellipsize="end"
+<!-- 
+`android:ellipsize` 设置项如下
+"start"   --省略号显示在开头   "...pedia"
+"end"     --省略号显示在结尾   "encyc..."
+"middle"  —-省略号显示在中间   "en...dia"
+"marquee" -–以横向滚动方式显示(需获得当前焦点时)
+ -->
+```
