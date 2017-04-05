@@ -1,4 +1,6 @@
-##使用github的博客，记录自己工作和生活的点点滴滴
+使用github的博客，记录自己工作和生活的点点滴滴
+
+[Live View :](https://stdupanda.github.io)
 
 [jekyll博客主题们](http://jekyllthemes.org/)
 

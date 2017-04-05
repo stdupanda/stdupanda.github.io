@@ -3,7 +3,7 @@ layout: post
 title: 常见Android开发问题整理
 categories: Android
 description: 常见Android开发问题整理
-keywords: Android
+keywords: android, Android,
 ---
 
 记录常见Android开发问题并整理其解决方法。
