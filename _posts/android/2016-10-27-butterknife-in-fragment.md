@@ -3,7 +3,7 @@ layout: post
 title: Fragment中使用ButterKnife初始化view失败
 categories: Android
 description: Fragment中使用ButterKnife初始化view失败，查找问题并解决
-keywords: Android, ButterKnife
+keywords: android, Android, ButterKnife
 ---
 
 之前文章里写的 **[Android基本界面模型](https://stdupanda.github.io/2016/10/19/viewpager+fragment%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E5%B7%A6%E5%8F%B3%E6%BB%91%E5%8A%A8/)** 里提过，在Fragment中使用ButterKnife初始化view会提示空指针异常的问题，经过哥们们一起分析，是我的一个缺乏经验的低级操作失误。

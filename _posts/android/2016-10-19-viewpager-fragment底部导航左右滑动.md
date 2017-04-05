@@ -3,7 +3,7 @@ layout: post
 title: Android基本界面模型
 categories: Android
 description: Android底部导航，左右滑动开发程序
-keywords: android, java
+keywords: android, Android, java
 ---
 
 由于工作需要和兴趣爱好，java web开发的同时自己也喜欢写一些Android小app，最近整理了这个Viewpager+Fragment实现的底部导航、左右滑动的小基本框架，方便以后再开发类似app的时候直接拿来就用

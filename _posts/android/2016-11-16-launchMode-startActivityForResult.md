@@ -3,7 +3,7 @@ layout: post
 title: startActivityForResult+onActivityResult
 categories: Android
 description: startActivityForResult启动新的Activity时onActivityResult立刻执行
-keywords: Android, launchMode
+keywords: android, Android, launchMode
 ---
 
 在测试项目时发现一个问题，具体描述如下：
