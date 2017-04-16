@@ -32,6 +32,7 @@ mysql的方式比较多
 
 ```sql
 -- 传统方式，越往后分页 LIMIT 语句的偏移量就会越大，速度也会明显变慢
+SELECT * FROM table LIMIT m,n    // 从第m+1条开始取n条记录
 SELECT * FROM table LIMIT 5,10;  // 检索记录行 6-15
 SELECT * FROM table LIMIT 95,-1; // 检索记录行 96-last.
 SELECT * FROM table LIMIT 5;     //检索前 5 个记录行
