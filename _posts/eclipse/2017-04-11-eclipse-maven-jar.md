@@ -1,6 +1,6 @@
 ---
 layout: post
-title: maven package executeable jar 
+title: eclipse中用maven插件打包可执行jar
 categories: Eclipse
 description: eclipse maven 打包可执行 jar 包
 keywords: maven, jar, java, Eclipse
