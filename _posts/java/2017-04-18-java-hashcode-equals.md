@@ -5,6 +5,9 @@ categories: Java
 description: Java 中的hashcode & equals分析
 keywords: Java, 集合
 ---
+
+为 java 集合框架做基础，先掌握 `hashCode()` 和 `equals()` 接口。
+
 # equals  方法定义
 
 Object类中默认的实现方式是：return this == obj，也就是说，只有this 和 obj引用同一个对象，才会返回true。
