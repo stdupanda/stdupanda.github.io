@@ -91,14 +91,15 @@ dog.equals(animal) 返回false
 
 运算方法参考表
 
-| 重要字段var的类型       | 他生成的hash分量 |
-| ----------------------|:-------------  :|
-| byte, char, short,int | (int)var|
+| 重要字段var的类型     | 他生成的hash分量   |
+| ---------------------:|:-------------   :  |
+| byte, char, short,int | (int) var
 | long                  |(int)(var ^ (var >>> 32))
-| boolean               | var?1:0
+| boolean               | var ? 1 : 0
 | float                 | Float.floatToIntBits(var)
-| double                | long bits = Double.doubleToLongBits(var);分量 = (int)(bits ^ (bits >>> 32));
-| 引用类型               | (null == var ? 0 : var.hashCode())
+| double                | long bits = Double.doubleToLongBits(var);
+| double                | 分量 = (int)(bits ^ (bits >>> 32));
+| 引用类型              | (null == var ? 0 : var.hashCode())
 
 # 分布式应用 & 哈希码
 
