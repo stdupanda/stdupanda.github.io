@@ -29,29 +29,29 @@ Servlet 3.0 开始提供注解、异步调用、直接文件上传支持。之�
 loadOnStartup = 1, //启动项
 initParams = { @WebInitParam(name = "initParameter", value = "张三") })
 public class MyServlet extends HttpServlet {
-	private static final long serialVersionUID = 671597860608235344L;
+    private static final long serialVersionUID = 671597860608235344L;
 
-	public ChangePinServlet() {
-		super();
-	}
+    public ChangePinServlet() {
+        super();
+    }
 
-	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		// doPost(request, response);
-		String initParameter = getInitParameter("initParameter"); // 张三
-	}
+    @Override
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        // doPost(request, response);
+        String initParameter = getInitParameter("initParameter"); // 张三
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		//
-	}
+    @Override
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        //
+    }
 
-	@Override
-	public void init() throws ServletException {
-		//
-	}
+    @Override
+    public void init() throws ServletException {
+        //
+    }
 }
 ```
 
@@ -83,19 +83,19 @@ asyncContext.setTimeout(10*1000L);
 //新起线程开始异步调用，start方法不是阻塞式的，它会新起一个线程来启动Runnable接口，之后主程序会继续执行
 asyncContext.start(new Runnable() {
 
-	@Override
-	public void run() {
-		try {
-			Thread.sleep(5*1000L);
-			writer.println("异步调用之后输出的内容。");
-			writer.flush();
-			//异步调用完成，如果异步调用完成后不调用complete()方法的话，异步调用的结果需要等到设置的超时
-			//时间过了之后才能返回到客户端。
-			asyncContext.complete();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(5*1000L);
+            writer.println("异步调用之后输出的内容。");
+            writer.flush();
+            //异步调用完成，如果异步调用完成后不调用complete()方法的话，异步调用的结果需要等到设置的超时
+            //时间过了之后才能返回到客户端。
+            asyncContext.complete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 });
 writer.println("可能在异步调用前输出，也可能在异步调用之后输出，因为异步调用会新起一个线程。");
