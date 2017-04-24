@@ -18,38 +18,38 @@ keywords: maven, jar, java, Eclipse
 
 <!-- 配置打包begin -->
 <build>
-	<plugins>
-		<plugin>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>2.3.2</version>
-			<configuration>
-				<source>1.8</source>
-				<target>1.8</target>
-			</configuration>
-		</plugin>
-		<plugin>
-			<artifactId> maven-assembly-plugin </artifactId>
-			<configuration>
-				<descriptorRefs>
-					<descriptorRef>jar-with-dependencies</descriptorRef>
-				</descriptorRefs>
-				<archive>
-					<manifest>
-						<mainClass>cn.xz.qrmaker.view.MainWindow</mainClass>
-					</manifest>
-				</archive>
-			</configuration>
-			<executions>
-				<execution>
-					<id>make-assembly</id>
-					<phase>package</phase>
-					<goals>
-						<goal>single</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
-	</plugins>
+    <plugins>
+        <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
+        </plugin>
+        <plugin>
+            <artifactId> maven-assembly-plugin </artifactId>
+            <configuration>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+                <archive>
+                    <manifest>
+                        <mainClass>cn.xz.qrmaker.view.MainWindow</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
 </build>
 <!-- 配置打包end -->
 ```

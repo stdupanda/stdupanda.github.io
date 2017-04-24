@@ -31,11 +31,11 @@ Object类中默认的实现方式是：return this == obj，也就是说，只�
 ```java
 // 1 ok
 if ((obj == null) || (obj.getClass() != this.getClass())) {
-	return false;
+    return false;
 }
 // 2 error
 if (!(obj instanceof Test)) {
-	return false; // avoid 避免！
+    return false; // avoid 避免！
 }
 ```
 它违反了公约中的对称原则。
