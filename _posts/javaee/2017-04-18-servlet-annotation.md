@@ -8,9 +8,9 @@ keywords: java, web, javaweb, JavaWeb, servlet
 
 Servlet 3.0 开始提供注解、异步调用、直接文件上传支持。之前一直是在 `web.xml` 中配置 `<servlet>` 进行开发，写文整理下。
 
-# 使用 @WebServlet 代替 `web.xml
+# 使用 @WebServlet 代替 `web.xml`
 
-关于 `@WebServlet` 参数：
+## 关于 `@WebServlet` 参数：
 
 |属性名         |类型           |属性描述|
 |---------------|:--------------|--------|
@@ -23,6 +23,8 @@ Servlet 3.0 开始提供注解、异步调用、直接文件上传支持。之�
 |displayName    |String         |servlet的显示名,等价于<display-name>标签.
 |description    |String         |servlet的描述信息,等价于<description>标签.
 
+## 示例
+
 ```java
 
 @WebServlet(name = "MyServlet", value = {"/my/1"},
@@ -30,10 +32,6 @@ loadOnStartup = 1, //启动项
 initParams = { @WebInitParam(name = "initParameter", value = "张三") })
 public class MyServlet extends HttpServlet {
     private static final long serialVersionUID = 671597860608235344L;
-
-    public ChangePinServlet() {
-        super();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request,
@@ -60,6 +58,8 @@ public class MyServlet extends HttpServlet {
 
 # 异步调用
 
+## asyncSupported 属性
+
 对于一个 Servlet 如果要支持异步调用的话我们必须指定其 `asyncSupported`属性为 `true`（默认是 `false`）
 ```
 @WebServlet(
@@ -69,10 +69,12 @@ loadOnStartup = 1, //启动项
 initParams = { @WebInitParam(name = "initParameter", value = "张三") })
 ```
 
+## 示例
+
 实例如下：
 
 ```java
-// in dpget/doPost method
+// in doGet/doPost method
 final PrintWriter writer = resp.getWriter();
 writer.println("异步之前输出的内容。");
 writer.flush();
@@ -86,7 +88,7 @@ asyncContext.start(new Runnable() {
     @Override
     public void run() {
         try {
-            Thread.sleep(5*1000L);
+            Thread.sleep(5 * 1000L);
             writer.println("异步调用之后输出的内容。");
             writer.flush();
             //异步调用完成，如果异步调用完成后不调用complete()方法的话，异步调用的结果需要等到设置的超时
