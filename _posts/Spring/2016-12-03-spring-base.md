@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Spring 简介
-categories: Jdbc
+categories: Spring
 description: Spring 简介
 keywords: Spring, java
 ---
