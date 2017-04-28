@@ -10,7 +10,7 @@ keywords: Spring, redis, Redis
 
 # 相关配置
 
-## 配置 `pom.xml` 引入 `jedis`,`spring-data-redis`
+## 配置 `maven`
 
 ```xml
 <dependencyManagement>
@@ -48,6 +48,12 @@ keywords: Spring, redis, Redis
     <property name="maxWaitMillis" value="1000" />
     <property name="testOnBorrow" value="true" />
 </bean>
+<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+    <constructor-arg index="0" ref="poolConfig" />
+    <constructor-arg index="1" value="${redis_ip}" />
+    <constructor-arg index="2" value="${redis_port}" />
+    <constructor-arg index="3" value="${redis_timeout}" />
+</bean>
 <bean id="connFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
     <property name="hostName" value="127.0.0.1" />
     <property name="port" value="6379" />
@@ -70,6 +76,17 @@ keywords: Spring, redis, Redis
 
 # 业务中调用
 
+## `jedis` 方式
+
+```java
+Jedis jedis = jedisPool.getResource();
+jedis.select(Integer.parseInt(DB_INDEX));
+jedis.exists(key);
+jedis.get(key);
+String result = jedis.set(key, value);
+```
+
+## `spring-data-redis` 方式
 ```java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -130,7 +147,7 @@ public class CommonRedisDao {
 }
 ```
 
-或者
+或者泛型方式
 
 ```java
 import java.util.concurrent.TimeUnit;
