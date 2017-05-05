@@ -87,6 +87,7 @@ String result = jedis.set(key, value);
 ```
 
 ## `spring-data-redis` 方式
+
 ```java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -97,16 +98,16 @@ import org.springframework.stereotype.Component;
 public class InfoDAO {
 
     @Autowired
-    private RedisTemplate<String, UserLogonInfo> redisTemplate;
+    private RedisTemplate<String, UserInfo> redisTemplate;
 
-    public UserLogonInfo get(String id) {
-        ValueOperations<String, UserLogonInfo> opsForValue = redisTemplate.opsForValue();
+    public UserInfo get(String id) {
+        ValueOperations<String, UserInfo> opsForValue = redisTemplate.opsForValue();
         return opsForValue.get(id);
     }
 
-    public void setUserLogonInfo(String key, UserLogonInfo userLogonInfo) {
-        ValueOperations<String, UserLogonInfo> opsForValue = redisTemplate.opsForValue();
-        opsForValue.set(key, userLogonInfo);
+    public void setUserLogonInfo(String key, UserInfo userInfo) {
+        ValueOperations<String, UserInfo> opsForValue = redisTemplate.opsForValue();
+        opsForValue.set(key, userInfo);
     }
 }
 ```
