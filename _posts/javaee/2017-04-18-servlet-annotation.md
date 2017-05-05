@@ -6,7 +6,9 @@ description: 使用注解进行 Servlet 开发
 keywords: java, web, javaweb, JavaWeb, servlet
 ---
 
-Servlet 3.0 开始提供注解、异步调用、直接文件上传支持。之前一直是在 `web.xml` 中配置 `<servlet>` 进行开发，写文整理下。
+Servlet 3.0 开始提供注解、异步调用、直接文件上传支持。
+
+之前一直是在 `web.xml` 中配置 `<servlet>` 进行开发，写文整理下。
 
 # 使用 @WebServlet 代替 `web.xml`
 
