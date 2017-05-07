@@ -6,7 +6,7 @@ description: 使用注解进行 WebSocket 开发
 keywords: java, web, javaweb, JavaWeb, WebSocket, websocket
 ---
 
-JavaEE 7 对 WebSocket 的支持，使用 注解开发，Tomcat 7.0.5版本以上，JSR356 规范。
+JavaEE 7 对 WebSocket 的支持，使用注解开发，Tomcat 7.0.5版本以上，JSR356 规范。
 
 ```java
 package websocket;
@@ -32,7 +32,7 @@ public class WebsocketDemo {
 
     /**
      * 返回消息给远程客户端
-     * 
+     *
      * @param message
      * @throws IOException
      */
@@ -43,7 +43,7 @@ public class WebsocketDemo {
 
     /**
      * 打开连接时触发
-     * 
+     *
      * @param reqId
      * @param session
      */
@@ -61,7 +61,7 @@ public class WebsocketDemo {
 
     /**
      * 收到客户端消息时触发
-     * 
+     *
      * @param reqId
      * @param message
      * @return
@@ -73,7 +73,7 @@ public class WebsocketDemo {
 
     /**
      * 异常时触发
-     * 
+     *
      * @param reqId
      * @param userCode
      * @param session
@@ -88,7 +88,7 @@ public class WebsocketDemo {
 
     /**
      * 关闭连接时触发
-     * 
+     *
      * @param reqId
      * @param userCode
      * @param session
