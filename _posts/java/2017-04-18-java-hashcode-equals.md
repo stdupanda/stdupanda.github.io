@@ -14,14 +14,14 @@ Object类中默认的实现方式是：return this == obj，也就是说，只�
 而我们往往需要用equals来判断 2个对象是否等价，而非验证他们的唯一性。这样我们在实现自己的类时，就要重写equals.
 
 > 判定 equals() 原则如下：
- 
-> - 对于任何非 null 对象引用值 x， x.equals(x) 应返回 true。
-> - 对于任何非 null 对象引用值 x、y，x.equals(y) 应返回 true 当且仅当 y.equals(x) 返回 true. 
-> - 对于任何非 null 对象引用值 x、y、z，若 x.equals(y) 返回 true 且 y.equals(z) 返回 true, 则 x.equals(z) 应返回 true. 
-> - 对于任何非 null 对象引用值 x、y，在对象未改变的情况下 x.equals(y) 的返回值应永远返回 true 或永远返回 false。
-> - 对于任何非 null 对象引用值 x, x.equals(null) 应永远返回 false. 
-> -对于任何非 null 对象引用值 x、y，当且仅当 x and y 引用同一个对象 (x == y has the value true)时才返回 true
 
+> - 对于任何非 null 对象引用值 x， x.equals(x) 应返回 true。
+> - 对于任何非 null 对象引用值 x、y，x.equals(y) 应返回 true 当且仅当 y.equals(x) 返回 true.
+> - 对于任何非 null 对象引用值 x、y、z，若 x.equals(y) 返回 true 且 y.equals(z) 返回 true, 则 x.equals(z) 应返回 true.
+> - 对于任何非 null 对象引用值 x、y，在对象未改变的情况下 x.equals(y) 的返回值应永远返回 true 或永远返回 false。
+> - 对于任何非 null 对象引用值 x, x.equals(null) 应永远返回 false.
+> - 对于任何非 null 对象引用值 x、y，当且仅当 x and y 引用同一个对象 (x == y has the value true)时才返回 true(此句有问题，待查证)
+> - **The equals method for class Object implements the most discriminating possible equivalence relation on objects; that is, for any non-null reference values x and y, this method returns true if and only if x and y refer to the same object (x == y has the value true). **
 > **Note that it is generally necessary to override the hashCode() method whenever this method is overridden, so as to maintain the general contract for the hashCode method, which states that equal objects must have equal hash codes.**
 
 ## 一种错误
@@ -58,7 +58,7 @@ dog.equals(animal) 返回false
 
 > Returns a hash code value for the object. This method is supported for the benefit of hash tables such as those provided by java.util.HashMap. 返回该对象的哈希值。该方法为使用哈希表提升性能，例如java.util.Hashtable 提供的哈希表。
 
-> The general contract of hashCode is: 
+> The general contract of hashCode is:
 
 > - Whenever it is invoked on the same object more than once during an execution of a Java application, the hashCode method must consistently return the same integer, provided no information used in equals comparisons on the object is modified. This integer need not remain consistent from one execution of an application to another execution of the same application. 同一个对象每次调用 hashCode 方法都返回同一个整数值，前提是将对象进行 equals 比较时所用的信息没有被修改。一个对象的哈希值在程序一次运行中不变，不同运行过程中允许不一样。
 > - If two objects are equal according to the equals(Object) method, then calling the hashCode method on each of the two objects must produce the same integer result. 若两个对象的 equals() 方法返回 true，则两个对象的哈希值一定相同
