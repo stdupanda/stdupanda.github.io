@@ -14,12 +14,12 @@ keywords: web, tcp, ip, tcpip, http, HTTP
 
 - Domain Name System，是一种组织成域层次结构的计算机和网络服务命名系统，它用于TCP/IP网络，它所提供的服务是用来将主机名和域名转换为IP地址的工作
 
-关于本地缓存
+## 关于本地缓存
 
 - `%SystemRoot%\system32\drivers\etc\hosts` & `/etc/hosts`，优先级最高
 - `ipconfig /flushdns` & `source /etc/hosts` 刷新 dns 缓存
 
-解析流程
+## DNS 解析流程
 
 1. 在浏览器中输入 qq.com 域名，浏览器会先检测浏览器的缓存内是否有此记录，有则直接访问，若没有则操作系统会先检查自己本地的 hosts 文件是否有这个网址映射关系，如果有，就先调用这个IP地址映射，完成域名解析。
 2. 如果 hosts 里没有这个域名的映射，则查找本地 DNS 解析器缓存，是否有这个网址映射关系，如果有，直接返回，完成域名解析。
@@ -31,13 +31,15 @@ keywords: web, tcp, ip, tcpip, http, HTTP
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/dns_analysis.jpg)
 
-关于 DNS 加速
+## 关于 DNS 加速
 - 可使用 cdn 加速，例如可以根据每台机器的负载量，该机器离用户地理位置的距离等返回给不同用户不同 IP 地址。这种过程就是 DNS 负载均衡，又叫做 DNS 重定向。大家耳熟能详的 CDN(Content Delivery Network)就是利用 DNS 的重定向技术，DNS 服务器会返回一个跟用户最接近的点的 IP 地址给用户，CDN 节点的服务器负责响应用户的请求，提供所需的内容。
 - DNS 预获取，可以在 html head 部分加上
+
 ```html
 <meta http-equiv="x-dns-prefetch-control" content="on">
 <link rel="dns-prefetch" href="//t11.baidu.com"/>
 ```
+
 且尽量放在网页前面，推荐放在 `<meta charset="UTF-8">` 后面。
 
 # TCP 连接
