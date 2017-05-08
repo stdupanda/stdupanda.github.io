@@ -20,11 +20,11 @@ Object类中默认的实现方式是：return this == obj，也就是说，只�
 > - 对于任何非 null 对象引用值 x、y、z，若 x.equals(y) 返回 true 且 y.equals(z) 返回 true, 则 x.equals(z) 应返回 true.
 > - 对于任何非 null 对象引用值 x、y，在对象未改变的情况下 x.equals(y) 的返回值应永远返回 true 或永远返回 false。
 > - 对于任何非 null 对象引用值 x, x.equals(null) 应永远返回 false.
-> - 对于任何非 null 对象引用值 x、y，当且仅当 x and y 引用同一个对象 (x == y has the value true)时才返回 true(此句有问题，待查证)
+
 > - **The equals method for class Object implements the most discriminating possible equivalence relation on objects; that is, for any non-null reference values x and y, this method returns true if and only if x and y refer to the same object (x == y has the value true). **
 > **Note that it is generally necessary to override the hashCode() method whenever this method is overridden, so as to maintain the general contract for the hashCode method, which states that equal objects must have equal hash codes.**
 
-## 一种错误
+## 一种错误写法
 
 有些程序员使用下面的第二种写法替代第一种比较运行时类的写法。应该避免这样做。
 
@@ -40,7 +40,7 @@ if (!(obj instanceof Test)) {
 ```
 它违反了公约中的对称原则。
 
-例如：假设Dog扩展了Aminal类。
+例如：假设 Dog 扩展了 Aminal 类。
 
 ```java
 dog instanceof Animal // 得到true
@@ -52,7 +52,7 @@ animal instanceof Dog // 得到false
 animal.equls(dog) 返回true
 dog.equals(animal) 返回false
 
-仅当Test类没有子类的时候，这样做才能保证是正确的。
+仅当 Test 类没有子类的时候，这样做才能保证是正确的。
 
 # hashCode 方法定义
 
@@ -106,7 +106,7 @@ dog.equals(animal) 返回false
 
 # 分布式应用 & 哈希码
 
-** 在分布式应用中不要使用哈希码 **
+**在分布式应用中不要使用哈希码**
 
 一个远程对象可能与本地对象有不同的哈希码，即使这两个对象是相等的。
 
