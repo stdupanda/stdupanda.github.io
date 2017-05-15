@@ -109,6 +109,25 @@ Accept-Language: zh-CN,zh;q=0.8
 Cookie: BAIDUID=B2B5102089D00E736D0363BA9CF5870C:FG=1; BIDUPSID=B2B5102089D00E736D0363BA9CF5870C; PSTM=1486961211; Hm_lvt_12423ecbc0e2ca965d84259063d35238=1492074218; BD_UPN=12314353; MCITY=-131%3A
 ```
 
+### `Content-Type`
+
+`Content-Type` 表示后面的文档属于什么MIME类型。格式为： `Content-Type: [type]/[subtype]`。
+
+常见格式包括：
+
+| `Content-Type` | 文件扩展名 |
+|:---------------|:----------|
+|text/html|.html|
+|text/xml|.xml|
+|application/json|.json(JavaScript Object Notation)|
+|application/octet-stream|.二进制流|
+
+```java
+response.setContentType("application/octet-stream");//设置文件类型
+response.setHeader("Content-Disposition", "attachment;filename="+filename);//设置文件名
+response.setHeader("Content-Length", fileLength);//设置下载文件大小
+```
+
 ## 主体 body
 
 请求报文的主体主要保存 `POST`类型的参数，响应报文的主体主要保存响应内容数据。
