@@ -1,6 +1,6 @@
 ---
 layout: post
-title: git 常用命令总结
+title: git 提交时的换行符问题
 categories: git
 description: git 常用命令总结
 keywords: Python, Ubuntu, psutil

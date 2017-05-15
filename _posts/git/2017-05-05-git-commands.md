@@ -10,8 +10,10 @@ keywords: Python, Ubuntu, psutil
 
 | command                                              | desc |
 |:-----------------------------------------------------|:------------|
-| `git config <--global/system/local> -l`              | 查看<当前用户/系统/当前库>配置信息 |
+| `git config <--global/--system/--local> -l`              | 查看<当前用户/系统/当前库>配置信息 |
 | `git clone git@xxx.git`                              | 从远程主机克隆一个版本库 |
+| `git remote -v`                                      | 查看 git 远程库地址 |
+| `git remote show origin`                             | 查看远程库对应关系 |
 | `git branch`                                         | 查看本地分支               |
 | `git branch -a`                                      | 查看本地+远程分支 |
 | `git branch testing`                                 | 本地创建 testing 分支         |
