@@ -30,38 +30,38 @@ IE11 中处理返回的 json 数据时直接提示另存为，在其他浏览器
 
 ```xml
 <bean
-	class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+    class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
 <bean
-	class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-	<property name="messageConverters">
-		<list>
-			<bean
-				class="org.springframework.http.converter.StringHttpMessageConverter">
-				<property name="supportedMediaTypes">
-					<list>
-						<bean class="org.springframework.http.MediaType">
-							<constructor-arg index="0" value="text" />
-							<constructor-arg index="1" value="plain" />
-							<constructor-arg index="2" value="UTF-8" />
-						</bean>
-						<value>text/html;charset=UTF-8</value>
-					</list>
-				</property>
-			</bean>
+    class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+    <property name="messageConverters">
+        <list>
+            <bean
+                class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <bean class="org.springframework.http.MediaType">
+                            <constructor-arg index="0" value="text" />
+                            <constructor-arg index="1" value="plain" />
+                            <constructor-arg index="2" value="UTF-8" />
+                        </bean>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
 
-			<!-- 解析返回json -->
-			<bean
-				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-				<property name="supportedMediaTypes">
-					<list>
-						<value>text/html;charset=UTF-8</value>
-						<value>text/plain;charset=UTF-8</value>
-						<value>application/json;charset=UTF-8</value>
-					</list>
-				</property>
-			</bean>
-		</list>
-	</property>
+            <!-- 解析返回json -->
+            <bean
+                class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </list>
+    </property>
 </bean>
 ```
 
