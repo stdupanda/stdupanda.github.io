@@ -73,12 +73,39 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 测试注解
+ * 自定义注解
  */
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface MyAnnotation {
 	public String name() default "fieldName";
+}
+```
+
+## 测试类
+
+```java
+@MyAnnotation(name = "sss")
+public class Demo {
+
+	@MyAnnotation
+	private String str;
+
+	public String getStr() {
+		return str;
+	}
+
+	public void setStr(String str) {
+		this.str = str;
+	}
+
+	public static void main(String[] args) {
+		if (Demo.class.isAnnotationPresent(MyAnnotation.class)) {
+			MyAnnotation m = Demo.class.getAnnotation(MyAnnotation.class);
+			System.out.println(m);
+			System.out.println(m.name());
+		}
+	}
 }
 ```
