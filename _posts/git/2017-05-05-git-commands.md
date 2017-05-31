@@ -10,10 +10,11 @@ keywords: Python, Ubuntu, psutil
 
 | command                                              | desc |
 |:-----------------------------------------------------|:------------|
-| `git config <--global/--system/--local> -l`              | 查看<当前用户/系统/当前库>配置信息 |
+| `git config <--global or --system or --local> -l`    | 查看<当前用户/系统/当前库>配置信息 |
 | `git clone git@xxx.git`                              | 从远程主机克隆一个版本库 |
 | `git remote -v`                                      | 查看 git 远程库地址 |
 | `git remote show origin`                             | 查看远程库对应关系 |
+| ......                                               | ...... |
 | `git branch`                                         | 查看本地分支               |
 | `git branch -a`                                      | 查看本地+远程分支 |
 | `git branch testing`                                 | 本地创建 testing 分支         |
@@ -27,6 +28,7 @@ keywords: Python, Ubuntu, psutil
 | `git push -u origin develop`                         | 推送本地库当前分支到origin远程仓库的develop远程分支        |
 | `git push -u origin :develop`                        | 删除origin远程仓库的develop远程分支        |
 | `git rm <file>`                                      | 从版本库中删除一个文件       |
+| `git reset    `                                      | .....       |
 | `git tag`                                            | 列出现有标签      |
 | `git tag 20170428.v.1.2`                             | 添加一个轻量级标签        |
 | `git push orign 20170428.v.1.2`                      | 推送标签到远程仓库        |
@@ -45,3 +47,10 @@ keywords: Python, Ubuntu, psutil
 /xxx/xx.properties~develop
 ```
 解决方式如下：
+
+
+`git` 命令参考网站：
+
+[git-scm中文版](https://git-scm.com/book/zh/v2 "https://git-scm.com/book/zh/v2")
+
+[git-scm英文版](https://git-scm.com/book/en/v2 "https://git-scm.com/book/en/v2")
