@@ -23,7 +23,7 @@ permalink: /about/
 
 * GitHub：[@stdupanda](https://github.com/stdupanda)
 * 博客：[{{ site.title }}]({{ site.url }})
-* QQ：笑口常开 1197591680 <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1197591680" target="class">加好友</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1197591680&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:1439990843:41" alt="点击这里给我发消息" title="点击这里给我发消息"></a>
+* QQ：1197591680 (<a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1197591680" title="点击加我 1197591680 为好友" target="class">笑口常开</a>)　<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1197591680&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:1439990843:41" alt="点击这里给我发消息" title="点击这里给我发消息"></a>
 
 
 ## Skill Keywords
