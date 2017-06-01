@@ -10,6 +10,20 @@ Servlet 3.0 开始提供注解、异步调用、直接文件上传支持。
 
 之前一直是在 `web.xml` 中配置 `<servlet>` 进行开发，写文整理下。
 
+# 注解整理
+
+|注解名称|对应含义|
+|----|----|
+|`@WebServlet`|该注解用来声明一个Servlet的配置|
+|`@WebListener`|该注解为Web应用程序上下文中不同类型的事件声明监听器|
+|`@WebInitParam`|该注解用来声明Servlet或是过滤器的中的初始化参数，通常配合 @WebServlet 或者 @WebFilter 使用|
+|`@WebFilter`|该注解用来声明一个Server过滤器|
+|`@ServletSecurity`|该注解标注在Servlet继承类上面，强制该HTTP协议请求遵循安全约束|
+|`@MultipartConfig`|该注解标注在Servlet上面，表示该Servlet希望处理的请求的 MIME 类型是 multipart/form-data|
+|`@HttpMethodConstraint`|指明不同类型请求的安全约束，和ServletSecurity 注解中描述HTTP协议方法类型的注释不同|
+|`@HttpConstraint`|该注解代表所有HTTP方法的应用请求的安全约束，和ServletSecurity注释中定义的HttpMethodConstraint安全约束不同|
+|`@HandlesTypes`|该注解用来表示一组传递给ServletContainerInitializer的应用类|
+
 # 使用 @WebServlet 代替 `web.xml`
 
 ## 关于 `@WebServlet` 参数：
