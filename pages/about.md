@@ -53,6 +53,6 @@ permalink: /about/
 
 [jekyll博客主题们](http://jekyllthemes.org/)
 
-Fored from [mzlogin](https://github.com/mzlogin/mzlogin.github.io) 2016-09-19, 基于 [DONGChuan](http://dongchuan.github.io/) 修改。
+Forked from [mzlogin](https://github.com/mzlogin/mzlogin.github.io) 2016-09-19, 基于 [DONGChuan](http://dongchuan.github.io/) 修改。
 
 其中 Wiki 部分保留原作者内容。
