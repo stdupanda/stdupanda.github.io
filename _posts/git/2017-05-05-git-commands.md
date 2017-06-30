@@ -18,15 +18,15 @@ keywords: Python, Ubuntu, psutil
 | `git branch`                                         | 查看本地分支               |
 | `git branch -a`                                      | 查看本地+远程分支 |
 | `git branch testing`                                 | 本地创建 testing 分支         |
-| `git branch -d develop`                              | 切换到 develop 分支 |
+| `git branch -d develop`                              | 删除 develop 分支 |
 | `git checkout develop`                               | 切换到 develop 分支 |
 | `git status`                                         | 查看本地仓库当前状态  |
 | `git add <path>`                                     | 将工作文件修改提交到本地暂存区  |
 | `git add -A(--all)`                                  | statges **All**       |
 | `git add .`                                          | stages new and modified,without deleted      |
 | `git add -u`                                         | stages deleted and modified,without new       |
-| `git push -u origin develop`                         | 推送本地库当前分支到origin远程仓库的develop远程分支        |
-| `git push -u origin :develop`                        | 删除origin远程仓库的develop远程分支        |
+| `git push -u origin develop`                         | 推送本地库当前分支到 origin 远程仓库的 develop 远程分支        |
+| `git push -u origin :develop`                        | 删除 origin 远程仓库的 develop 远程分支        |
 | `git rm <file>`                                      | 从版本库中删除一个文件       |
 | `git reset    `                                      | .....       |
 | `git tag`                                            | 列出现有标签      |
