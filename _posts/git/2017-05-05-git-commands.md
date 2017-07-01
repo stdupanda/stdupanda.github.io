@@ -10,11 +10,12 @@ keywords: Python, Ubuntu, psutil
 
 | command                                              | desc |
 |:-----------------------------------------------------|:------------|
+| **配置部分** ||
 | `git config <--global or --system or --local> -l`    | 查看<当前用户/系统/当前库>配置信息 |
 | `git clone git@xxx.git`                              | 从远程主机克隆一个版本库 |
 | `git remote -v`                                      | 查看 git 远程库地址 |
 | `git remote show origin`                             | 查看远程库对应关系 |
-| ......                                               | ...... |
+| **分支** |
 | `git branch`                                         | 查看本地分支               |
 | `git branch -a`                                      | 查看本地+远程分支 |
 | `git branch testing`                                 | 本地创建 testing 分支         |
@@ -38,6 +39,8 @@ keywords: Python, Ubuntu, psutil
 | `git merge --no-ff testing`                          | 把 testing 分支合并到当前分支,并保存之前的分支历史**推荐用法** |
 | `git show`                                           | 查看此标签信息       |
 | `git pull`                                           | 同步更新最新代码到本地|
+| `git log --graph`                  | 查看分支合并图 |
+| `git log --graph --pretty=oneline --abbrev-commit` | 查看分支合并图 |
 
 - `git merge` 冲突解决
 
@@ -48,6 +51,31 @@ keywords: Python, Ubuntu, psutil
 ```
 解决方式如下：
 
+```
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+Git has a mutable index called stage.
+Git tracks changes of files.
+<<<<<<< branch1
+Creating a new branch is quick & simple.
+=======
+Creating a new branch is quick AND simple.
+>>>>>>> branch2
+```
+在执行了 `git merge branch_name` 之后，合并时有冲突的文件在打开后就出现类似的内容，其中可以看到 `git` 用 `<<<<<<<`，`=======`，`>>>>>>>` 标记出不同分支的内容，我们修改如下后保存：
+
+`Creating a new branch is quick and simple.`
+
+然后提交：`git add xx.properties`,`git commit -m "conflict fixed"`,这样冲突就解决了。
+
+`git log --graph --pretty=oneline --abbrev-commit` 查看分支合并情况。
+
+
+
+
+然后应该分析如何处理其中的问题，进行处理，将 `git` 添加的这部分进行处理，
+
+---
 
 `git` 命令参考网站：
 
