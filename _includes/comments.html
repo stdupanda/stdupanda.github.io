@@ -76,5 +76,12 @@
       <!-- 多说公共JS代码 END -->
       <!-- Duoshuo Comment END -->
       {% endif %}
+    {% when 'youyan' %}
+      <!-- UY BEGIN -->
+      <div id="uyan_frame"></div>
+      {% if site.youyan_username %}
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid={{ site.youyan_username }}"></script>
+      {% endif %}
+      <!-- UY END -->
   {% endcase %}
 {% endif %}
