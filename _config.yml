@@ -90,7 +90,6 @@ zhihu_username: stdupanda
 # ---------------- #
 #      Comments    #
 # ---------------- #
-comments:true
 # support provider: disqus, duoshuo,youyan
 comments_provider: youyan
 # !!!重要!!! 请修改下面两个用户名为你自己申请的
