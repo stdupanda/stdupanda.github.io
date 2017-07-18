@@ -51,3 +51,9 @@ keywords: maven, jetty, java
 
 
 之后就可以用 jetty 启动项目了。
+
+------
+
+使用 idea 时， `pom.xml` 的配置与上边的一致即可，然后进行以下步骤：
+
+在 `Maven Projects` 视图中依次执行 `clean:clean` `jetty:run` 即可。

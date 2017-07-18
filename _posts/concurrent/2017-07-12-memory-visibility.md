@@ -1,6 +1,6 @@
 ---
 layout: post
-title: java 并发编程内存可见性问题
+title: java 并发编程01内存可见性问题
 categories: 并发编程
 description: java 并发编程时的内存可见性问题
 keywords: java, concurrent, memory
