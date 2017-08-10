@@ -29,7 +29,8 @@ keywords: Python, Ubuntu, psutil
 | `git push -u origin develop`                         | 推送本地库当前分支到 origin 远程仓库的 develop 远程分支        |
 | `git push -u origin :develop`                        | 删除 origin 远程仓库的 develop 远程分支        |
 | `git rm <file>`                                      | 从版本库中删除一个文件       |
-| `git reset    `                                      | .....       |
+| `git reset HEAD file  `                              | 把暂存区的修改撤销掉（unstage）重新放回工作区       |
+| `git reset --hard HEAD`                              | 彻底会退到某一个版本，本地源码也会变为上一个源码内容      |
 | `git tag`                                            | 列出现有标签      |
 | `git tag 20170428.v.1.2`                             | 添加一个轻量级标签        |
 | `git push orign 20170428.v.1.2`                      | 推送标签到远程仓库        |
