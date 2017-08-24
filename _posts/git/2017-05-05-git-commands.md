@@ -26,11 +26,14 @@ keywords: Python, Ubuntu, psutil
 | `git add -A(--all)`                                  | statges **All**       |
 | `git add .`                                          | stages new and modified,without deleted      |
 | `git add -u`                                         | stages deleted and modified,without new       |
+| `git commit -m "here is infos."`                     | 提交代码，有注释       |
 | `git push -u origin develop`                         | 推送本地库当前分支到 origin 远程仓库的 develop 远程分支        |
 | `git push -u origin :develop`                        | 删除 origin 远程仓库的 develop 远程分支        |
 | `git rm <file>`                                      | 从版本库中删除一个文件       |
-| `git reset HEAD file  `                              | 把暂存区的修改撤销掉（unstage）重新放回工作区       |
-| `git reset --hard HEAD`                              | 彻底会退到某一个版本，本地源码也会变为上一个源码内容      |
+| `git reset <commit-id>(即：git reset –mixed)  `      | 把commit撤销，本地文件不受影响       |
+| `git reset HEAD <file>  `                            | 把暂存区的修改撤销掉（unstage）重新放回工作区       |
+| `git reset --hard HEAD`                              | 彻底回退到某一个版本，本地源码也会变为上一个源码内容      |
+| `git push origin <分支名> --force`                   | 彻底回退到某一个版本然后提交到远程库，删除对应的提交记录      |
 | `git tag`                                            | 列出现有标签      |
 | `git tag 20170428.v.1.2`                             | 添加一个轻量级标签        |
 | `git push orign 20170428.v.1.2`                      | 推送标签到远程仓库        |
