@@ -33,6 +33,7 @@ keywords: Python, Ubuntu, psutil
 | `git reset <commit-id>(即：git reset –mixed)  `      | 把commit撤销，本地文件不受影响       |
 | `git reset HEAD <file>  `                            | 把暂存区的修改撤销掉（unstage）重新放回工作区       |
 | `git reset --hard HEAD`                              | 彻底回退到某一个版本，本地源码也会变为上一个源码内容      |
+| `git revert xxxxx`                                   | 撤销指定的版本，本次撤销也会作为一次提交进行保存；版本会递增，不影响之前提交的内容|
 | `git push origin <分支名> --force`                   | 彻底回退到某一个版本然后提交到远程库，删除对应的提交记录      |
 | `git tag`                                            | 列出现有标签      |
 | `git tag 20170428.v.1.2`                             | 添加一个轻量级标签        |
@@ -41,10 +42,13 @@ keywords: Python, Ubuntu, psutil
 | `git push orign :refs/tags/20170428.v.1.2`           | 删除远程仓库的标签        |
 | `git merge testing`                                  | 把 testing 分支合并到当前分支,不会保留历史分支记录~~_不推荐_~~ |
 | `git merge --no-ff testing`                          | 把 testing 分支合并到当前分支,并保存之前的分支历史**推荐用法** |
+| `git merge --no-ff testing`                          |可以保存你之前的分支历史。能够更好的查看 merge历史，以及branch 状态，具体比较可见随后配图|
 | `git show`                                           | 查看此标签信息       |
 | `git pull`                                           | 同步更新最新代码到本地|
 | `git log --graph`                  | 查看分支合并图 |
 | `git log --graph --pretty=oneline --abbrev-commit` | 查看分支合并图 |
+
+![git merge --no-ff](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_merge_no_ff.png)
 
 - `git merge` 冲突解决
 
