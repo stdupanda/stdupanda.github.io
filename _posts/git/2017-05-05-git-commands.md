@@ -28,7 +28,9 @@ keywords: Python, Ubuntu, psutil
 | `git add -u`                                         | stages deleted and modified,without new       |
 | `git commit -m "here is infos."`                     | 提交代码，有注释       |
 | `git push -u origin develop`                         | 推送本地库当前分支到 origin 远程仓库的 develop 远程分支        |
+| `git push --force -u origin develop`                 | 本地版本比远程版本低时，强制推送更新远程版本（比如本地先git reset --hard再强制更新远程版本）        |
 | `git push -u origin :develop`                        | 删除 origin 远程仓库的 develop 远程分支        |
+| `git push -u origin --delete develop`                | 同上        |
 | `git rm <file>`                                      | 从版本库中删除一个文件       |
 | `git reset <commit-id>(即：git reset –mixed)  `      | 把commit撤销，本地文件不受影响       |
 | `git reset HEAD <file>  `                            | 把暂存区的修改撤销掉（unstage）重新放回工作区       |
