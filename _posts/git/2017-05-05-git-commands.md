@@ -12,9 +12,12 @@ keywords: Python, Ubuntu, psutil
 |:-----------------------------------------------------|:------------|
 | **配置部分** ||
 | `git config <--global or --system or --local> -l`    | 查看<当前用户/系统/当前库>配置信息 |
+| `git config -e`                                      | vi 修改<当前 库>配置信息 |
 | `git clone git@xxx.git`                              | 从远程主机克隆一个版本库 |
+| `git clone ssh://git@xxx:10122/xxx.git`              | 从远程主机克隆一个版本库 |
 | `git remote -v`                                      | 查看 git 远程库地址 |
 | `git remote show origin`                             | 查看远程库对应关系 |
+| `git remote add origin ssh://git@xxx:10122/xxx.git`  | 新增远程库     |
 | **分支** |
 | `git branch`                                         | 查看本地分支               |
 | `git branch -a`                                      | 查看本地+远程分支 |
@@ -22,6 +25,7 @@ keywords: Python, Ubuntu, psutil
 | `git branch -d develop`                              | 删除 develop 分支 |
 | `git checkout develop`                               | 切换到 develop 分支 |
 | `git status`                                         | 查看本地仓库当前状态  |
+| **提交、推送** |
 | `git add <path>`                                     | 将工作文件修改提交到本地暂存区  |
 | `git add -A(--all)`                                  | statges **All**       |
 | `git add .`                                          | stages new and modified,without deleted      |
@@ -31,6 +35,7 @@ keywords: Python, Ubuntu, psutil
 | `git push --force -u origin develop`                 | 本地版本比远程版本低时，强制推送更新远程版本（比如本地先git reset --hard再强制更新远程版本）        |
 | `git push -u origin :develop`                        | 删除 origin 远程仓库的 develop 远程分支        |
 | `git push -u origin --delete develop`                | 同上        |
+| **版本管理** |
 | `git rm <file>`                                      | 从版本库中删除一个文件       |
 | `git reset <commit-id>(即：git reset –mixed)  `      | 把commit撤销，本地文件不受影响       |
 | `git reset HEAD <file>  `                            | 把暂存区的修改撤销掉（unstage）重新放回工作区       |
