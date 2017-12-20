@@ -54,6 +54,8 @@ keywords: Python, Ubuntu, psutil
 | `git pull`                                           | 同步更新最新代码到本地|
 | `git log --graph`                  | 查看分支合并图 |
 | `git log --graph --pretty=oneline --abbrev-commit` | 查看分支合并图 |
+| **其他操作** |
+| `git rev-parse HEAD`                                 | 查看 HEAD 对应的 SHA-1 版本号 |
 
 ![git merge --no-ff](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_merge_no_ff.png)
 
