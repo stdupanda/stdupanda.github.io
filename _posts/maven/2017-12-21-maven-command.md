@@ -37,8 +37,8 @@ keywords: maven, java, Eclipse
 
 语法: `mvn [options] [<goal(s)>] [<phase(s)>]`
 
-`mvn archetype:generate -DgroupId=xx -DartifactId=xx -DarchetypeArtifactId=maven-archetype-quickstart`
-可以创建项目。
+创建项目: `mvn archetype:generate -DgroupId=xx -DartifactId=xx -DarchetypeArtifactId=maven-archetype-quickstart`
+
 archetypeArtifactId 类型一般有: `maven-archetype-webapp`, `maven-archetype-quickstart`,
 
 | 命令 | 解释 |
