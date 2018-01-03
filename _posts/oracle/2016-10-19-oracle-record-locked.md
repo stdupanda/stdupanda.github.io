@@ -1,7 +1,7 @@
 ---
 layout: post
 title: oracle record is locked by another user
-categories: oracle
+categories: Oracle
 description: record is locked by another user
 keywords: oracle, database
 ---
