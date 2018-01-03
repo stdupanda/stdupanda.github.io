@@ -12,6 +12,8 @@ keywords: linux
 
 一般是是位于 `/etc/sysconfig/network-scripts/` 路径，网卡名字是 `ifcfg-ethxxxxxx` 或者 `ifcfg-enp0s3xxxx`，使用 vim 打开配置文件进行修改。
 
+如 `vi /etc/sysconfig/network-scripts/eth0` 修改第一块网卡
+
 ```
 TYPE=Ethernet
 BOOTPROTO=dhcp
@@ -29,6 +31,7 @@ IPV6_ADDR_GEN_MODE=stable-privacy
 NAME=enp0s3
 UUID=a51b993f-89b1-40ef-be1b-0e0f41576fad
 DEVICE=enp0s3
+# 配置自动启动
 ONBOOT=yes
 ```
 
@@ -36,14 +39,14 @@ ONBOOT=yes
 
 `vim /etc/resolv.conf `
 
-```
+```bash
 nameserver 202.96.134.133
 nameserver 8.8.8.8
 ```
 
 # 重启网卡
 
-```
+```bash
 /etc/init.d/network restart
 service network restart
 systemctl restart network
