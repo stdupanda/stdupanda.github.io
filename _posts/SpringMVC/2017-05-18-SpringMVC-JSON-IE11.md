@@ -1,7 +1,7 @@
 ---
 layout: post
 title: SpringMVC返回 json 格式对象时在 IE11 异常
-categories: SpringMVC
+categories: Spring MVC
 description: SpringMVC返回 json 格式对象时在 IE11 异常
 keywords: SpringMVC, java, JavaWeb, Spring, SSM
 ---

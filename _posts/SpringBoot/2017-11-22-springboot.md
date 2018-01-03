@@ -1,7 +1,7 @@
 ---
 layout: post
 title: springboot 001
-categories: Java
+categories: Spring Boot
 description: socket 相关整理
 keywords: Java, socket, 套接字, nio, NIO, java
 ---

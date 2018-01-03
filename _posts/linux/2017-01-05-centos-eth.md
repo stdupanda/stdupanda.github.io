@@ -1,7 +1,7 @@
 ---
 layout: post
 title: centos7 网卡配置
-categories: linux
+categories: Linux
 description: centos7 网卡配置
 keywords: linux
 ---
