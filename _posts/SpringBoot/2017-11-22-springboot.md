@@ -1,11 +1,13 @@
 ---
 layout: post
 title: springboot 001
-categories: Spring Boot
+categories: SpringBoot
 description: socket 相关整理
 keywords: Java, socket, 套接字, nio, NIO, java
 ---
+
 SpringBoot 个人整理
+
 java -jar xx.jar --debug
 
 only add one @EnableAutoConfiguration.
