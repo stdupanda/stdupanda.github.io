@@ -1,7 +1,7 @@
 ---
 layout: post
 title: SpringMVC对静态资源的处理
-categories: Spring MVC
+categories: SpringMVC
 description: SpringMVC对静态资源的处理
 keywords: SpringMVC, java, JavaWeb, Spring, SSM
 ---
