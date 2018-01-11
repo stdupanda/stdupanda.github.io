@@ -2,11 +2,11 @@
 layout: post
 title: SpringBoot 系列 00 一个简单的 Spring Boot 工程
 categories: SpringBoot
-description: socket 相关整理
-keywords: Java, socket, 套接字, nio, NIO, java
+description: SpringBoot 系列
+keywords: Java, spring, springboot, java, boot
 ---
 
-基本的 Spring Boot 工程, 集成了 Spring MVC 
+基本的 Spring Boot 工程, 集成了 Spring MVC 模块.
 
 # 介绍
 
@@ -30,13 +30,7 @@ Home page: [https://github.com/spring-projects/spring-boot](https://github.com/s
 
 按照 Spring Boot 的**规范**进行开发, 效率真是提升了很多.
 
-java -jar xx.jar --debug
-
-only add one @EnableAutoConfiguration.
-
-recommend that you add it to your primary @Configuration class.
-
-@SpringBootApplication  annotation  is  equivalent  to  using  @Configuration,@EnableAutoConfiguration and @ComponentScan with their default attributes
+> only add one `@EnableAutoConfiguration` recommend that you add it to your primary `@Configuration` class.
 
 # 工程结构
 
@@ -78,6 +72,8 @@ public class Application {
 	}
 }
 ```
+
+> `@SpringBootApplication`  annotation  is  equivalent  to  using  `@Configuration`, `@EnableAutoConfiguration` and `@ComponentScan` with their default attributes.
 
 ## 实际结构
 
@@ -273,11 +269,12 @@ public class DemoController {
 > - `build-info`: generate a build information that can be used by the Actuator.
 
 ```shell
-# 直接运行
+# 直接运行 run,start,stop,repackage,build-info,help
 mvn springboot:run
 # 打包
 mvn clean package
 java -jar xx_app.jar
+java -jar xx_app.jar --debug
 # 也可以打包成 executeable jar 设置为 Linux 服务.
 ```
 
