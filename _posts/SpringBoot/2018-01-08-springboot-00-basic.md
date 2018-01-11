@@ -1,12 +1,12 @@
 ---
 layout: post
-title: springboot 001
+title: SpringBoot 系列 00 一个简单的 Spring Boot 工程
 categories: SpringBoot
 description: socket 相关整理
 keywords: Java, socket, 套接字, nio, NIO, java
 ---
 
-SpringBoot 系列 00 - 一个简单的 Spring Boot 工程
+基本的 Spring Boot 工程, 集成了 Spring MVC 
 
 # 介绍
 
@@ -26,7 +26,9 @@ Home page: [https://github.com/spring-projects/spring-boot](https://github.com/s
 
 > Absolutely no code generation and no requirement for XML configuration
 
-按照 Spring Boot 的规范进行开发, 效率真是提升了不止一个档次.
+以上摘自官网介绍.
+
+按照 Spring Boot 的**规范**进行开发, 效率真是提升了很多.
 
 java -jar xx.jar --debug
 
@@ -139,6 +141,7 @@ sb00
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+		<!-- https://docs.spring.io/spring-boot/docs/1.5.9.RELEASE/reference/htmlsingle/ -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -250,5 +253,32 @@ public class DemoController {
 }
 ```
 
+# 运行
+
+## 在 IDE 中运行
+
+- `IntelliJ IDEA` 中可以直接识别出 Spring Boot 工程.
+- `Eclipse` 建议安装 `Spring Tool Suite`, `Ansi Console`, `DevStyle` 等插件, 然后可以右键 `Run As -> Spring Boot App`.
+
+## maven 运行
+
+使用 `Spring Boot Maven Plugin`. 官网链接: [https://docs.spring.io/spring-boot/docs/current/maven-plugin/usage.html](https://docs.spring.io/spring-boot/docs/current/maven-plugin/usage.html "https://docs.spring.io/spring-boot/docs/current/maven-plugin/usage.html")
+
+> The plugin provides several goals to work with a Spring Boot application:
+
+> - `repackage`: create a jar or war file that is auto-executable. It can replace the regular artifact or can be attached to the build lifecycle with a separate classifier.
+
+> - `run`: run your Spring Boot application with several options to pass parameters to it.
+> - `start` and `stop`: integrate your Spring Boot application to the integration-test phase so that the application starts before it.
+> - `build-info`: generate a build information that can be used by the Actuator.
+
+```shell
+# 直接运行
+mvn springboot:run
+# 打包
+mvn clean package
+java -jar xx_app.jar
+# 也可以打包成 executeable jar 设置为 Linux 服务.
+```
 
 具体代码参见 [https://github.com/stdupanda/spring-boot-demo](https://github.com/stdupanda/spring-boot-demo "https://github.com/stdupanda/spring-boot-demo")
