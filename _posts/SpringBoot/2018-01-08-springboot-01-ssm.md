@@ -3,7 +3,7 @@ layout: post
 title: SpringBoot 系列 01 SSM-Redis-schedule-properties
 categories: SpringBoot
 description: SpringBoot 系列
-keywords: Java, spring, springboot, java, boot
+keywords: Java, spring, springboot, java, boot, mybatis
 ---
 
 一个集成了 SSM-Redis-schedule-properties 的 Spring Boot 工程.
@@ -48,7 +48,6 @@ sb01/
             └── cn
                 └── xz
                     └── ApplicationTests.java
-
 ```
 # 代码实例
 
@@ -163,7 +162,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.1.241:3306/hce_guiyang?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
     username: root
-    password: Cec@123456
+    password: xxx
   redis:
     host: 192.168.1.233
     port: 6379
