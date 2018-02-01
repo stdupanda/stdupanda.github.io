@@ -51,7 +51,8 @@ keywords: Python, Ubuntu, psutil
 | `git merge --no-ff testing`                          | 把 testing 分支合并到当前分支,并保存之前的分支历史**推荐用法** |
 | `git merge --no-ff testing`                          |可以保存你之前的分支历史。能够更好的查看 merge历史，以及branch 状态，具体比较可见随后配图|
 | `git show`                                           | 查看此标签信息       |
-| `git pull`                                           | 同步更新最新代码到本地|
+| `git pull`                                           | 同步更新最新代码到本地， 相当于 `git fetch, git merge` |
+| `git pull --rebase`                                  | 相当于 `git fetch, git rebase` | 
 | `git log --graph`                  | 查看分支合并图 |
 | `git log --graph --pretty=oneline --abbrev-commit` | 查看分支合并图 |
 | **其他操作** |
