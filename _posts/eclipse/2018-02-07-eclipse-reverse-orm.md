@@ -11,3 +11,5 @@ keywords: eclipse, Eclipse
 全文如下：
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/eclipse_orm.jpg)
+
+转自: http://blog.sina.com.cn/s/blog_8adb05b7010182qb.html
