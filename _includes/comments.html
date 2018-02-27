@@ -83,5 +83,23 @@
         <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid={{ site.youyan_username }}"></script>
       {% endif %}
       <!-- UY END -->
+    {% when 'gittalk' %}
+      <!-- gittalk BEGIN -->
+      {% if site.youyan_username %}
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+        <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+        <script type="text/javascript">
+            var gitalk = new Gitalk({
+              clientID: '{{gittalk.clientID}}',
+              clientSecret: '{{gittalk.clientSecret}}',
+              repo: '{{gittalk.repo}}',
+              owner: '{{gittalk.owner}}',
+              admin: ['{{gittalk.admin}}']
+            });
+            gitalk.render('gitalk-container');
+        </script>
+        <div id="gitalk-container"></div>
+      {% endif %}
+      <!-- gittalk END -->
   {% endcase %}
 {% endif %}
