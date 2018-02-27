@@ -91,11 +91,11 @@
         <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
         <script type="text/javascript">
             var gitalk = new Gitalk({
-              clientID: '{{ gitalk.clientID }}',
-              clientSecret: '{{ gitalk.clientSecret }}',
-              repo: '{{ gitalk.repo }}',
-              owner: '{{ gitalk.owner }}',
-              admin: ['{{ gitalk.admin }}']
+              clientID: '{{ site.gitalk.clientID }}',
+              clientSecret: '{{ site.gitalk.clientSecret }}',
+              repo: '{{ site.gitalk.repo }}',
+              owner: '{{ site.gitalk.owner }}',
+              admin: ['{{ site.gitalk.admin }}']
             });
             gitalk.render('gitalk-container');
         </script>
