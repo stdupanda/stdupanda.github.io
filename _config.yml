@@ -102,7 +102,7 @@ lazy_load_duoshuo: true
 
 gitalk:
     clientID: 8f17272c510f4e20dcc2
-    clientSecret: 8ffc21d695b5ea6f71bac780c6478a4a286dc60c
+    clientSecret: ba026b57038416b0cd334d4901dcdf226721a87e
     repo: ghpage_issue
     owner: stdupanda
     admin: stdupanda
