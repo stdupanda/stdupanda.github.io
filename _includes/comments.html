@@ -96,6 +96,7 @@
               repo: '{{ site.gitalk.repo }}',
               owner: '{{ site.gitalk.owner }}',
               perPage: 66,
+              id: window.location.pathname,
               admin: ['{{ site.gitalk.admin }}']
             });
             gitalk.render('gitalk-container');
