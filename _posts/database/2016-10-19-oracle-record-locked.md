@@ -1,9 +1,9 @@
 ---
 layout: post
 title: oracle record is locked by another user
-categories: Oracle
+categories: Database
 description: record is locked by another user
-keywords: oracle, database
+keywords: database, oracle
 ---
 
 今天连接一个远程oracle服务器操作的比较快但是网比较慢，结果在更新语句时提示 `record is locked by another user`,记录下解决办法。
