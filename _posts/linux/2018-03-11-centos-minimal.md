@@ -12,7 +12,7 @@ keywords: linux
 
 > 强烈建议直接使用 `setup` 命令去修改配置。
 
-> `yum install setuptool ntsysv system-config-network-tui iptables
+> `yum install setuptool ntsysv system-config-network-tui iptables`
 
 ## 修改网络配置
 
