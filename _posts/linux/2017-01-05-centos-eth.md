@@ -10,7 +10,7 @@ keywords: linux
 
 # 找到配置文件
 
-一般是是位于 `/etc/sysconfig/network-scripts/` 路径，网卡名字是 `ifcfg-ethxxxxxx` 或者 `ifcfg-enp0s3xxxx`，使用 vim 打开配置文件进行修改。
+一般是位于 `/etc/sysconfig/network-scripts/` 路径，网卡名字是 `ifcfg-ethxxxxxx` 或者 `ifcfg-enp0s3xxxx`，使用 vim 打开配置文件进行修改。
 
 如 `vi /etc/sysconfig/network-scripts/eth0` 修改第一块网卡
 
