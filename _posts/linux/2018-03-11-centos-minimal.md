@@ -79,4 +79,5 @@ wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-5.7.21-1.el6
 yum install mysql-*.rpm
 ```
 安装过程若无提示密码则尝试查看日志： `grep password` 即可。
+
 `mysql` 其余问题请参考： [MySQL 运维整理](https://stdupanda.github.io/2018/03/10/mysql/ "")
