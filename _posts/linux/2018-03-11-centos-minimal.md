@@ -10,7 +10,9 @@ keywords: linux
 
 # 网络连接异常
 
- > 强烈建议直接使用 `setup` 命令去修改配置。(`yum install setuptool` 即可安装此组件)
+> 强烈建议直接使用 `setup` 命令去修改配置。
+
+> `yum install setuptool ntsysv system-config-network-tui iptables
 
 ## 修改网络配置
 
