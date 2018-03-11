@@ -66,3 +66,17 @@ systemctl status network -l
 ```
 
 重启服务再 `ip addr`查看下配置是否已生效。
+
+# mysql
+
+## 安装
+
+```shell
+yum install wget
+wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.21-1.el6.x86_64.rpm-bundle.tar
+wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-5.7.21-1.el6.x86_64.rpm-bundle.tar
+#解压到某个路径，安装全部的 rpm 包
+yum install mysql-*.rpm
+```
+安装过程若无提示密码则尝试查看日志： `grep password` 即可。
+`mysql` 其余问题请参考： [MySQL 运维整理](https://stdupanda.github.io/2018/03/10/mysql/ "")
