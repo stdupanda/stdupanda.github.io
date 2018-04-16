@@ -26,7 +26,7 @@ keywords: maven, java, Eclipse
             <id>alimaven</id>
             <name>aliyun maven</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-            <mirrorOf>central</mirrorOf>
+            <mirrorOf>central</mirrorOf><!-- 此处需注意，可设置为 * 强制走此镜像 -->
         </mirror>
     </mirrors>
     <localRepository>D:/apache-maven-repository</localRepository>

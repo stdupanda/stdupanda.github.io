@@ -55,6 +55,7 @@ keywords: Python, Ubuntu, psutil
 | `git pull --rebase`                                  | 相当于 `git fetch, git rebase` | 
 | `git log --graph`                  | 查看分支合并图 |
 | `git log --graph --pretty=oneline --abbrev-commit` | 查看分支合并图 |
+| `git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative` | 查看分支合并图 |
 | **其他操作** |
 | `git rev-parse HEAD`                                 | 查看 HEAD 对应的 SHA-1 版本号 |
 

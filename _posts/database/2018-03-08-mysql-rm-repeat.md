@@ -42,3 +42,13 @@ DELETE p1 from TABLE p1, TABLE p2
 ```
 
 https://www.zhihu.com/question/33189744
+
+3、查找表中多余的重复记录（多个字段）
+select * from vitae a
+where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1)
+4、删除表中多余的重复记录（多个字段），只留有rowid最小的记录
+delete from vitae a
+where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1)
+and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)>1)
+
+http://www.jb51.net/article/23964.htm
