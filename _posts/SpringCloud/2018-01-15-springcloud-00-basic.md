@@ -1,9 +1,9 @@
 ---
 layout: post
 title: SpringCloud 系列 00 一个简单的 Spring Cloud Eureka Server 工程
-categories: SpringBoot
-description: SpringBoot 系列
-keywords: Java, spring, springboot, java, boot, springcloud, cloud, eureka
+categories: SpringCloud
+description: SpringCloud 系列
+keywords: Java, spring, springboot, java, boot, SpringCloud, cloud, eureka
 ---
 
 基本的 Spring Cloud Eureka Server 工程, 单实例.
