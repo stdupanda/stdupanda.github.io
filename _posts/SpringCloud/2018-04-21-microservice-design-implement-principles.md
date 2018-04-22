@@ -3,7 +3,7 @@ layout: post
 title: 微服务设计与实践原则
 categories: SpringCloud
 description: 微服务设计与实践原则
-keywords: web, micro, 微服务, design
+keywords: web, micro, design, service
 ---
 
 整理微服务设计与实践历程，共享给大家。
