@@ -1,7 +1,7 @@
 ---
 layout: post
 title: SpringMVC对静态资源的处理
-categories: SpringMVC
+categories: Spring
 description: SpringMVC对静态资源的处理
 keywords: SpringMVC, java, JavaWeb, Spring, SSM
 ---
@@ -10,7 +10,7 @@ keywords: SpringMVC, java, JavaWeb, Spring, SSM
 
 # 问题场景
 
-`web.xml`中配置了 SpringMVC 的 `org.springframework.web.servlet.DispatcherServlet` ，在html界面中访问静态资源文件时会出现404问题，同时 SpringMVC 后台警告 `No mapping found for HTTP request with URI [/xxx/xxx.js] in DispatcherServlet with name 'springmvc'-[org.springframework.web.servlet.DispatcherServlet.noHandlerFound` 
+`web.xml`中配置了 SpringMVC 的 `org.springframework.web.servlet.DispatcherServlet` ，在html界面中访问静态资源文件时会出现404问题，同时 SpringMVC 后台警告 `No mapping found for HTTP request with URI [/xxx/xxx.js] in DispatcherServlet with name 'springmvc'-[org.springframework.web.servlet.DispatcherServlet.noHandlerFound`
 
 
 # 两种经典解决办法
