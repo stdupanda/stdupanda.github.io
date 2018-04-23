@@ -10,7 +10,7 @@ keywords: web, micro, design, service
 
 # 微服务的描述
 
-The description of microserivce by *Martin Fowler*:
+The description of microserivce by *Martin Fowler* :
 
 - 根据业务模块划分服务种类。
 - 每个服务可以独立部署并且互相隔离。
