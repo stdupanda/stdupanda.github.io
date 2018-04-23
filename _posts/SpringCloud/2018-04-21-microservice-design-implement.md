@@ -90,15 +90,15 @@ AKF 扩展立方体： X-水平复制，即多实例集群负载、Z-数据分�
 
 - 基于领域模型拆分
 
-https://www.zhihu.com/question/24013141
+[https://www.zhihu.com/question/24013141](https://www.zhihu.com/question/24013141 "")
 
-https://blog.csdn.net/jek123456/article/details/54691456
+[https://blog.csdn.net/jek123456/article/details/54691456](https://blog.csdn.net/jek123456/article/details/54691456 "")
 
-https://blog.csdn.net/featuresoft/article/details/52496186
+[https://blog.csdn.net/featuresoft/article/details/52496186](https://blog.csdn.net/featuresoft/article/details/52496186 "")
 
-https://blog.csdn.net/huangshulang1234/article/details/78848420
+[https://blog.csdn.net/huangshulang1234/article/details/78848420](https://blog.csdn.net/huangshulang1234/article/details/78848420 "")
 
-https://blog.csdn.net/Gupaoxueyuan/article/details/79173292
+[https://blog.csdn.net/Gupaoxueyuan/article/details/79173292](https://blog.csdn.net/Gupaoxueyuan/article/details/79173292 "")
 
 > 标准化的功能，由底层服务为产品层提供标准能力支撑，具有强烈的个别业务特性化的功能，由产品层直接调用更底层的能力自己封装实现。
 
