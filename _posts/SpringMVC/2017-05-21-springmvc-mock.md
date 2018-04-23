@@ -1,7 +1,7 @@
 ---
 layout: post
 title: SpringMVC 的 mock 单元测试
-categories: SpringMVC
+categories: Spring
 description: SpringMVC 的 mock 单元测试
 keywords: SpringMVC, mock, test
 ---
