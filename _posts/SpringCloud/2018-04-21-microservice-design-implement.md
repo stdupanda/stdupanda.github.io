@@ -192,14 +192,13 @@ Service Mesh 的重试功能避免将其嵌入到业务代码，同时最后期�
 
 ### 工业产品
 
-业界 Service Mesh产品
 当前，业界主要有以下相关产品：
 
-Buoyant 的 linkerd，基于Twitter 的 Fingle，长期的实际产线运行经验及验证，支持 Kubernetes，DC/OS容器管理平台，CNCF官方支持的项目之一。
+Buoyant 的 linkerd，基于 Twitter 的 Fingle，长期的实际产线运行经验及验证，支持 Kubernetes，DC/OS 容器管理平台，CNCF 官方支持的项目之一。
 
-Lyft 的Envoy，7层代理及通信总线，支持7层 HTTP 路由、TLS、gRPC、服务发现以及健康监测等，也是 CNCF 官方支持项目之一。
+Lyft 的 Envoy，7 层代理及通信总线，支持 7 层 HTTP 路由、TLS、gRPC、服务发现以及健康监测等，也是 CNCF 官方支持项目之一。
 
-IBM、Google、Lyft 支持的Istio，一个开源的微服务连接、管理平台以及给微服务提供安全管理，支持 Kubernetes、Mesos等容器管理工具，其底层依赖于 Envoy。
+IBM、Google、Lyft 支持的 Istio，一个开源的微服务连接、管理平台以及给微服务提供安全管理，支持 Kubernetes、Mesos 等容器管理工具，其底层依赖于 Envoy。
 
 ### 总结
 
