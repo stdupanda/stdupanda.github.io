@@ -53,6 +53,8 @@ AuthorizedKeysCommandRunAs nobody
 
 ## 生成 RSA 证书
 
+`ssh-keygen -t rsa -b 4096` (`man ssh-keygen`)
+
 此处不再赘述服务器证书的生成过程。需要保证 `id_rsa.pub` 文件内容已存在于服务器的 `authorized_keys` 文件中。
 
 ## clone 项目到本地
