@@ -20,8 +20,8 @@ git --version
 ## 初始化 linux 账户
 
 ```shell
-id git
-useradd git
+id git # 判断此用户是否存在
+useradd git -b /home/git
 passwd git
 su git # 以 git 账户登录进行后续操作
 cd /home/git
