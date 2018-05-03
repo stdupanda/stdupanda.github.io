@@ -246,7 +246,12 @@ Spring Cloud 官网介绍如下：
 - Spring Cloud OpenFeign
 ....
 
-是在是太多了，我表示国外的开发者支持的很全面，互联网企业开发中涉及到的很多功能都在这里进行了良好的支持。
+配合上
+
+- Spring Boot Actuator
+- Spring Boot admin
+
+即可满足日常业务所需的功能。我觉得 Spring 全家桶对企业开发支持的很全面，互联网企业开发中涉及到的很多功能都在这里进行了良好的支持。
 
 
 ---
