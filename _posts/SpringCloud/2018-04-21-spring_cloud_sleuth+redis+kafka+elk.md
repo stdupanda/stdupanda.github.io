@@ -45,9 +45,9 @@ su elk
 
 下载 ELK 的安装包：
 
-https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.4.tar.gz
-https://artifacts.elastic.co/downloads/logstash/logstash-6.2.4.tar.gz
-https://artifacts.elastic.co/downloads/kibana/kibana-6.2.4-linux-x86_64.tar.gz
+- [elasticsearch-6.2.4](https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.4.tar.gz)
+- [logstash-6.2.4](https://artifacts.elastic.co/downloads/logstash/logstash-6.2.4.tar.gz)
+- [kibana-6.2.4-linux-x86_64](https://artifacts.elastic.co/downloads/kibana/kibana-6.2.4-linux-x86_64.tar.gz)
 
 # ELK 安装
 ## Elasticsearch
@@ -80,7 +80,7 @@ bootstrap.system_call_filter: false
 
 [https://www.elastic.co/guide/en/logstash/current/index.html](https://www.elastic.co/guide/en/logstash/current/index.html "官网教程链接")
 
-### logstash all
+### logstash 处理 redis, kafka, rabbitmq 输入源
 
 ```shell
 cd logstash-6.2.4
@@ -136,7 +136,7 @@ output {
 
 以上即配置 redis/kafka/rabbitmq 为总日志信息来源，elasticsearch 为 日志采集后发送的目的地。
 
-### logstash agent
+### logstash agent 采集日志文件
 
 ```shell
 vi config/my_logstash_agent.conf # 写入以下内容
@@ -173,7 +173,6 @@ output {
 }
 ```
 
-
 ## Kibana
 
 ```shell
@@ -190,13 +189,12 @@ kibana.index: ".kibana"
 curl http://localhost:5601
 ```
 
-
 以上即完成了 Kibana 的配置和启动。
 
-注意：若采用 logback 直接发送日志到 logstash agent 的方式，可在 logback 配置中增加如下的 appender：
+注意：若采用 logback 直接发送日志到 logstash agent 的方式，建议在 logback 配置中增加如下的 appender：
 
 ```xml
-<appender name="logstash2" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+<appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
     <remoteHost>127.0.0.1</remoteHost>
     <port>4567</port>
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -220,9 +218,8 @@ echo "done startting elk."
 
 # Kafka & Zookeeper
 
-http://mirrors.tuna.tsinghua.edu.cn/apache/kafka/1.1.0/kafka_2.11-1.1.0.tgz
-
-http://mirrors.shu.edu.cn/apache/zookeeper/stable/zookeeper-3.4.10.tar.gz
+- [kafka_2.11-1.1.0](http://mirrors.tuna.tsinghua.edu.cn/apache/kafka/1.1.0/kafka_2.11-1.1.0.tgz)
+- [zookeeper-3.4.10](http://mirrors.shu.edu.cn/apache/zookeeper/stable/zookeeper-3.4.10.tar.gz)
 
 ## 配置 Zookeeper
 
@@ -268,7 +265,6 @@ log.dirs=/home/elk/ #日志存放路径，上面创建的目录
 zookeeper.connect=localhost:2181 #zookeeper地址和端口，单机配置部署，localhost:2181
 host.name=你的ip
 
-
 cp config/producer.properties config/producer.properties-bak
 vi config/producer.properties
 
@@ -295,13 +291,12 @@ bin/kafka-topics.sh --zookeeper localhost:2181 --list
 # 显示 topic 详情
 bin/kafka-topics.sh --zookeeper localhost:2181 -describe -topic test_topic
 bin/kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --zookeeper localhost:2181 --group test_group --topic test_topic
-```
 
 ## Zookeeper & Kafka 启动脚本
 
 nohup sh /home/elk/kafka_2.11-1.1.0/bin/zookeeper-server-start.sh /home/elk/kafka_2.11-1.1.0/config/zookeeper.properties > /home/elk/nohup_zookeeper.out 2>&1 &
-export JMX_PORT=9999
 nohup sh /home/elk/kafka_2.11-1.1.0/bin/kafka-server-start.sh /home/elk/kafka_2.11-1.1.0/config/server.properties > /home/elk/nohup_kafka.out 2>&1 &
+JMX_PORT=9999 nohup sh /home/elk/kafka_2.11-1.1.0/bin/kafka-server-start.sh /home/elk/kafka_2.11-1.1.0/config/server.properties > /home/elk/nohup_kafka.out 2>&1 &
 echo "done startting zookeeper,kafka ."
 ```
 
@@ -309,9 +304,7 @@ echo "done startting zookeeper,kafka ."
 
 ### KafkaOffsetMonitor
 
-社区提供
-
-https://github.com/quantifind/KafkaOffsetMonitor/releases
+社区提供 [KafkaOffsetMonitor](https://github.com/quantifind/KafkaOffsetMonitor/releases)
 
 `java -cp KafkaOffsetMonitor-assembly-0.2.0.jar com.quantifind.kafka.offsetapp.OffsetGetterWeb --zk 192.168.1.236:2181 --port 9092 --refresh 10.seconds --retain 1.days`
 
@@ -319,7 +312,7 @@ https://github.com/quantifind/KafkaOffsetMonitor/releases
 
 ### kafka-manager
 
-Yahoo 开源
+Yahoo 开源 [github地址](https://github.com/yahoo/kafka-manager)
 
 ```shell
 cd kafka-manager-1.3.0.7
@@ -330,8 +323,57 @@ kafka-manager.zkhosts="localhost:2181"
 
 bin/kafka-manager -Dconfig.file=/path/to/application.conf -Dhttp.port=8080
 ```
+# 应用集成
 
----
+## Spring Cloud Sleuth 支持
+
+```yml
+spring:
+  application:
+    name: spring-cloud-eureka-producer
+  cloud:
+    inetutils:
+      ignored-interfaces: ethx
+  sleuth:
+    sampler:
+      percentage: 1.0
+  zipkin:
+#    base-url: http://192.168.1.241:8087
+    sender:
+      type: kafka
+    rabbitmq:
+      queue: zipkin_queue
+    kafka:
+      topic: zipkin_topic
+  kafka:
+    bootstrap-servers: 192.168.1.236:9092
+    client-id: ${spring.application.name}_${server.port}
+  rabbitmq:
+    host: 172.16.100.156
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq
+```
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-zipkin</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.amqp</groupId>
+    <artifactId>spring-rabbit</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+```
+
+可视情况，使用 sleuth 将应用调用情况的日志发送到 web(zipkin), 或者 rabbitmq/kafka 发送到 ELK.
+
+在Spring Cloud 中详细使用 ELK 可参考另一篇文章：
 
 
 
+...
