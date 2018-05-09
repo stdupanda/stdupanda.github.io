@@ -11,6 +11,7 @@ keywords: Java, spring, springboot, java, boot, mybatis
 # 集成步骤
 
 - `pom.xml`
+
 ```xml
 <dependency>
     <groupId>io.springfox</groupId>
