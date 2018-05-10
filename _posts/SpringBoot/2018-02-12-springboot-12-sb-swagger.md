@@ -146,7 +146,14 @@ public class UserCtrl {
     *   @ApiModelProperty：描述一个model的属性
 ```
 
-# 生产环境配置开关
+## 访问方式
+
+- http://localhost:8080/your-app-root/swagger-ui.html
+- http://localhost:8080/your-app-root/v2/api-docs
+
+# 相关问题
+
+## 生产环境配置开关
 
 ```java
 // 参考上述的 SwaggerConfig 内部使用示例。
@@ -161,8 +168,16 @@ if (isSwaggerEnabled) {
 }
 ```
 
-# 关于配合 lombok 的问题
+## 关于配合 lombok 的问题
 
 假如使用 `lombok` 的时候，若直接使用 eclipse 等 IDE 的启动方式，可能会存在 请求和相应 `Model` 的字段信息列出失败，原因应该是开发编译阶段生产的 class 并未包括 get、set 方法，打 jar 包后即可正常显示。
+
+## Eclipse IDE 提示使用了 `Deprecated` 类
+
+特意查了一下，发现在 `@EnableSwagger2` 注解中已用了一个已过时的类， 所以导致了这个问IT。官方回应如下：
+
+[springfox/issues/1307](https://github.com/springfox/springfox/issues/1307)
+
+大意就是在下一个新的 major 版本会移除这个使用；这个 warning 告警问题也可以通过修改 Eclipse 的配置解决。
 
 具体代码参见 [https://github.com/stdupanda/spring-boot-demo](https://github.com/stdupanda/spring-boot-demo "https://github.com/stdupanda/spring-boot-demo")
