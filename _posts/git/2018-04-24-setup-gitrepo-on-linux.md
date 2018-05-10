@@ -72,6 +72,11 @@ sudo chown -R git:git /home/.ssh/
 sudo chmod -R 644 /home/.ssh/
 sudo chmod 600 id_rsa
 ```
+
+# 安全设置
+
+可以修改 `/etc/passwd` 文件禁用 `git` 用户登录 shell.
+
 # 问题总结
 
 ## 已配置公钥但是 clone 仍需要输入密码
