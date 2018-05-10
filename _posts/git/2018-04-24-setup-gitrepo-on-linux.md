@@ -27,7 +27,11 @@ su git # 以 git 账户登录进行后续操作
 cd /home/git
 mkdir .ssh
 touch .ssh/authorized_keys
-chown -R git:git /home/git/.ssh # 确保 git 用户对版本库的权限
+# 确认权限
+sudo chown -R git:git /home/git/.ssh/ # 确保 git 用户对版本库的权限
+sudo chmod -R 700 /home/git/.ssh/
+sudo chmod -R 600 /home/git/.ssh/authorized_keys
+# 初始化 git 库
 git init --bare test.git # 生成 test.git 文件夹，即版本库
 ```
 
@@ -65,12 +69,20 @@ AuthorizedKeysCommandRunAs nobody
 
 流程正确无误的情况下即可不用输入任何密码就能把项目 clone 到本地，后续 push 也不用输入密码(若客户端私钥设置了密码则必须手动输入密码)。
 
-# 服务端与客户端的文件权限
+# 文件权限
+
+## 服务端
 
 ```shell
-sudo chown -R git:git /home/.ssh/
-sudo chmod -R 644 /home/.ssh/
-sudo chmod 600 id_rsa
+sudo chown -R git:git /home/git/.ssh/
+sudo chmod -R 700 /home/git/.ssh/
+sudo chmod -R 600 /home/git/.ssh/authorized_keys
+```
+
+## 客户端
+
+```shell
+sudo chmod 400 id_rsa
 ```
 
 # 安全设置
