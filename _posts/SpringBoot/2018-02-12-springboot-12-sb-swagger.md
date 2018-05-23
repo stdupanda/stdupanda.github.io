@@ -160,6 +160,8 @@ public class UserCtrl {
 @Value("${swagger.enable:true}")
 private boolean isSwaggerEnabled;
 
+//...
+
 if (isSwaggerEnabled) {
     log.debug("swagger is enabled, will generate api docs.");
     paths = PathSelectors.any();
