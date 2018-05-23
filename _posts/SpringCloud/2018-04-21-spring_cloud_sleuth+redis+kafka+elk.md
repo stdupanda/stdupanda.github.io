@@ -323,6 +323,11 @@ kafka-manager.zkhosts="localhost:2181"
 
 bin/kafka-manager -Dconfig.file=/path/to/application.conf -Dhttp.port=8080
 ```
+
+### kafkatool
+
+[kafkatool](http://www.kafkatool.com/) 一个 java 桌面应用
+
 # 应用集成
 
 ## Spring Cloud Sleuth 支持
@@ -374,6 +379,6 @@ spring:
 
 在Spring Cloud 中详细使用 ELK 可参考另一篇文章：
 
-
+asdas
 
 ...
