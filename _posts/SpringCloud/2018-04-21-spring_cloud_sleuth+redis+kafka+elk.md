@@ -243,6 +243,8 @@ vi config/zookeeper.properties
 
 dataDir=/home/elk/zookeeper_data
 clientPort=2181
+
+/home/elk/kafka_2.11-1.1.0/bin/zookeeper-server-start.sh /home/elk/kafka_2.11-1.1.0/config/zookeeper.properties
 ```
 
 ## 配置 Kafka
