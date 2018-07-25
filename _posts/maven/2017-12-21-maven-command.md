@@ -62,3 +62,4 @@ archetypeArtifactId 类型一般有: `maven-archetype-webapp`, `maven-archetype-
 | `mvn dependency:tree`                  | 打印依赖 |
 | 运行 |                               
 | `mvn jetty:run`                        | 需配置 jetty 插件 |
+| `mvn package -f /root/yunka/pom.xml -am -pl user`                        | 仅打包某个 module，指定 pom 路径 |
