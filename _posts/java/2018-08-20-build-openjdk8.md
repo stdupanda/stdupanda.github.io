@@ -10,7 +10,7 @@ keywords: Java, java, jdk, openjdk
 
 # 前言
 
-一开始是想着编译 jdk7 来着，但是看着 [http://hg.openjdk.java.net/jdk7u/jdk7u/raw-file/tip/README-builds.html](http://hg.openjdk.java.net/jdk7u/jdk7u/raw-file/tip/README-builds.html "openjdk7-build-readme") 发现，编译流程太繁琐。后来看了openjdk8 的编译流程 [http://hg.openjdk.java.net/jdk8u/jdk8u/raw-file/tip/README-builds.html](http://hg.openjdk.java.net/jdk8u/jdk8u/raw-file/tip/README-builds.html "openjdk8-build-readme") 简单了很多，于是决定进行 `openjdk8` 的编译。
+一开始是想着编译 jdk7 来着，但是看着 [openjdk7 编译流程](http://hg.openjdk.java.net/jdk7u/jdk7u/raw-file/tip/README-builds.html "openjdk7-build-readme") 发现，流程太繁琐。后来看了 [openjdk8 的编译流程 ](http://hg.openjdk.java.net/jdk8u/jdk8u/raw-file/tip/README-builds.html "openjdk8-build-readme") 简单了很多，于是决定进行 `openjdk8` 的编译。
 
 refer to 官网:
 > The build is now a "configure && make" style build
