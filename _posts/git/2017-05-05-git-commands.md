@@ -64,6 +64,8 @@ keywords: Python, Ubuntu, psutil
 | **其他操作** |
 | `git rev-parse HEAD`                                 | 查看 HEAD 对应的 SHA-1 版本号 |
 
+# 使用说明
+
 ## branch & flow 图示
 
 ![git merge --no-ff](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_merge_no_ff.png)
