@@ -8,6 +8,8 @@ keywords: Python, Ubuntu, psutil
 
 常用的 git 命令总结。
 
+# 常用命令速查表
+
 | command                                              | desc |
 |:-----------------------------------------------------|:------------|
 | **配置部分** ||
@@ -62,9 +64,13 @@ keywords: Python, Ubuntu, psutil
 | **其他操作** |
 | `git rev-parse HEAD`                                 | 查看 HEAD 对应的 SHA-1 版本号 |
 
+## branch & flow 图示
+
 ![git merge --no-ff](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_merge_no_ff.png)
 
 ![git branch mode](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_flow.jpg)
+
+### merge 冲突处理
 
 - `git merge` 冲突解决
 
