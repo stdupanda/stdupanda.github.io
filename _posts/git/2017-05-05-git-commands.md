@@ -72,7 +72,7 @@ keywords: Python, Ubuntu, psutil
 
 ![git branch mode](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_flow.jpg)
 
-### merge 冲突处理
+## merge 冲突处理
 
 - `git merge` 冲突解决
 
