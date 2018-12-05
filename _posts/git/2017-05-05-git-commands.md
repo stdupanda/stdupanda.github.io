@@ -17,6 +17,9 @@ keywords: Python, Ubuntu, psutil
 | `git config -e`                                      | vi 修改配置信息 |
 | `git clone git@xxx.git`                              | 从远程主机克隆一个版本库 |
 | `git clone ssh://git@xxx:10122/xxx.git`              | 从远程主机克隆一个版本库 |
+| `git clone -b 分支名 ssh://git@xxx:10122/xxx.git`     | 从远程主机克隆一个指定分支到本地 |
+| `git clone --depth=1 ssh://git@xxx:10122/xxx.git`    | 浅克隆(shallow clone) |
+| `git remote --set-braches origin '*'`                | 获取远程库的所有分支 |
 | `git remote -v`                                      | 查看 git 远程库地址 |
 | `git remote show origin`                             | 查看远程库对应关系 |
 | `git remote add origin ssh://git@xxx:10122/xxx.git`  | 新增远程库     |
