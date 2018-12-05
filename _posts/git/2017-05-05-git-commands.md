@@ -57,7 +57,7 @@ keywords: Python, Ubuntu, psutil
 | `git cherry-pick <commit-id>`                        | 仅合并某一次提交的内容。配合 `--continue`、`--abort` 使用 |
 | `git show`                                           | 查看此标签信息 |
 | `git pull`                                           | 同步更新最新代码到本地， 相当于 `git fetch, git merge` |
-| `git pull --rebase`                                  | 相当于 `git fetch, git rebase` | 
+| `git pull --rebase`                                  | 相当于 `git fetch, git rebase` |
 | `git log --graph`                  | 查看分支合并图 |
 | `git log --graph --pretty=oneline --abbrev-commit` | 查看分支合并图 |
 | `git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative` | 查看分支合并图 |
@@ -114,3 +114,11 @@ Creating a new branch is quick AND simple.
 [git-scm中文版](https://git-scm.com/book/zh/v2 "https://git-scm.com/book/zh/v2")
 
 [git-scm英文版](https://git-scm.com/book/en/v2 "https://git-scm.com/book/en/v2")
+
+# 相关工具
+
+## git for windows
+
+### 修改 git bash 的样式
+
+默认情况下， 安装好后的 git bash 会在标题和输入命令的时候显示 `MINGW64` ，而且命令和提示不在同一行。若需要自定义则可以修改 `C:\Program Files\Git\etc\profile.d` 文件。
