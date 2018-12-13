@@ -14,7 +14,7 @@ keywords: linux
 
 如 `vi /etc/sysconfig/network-scripts/eth0` 修改第一块网卡
 
-```
+```shell
 TYPE=Ethernet
 BOOTPROTO=dhcp
 DEFROUTE=yes
@@ -37,7 +37,7 @@ ONBOOT=yes
 
 配置 DNS
 
-`vim /etc/resolv.conf `
+`vim /etc/resolv.conf`
 
 ```bash
 nameserver 202.96.134.133
