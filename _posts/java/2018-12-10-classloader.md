@@ -16,7 +16,7 @@ keywords: Java, java, jdk, openjdk
 
 # 字节码文件的编译和加载
 
-## `.class` 编译流程
+## 编译流程
 
 整体流程就是：
 
@@ -26,7 +26,7 @@ keywords: Java, java, jdk, openjdk
 
 `.java` -> 词法、语法、语义分析器 -> 抽象语法树 -> 字节码生成器 -> 代码生成器 -> 字节码
 
-## `.class` 加载流程
+## 加载流程
 
 `.class` -> ClassLoader -> 字节码校验器 -> 解释器 -> OS
 
@@ -36,7 +36,7 @@ keywords: Java, java, jdk, openjdk
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/jvm.jpg)
 
-# ClassLoader
+# 类加载器 ClassLoader
 
 ClassLoader 负责将字节码内容转换成内存形式的 Class 对象。当类加载器将 `.class` 文件装载完成后，jvm 内将会形成一个对应的元信息对象， 即 `Class<T>` 类。字节码可以来自于磁盘文件 *.class，也可以是 jar 包里的 *.class，也可以来自远程服务器提供的字节流，字节码的本质就是一个字节数组 `byte[]`，它有特定的复杂的内部格式，有很多复杂的加密技术就是在此基础上实现的。
 
@@ -64,11 +64,11 @@ JVM 中内置了三个重要的 ClassLoader，分别是 Bootstrap ClassLoader、
 
 ### Bootstrap ClassLoader
 
-`Bootstrap ClassLoader` 是由底层代码实现并被嵌入到了 JVM 中，我们将它称之为「根加载器」，当 JVM 启动时，`Bootstrap ClassLoader` 也随着启动，负责加载 JVM 运行时核心类，这些类位于 JAVA_HOME/lib/rt.jar 文件中，我们常用内置库都在里面，比如 `java.util.*`、`java.io.*`、`java.nio.*`、`java.lang.*` 等等。可以用指令 `-Xbootclasspath` 指定自定义路径。
+`Bootstrap ClassLoader` 是由底层代码实现并被嵌入到了 JVM 中，我们将它称之为「根加载器」，当 JVM 启动时，`Bootstrap ClassLoader` 也随着启动，负责加载 JVM 运行时核心类，这些类位于 `JAVA_HOME/lib/rt.jar` 文件中，我们常用内置库都在里面，比如 `java.util.*`、`java.io.*`、`java.nio.*`、`java.lang.*` 等等。可以用指令 `-Xbootclasspath` 指定自定义路径。
 
 ### `ExtClassLoader`
 
-`ExtClassLoader` 位于 jdk 的 `rt.jar` 内 `sun.misc.Launcher$ExtClassLoader`，继承自 `URLClassLoader`, 负责加载 JVM 扩展类，比如 swing 系列、内置的 js 引擎、xml 解析器 等等，这些库名通常以 javax 开头，它们的 jar 包位于 JAVA_HOME/lib/ext/*.jar 中，有很多 jar 包。可以用指令 `-D java.ext.dirs` 自定义指定路径。
+`ExtClassLoader` 位于 jdk 的 `rt.jar` 内 `sun.misc.Launcher$ExtClassLoader`，继承自 `URLClassLoader`, 负责加载 JVM 扩展类，比如 swing 系列、内置的 js 引擎、xml 解析器 等等，这些库名通常以 javax 开头，它们的 jar 包位于 `JAVA_HOME/lib/ext/*.jar` 中，有很多 jar 包。可以用指令 `-D java.ext.dirs` 自定义指定路径。
 
 ### `AppClassLoader`
 
@@ -154,14 +154,13 @@ protected Class<?> loadClass(String name, boolean resolve)
 
 使用线程上下文类加载器，可以在执行线程中抛弃双亲委派加载模式，转而采用线程上下文类加载器来加载需要的类，这样就可以显式地指定类加载器。大部分的 java application 如 jboss，tomcat 都是采用 `contextClassLoader` 来处理 web 服务。还有一些采用 hot swap 的框架，也是采用线程上下文类加载器。
 
-对于运行在 Java EE容器中的 Web 应用来说，类加载器的实现方式与一般的 Java 应用有所不同。不同的 Web 容器的实现方式也会有所不同。以 Apache Tomcat 来说，每个 Web 应用都有一个对应的类加载器实例。该类加载器也使用代理模式，所不同的是它是首先尝试去加载某个类，如果找不到再代理给父类加载器。这与一般类加载器的顺序是相反的。这是 Java Servlet 规范中的推荐做法，其目的是使得 Web 应用自己的类的优先级高于 Web 容器提供的类。这种代理模式的一个例外是：Java 核心库的类是不在查找范围之内的。这也是为了保证 Java 核心库的类型安全。
+对于运行在 Java EE容器中的 Web 应用来说，类加载器的实现方式与一般的 Java 应用有所不同。不同的 Web 容器的实现方式也会有所不同。以 Apache Tomcat 来说，每个 Web 应用都有一个对应的类加载器实例。该类加载器也使用代理模式，所不同的是**它首先尝试去加载某个类，如果找不到再代理给父类加载器**。这与一般类加载器的顺序是相反的。这是 Java Servlet 规范中的推荐做法，其目的是*使得 Web 应用自己的类的优先级高于 Web 容器提供的类*。这种代理模式的一个例外是：Java 核心库的类是不在查找范围之内的。这也是为了保证 Java 核心库的类型安全。
 
-1. 每个 Web 应用自己的 Java 类文件和使用的库的 jar 包，分别放在 WEB-INF/classes和 WEB-INF/lib目录下面。
+1. 每个 Web 应用自己的 Java 类文件和使用的库的 jar 包，分别放在 `WEB-INF/classes` 和 `WEB-INF/lib` 目录下面。
 
 2. 多个应用共享的 Java 类文件和 jar 包，分别放在 Web 容器指定的由所有 Web 应用共享的目录下面。
 
 3. 当出现找不到类的错误时，检查当前类的类加载器和当前线程的上下文类加载器是否正确。
-
 
 下面举例分析一下 tomcat 内部加载不同 webapp 服务时涉及到的线程上下文类加载器问题。
 
