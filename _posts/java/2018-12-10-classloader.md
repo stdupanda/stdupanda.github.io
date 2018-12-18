@@ -142,7 +142,9 @@ protected Class<?> loadClass(String name, boolean resolve)
 
 ## 用户自定义类加载器和线程上下文类加载器
 
-此处不介绍用户自定义类加载器。
+自定义类加载器需要注意 `loadClass()`、`findClass()` 和 `defineClass()` 这三个方法的覆写
+
+此处不详细介绍用户自定义类加载器。
 
 ### 线程上下文类加载器
 
