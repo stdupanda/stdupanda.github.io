@@ -78,6 +78,10 @@ JVM 中内置了三个重要的 ClassLoader，分别是 Bootstrap ClassLoader、
 
 jdk 内置了一个 `URLClassLoader`，用户只需要传递规范的网络路径给构造器，就可以使用 `URLClassLoader` 来加载对应类库了。`URLClassLoader` 不但可以加载本地路径的类库，还可以加载远程类库，取决于构造器中不同的地址形式。`ExtClassLoader` 和 `AppClassLoader` 都是 `URLClassLoader` 的子类，它们都是从本地文件系统里加载类库。
 
+### 总结
+
+![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_order2.png)
+
 ## `ClassLoader` 运行机制
 
 ### 校验加载顺序
@@ -87,6 +91,8 @@ jdk 内置了一个 `URLClassLoader`，用户只需要传递规范的网络路�
 ### 双亲委派机制
 
 JVM 在加载类时默认采用的是双亲委派机制。通俗的说，就是某个特定的类加载器在接到加载类请求时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以完成，则返回，否则自己尝试加载。
+
+AppClassLoader 委托给 ExtensionClassLoader 加载，ExtensionClassLoader 委托 BootstrapClassLoader 加载。（注意由于 Bootstrap 是 C++ 实现，所以 Ext 获取的 parent 是 `null`）
 
 双亲委派机制是在 ClassLoader 的 loadClass 方法中实现的，标准扩展类加载器和系统类加载器都遵循了双亲委派机制，因为他们都继承了 ClassLoader，而且没有重写 loadClass 方法。
 
@@ -136,7 +142,7 @@ protected Class<?> loadClass(String name, boolean resolve)
 
 > `ClassLoader` 中的构造函数中，parent 默认是通过 `getSystemClassLoader()` 方法获取到的系统构造类加载器。
 >
-> AppClassLoader 的构造函数中传入了 parent ClassLoader，这个构造函数是 `protect` 的，在 AppClassLoader 的 getAppClassLoader 静态方法里被调用，而这个静态方法需要一个 ClassLoader 作为 AppClassLoader 的 parent。再看 Launcher 的构造方法，这个参数是 Launcher.ExtClassLoader.getExtClassLoader() 生成的，也就是说，在构造 AppClassLoader 时传入的是 ExtClassLoader。
+> AppClassLoader 的构造函数中传入了 parent ClassLoader，这个构造函数是 `protect` 的，在 AppClassLoader 的 getAppClassLoader 静态方法里被调用，而这个静态方法需要一个 ClassLoader 作为 AppClassLoader 的 parent。再看 `Launcher` 的构造方法，这个参数是 `Launcher.ExtClassLoader.getExtClassLoader()` 生成的，也就是说，在构造 AppClassLoader 时传入的是 ExtClassLoader。
 >
 > `ExtClassLoader` 的构造函数很容易看，parent 直接传入的是 `null`。
 
@@ -228,3 +234,6 @@ private void initClassLoaders() {
 3. 热部署。
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_tomcat.png)
+
+
+好了，就整理到这里吧。
