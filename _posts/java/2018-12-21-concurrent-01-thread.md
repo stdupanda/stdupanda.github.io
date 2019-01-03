@@ -1,16 +1,16 @@
 ---
 layout: post
-title: java 并发基础 (゜-゜)つロ 01 线程
+title: java 并发基础01线程
 categories: Java
-description: java 并发基础 (゜-゜)つロ 01 线程
+description: java 并发基础01线程
 keywords: Java, java, jdk, openjdk
 ---
 
-整理总结 `jvm` 类加载器机制。
+整理总结 java 线程基础功能点。
 
 # 线程简介
 
-## 简介
+## 概念
 
 > 现代操作系统在运行一个程序时，会为其创建一个进程。例如，启动一个Java程序，操作系统就会创建一个Java进程。现代操作系统调度的最小单元是线程，也叫轻量级进程（Light Weight Process），在一个进程里可以创建多个线程，这些线程都拥有各自的计数器、堆栈和局部变量等属性，并且能够访问共享的内存变量。处理器在这些线程上高速切换，让使用者感觉
 到这些线程在同时执行。
@@ -88,7 +88,7 @@ public class MultiThread{
 
 ## 中断
 
-线程的一个标志位，表示一个运行中的线程是否*被其他线程进行了中断操作*。举例对于运行的线程t，任意线程通过调用 t.interrupt() 来对 t 进行中断操作。
+线程的一个标志位，表示一个运行中的线程是否**被其他线程进行了中断操作**。举例对于运行的线程t，任意线程通过调用 t.interrupt() 来对 t 进行中断操作。
 
 通过 `t.isInterrupted()` 来判断 t 是否被中断，也可以调用 `t.isInterrupted(true)` 和 `Thread.interrupted()` 对 t 的中断标志位进行复位。
 
@@ -96,7 +96,7 @@ jdk 在很多类中，都是先清除中断标志位，然后抛出 `Interrupted
 
 ## 安全操作线程
 
-不允许使用已过时的 `suspend()/resume()/stop()` 方法来操作线程；暂停和恢复操作应改为使用*等待/通知*机制进行实现。
+不允许使用已过时的 `suspend()/resume()/stop()` 方法来操作线程；暂停和恢复操作应改为使用**等待/通知**机制进行实现。
 
 安全停止线程示例如下：
 
@@ -201,18 +201,65 @@ synchronized(obj){
 
 若线程A执行了 `t.join()`，则A会等待 t 线程执行完后才会从 `t.join` 出返回。类似的方法还包括 `join(long)`,`join(long,int)` 具备超时返回。
 
-需要知道的是， `join()` 实际实现还是调用的 `wait()` 方法。
+需要知道的是， `join()` 的具体实现还是调用的 `wait()` 方法。
 
 ### threadlocal
+
+其内部实现的保存信息结构为 `ThreadLocalMap`，而 `ThreadLocalMap` 的数据接口是一个固定 key 为 `ThreadLocal<?>` 的 `WeakReference<ThreadLocal<?>>` 实现类，主要是为了避免阻止系统 GC。
+
+> 和HashMap的最大的不同在于，ThreadLocalMap结构非常简单，没有next引用，也就是说ThreadLocalMap中解决Hash冲突的方式并非链表的方式，而是采用线性探测的方式，所谓线性探测，就是根据初始key的hashcode值确定元素在table数组中的位置，如果发现这个位置上已经有其他key值的元素被占用，则利用固定的算法寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
+>
+> ThreadLocalMap解决Hash冲突的方式就是简单的步长加1或减1，寻找下一个相邻的位置。
+> ```java
+> /**
+>  * Increment i modulo len.
+>  */
+> private static int nextIndex(int i, int len) {
+>     return ((i + 1 < len) ? i + 1 : 0);
+> }
+>
+> /**
+>  * Decrement i modulo len.
+>  */
+> private static int prevIndex(int i, int len) {
+>     return ((i - 1 >= 0) ? i - 1 : len - 1);
+> }
+> ```
+> 显然ThreadLocalMap采用线性探测的方式解决Hash冲突的效率很低，如果**有大量不同的ThreadLocal对象放入map中时发送冲突，或者发生二次冲突，则效率很低**。
+> 所以这里引出的良好建议是：每个线程只存一个变量，这样的话所有的线程存放到map中的Key都是相同的ThreadLocal，如果一个线程要保存多个变量，就需要创建多个ThreadLocal，多个ThreadLocal放入Map中时会极大的增加Hash冲突的可能。
+> 由于ThreadLocalMap的key是弱引用，而Value是强引用。这就导致了一个问题，ThreadLocal在没有外部对象强引用时，发生GC时弱引用Key会被回收，而Value不会回收，如果创建ThreadLocal的线程一直持续运行，那么这个Entry对象中的value就有可能一直得不到回收，发生内存泄露。
+> 既然Key是弱引用，那么我们要做的事，就是在调用ThreadLocal的get()、set()方法时完成后再调用remove方法，将Entry节点和Map的引用关系移除，这样整个Entry对象在GC Roots分析后就变成不可达了，下次GC的时候就可以被回收。
+> 如果使用ThreadLocal的set方法之后，没有显示的调用remove方法，就有可能发生内存泄露，所以养成良好的编程习惯十分重要，使用完ThreadLocal之后，记得调用remove方法。
+
+用jdk文档中对 `ThreadLocal` 的描述：
+
+> Each thread holds an implicit reference to its copy of a thread-localvariable as long as the thread is alive and the ThreadLocalinstance is accessible; after a thread goes away, all of its copies ofthread-local instances are subject to garbage collection (unless otherreferences to these copies exist).
 
 # 经典实例
 
 ## 等待超时
 
+```java
+// 对当前对象加锁
+public synchronized Object get(long mills) throws InterruptedException {
+    long future = System.currentTimeMillis() + mills;
+    long remaining = mills;// 等待持续时间
+    // 当超时大于0并且result返回值不满足要求
+    while ((result == null) && remaining > 0) {
+        wait(remaining);
+        remaining = future - System.currentTimeMillis();
+    }
+    return result;
+}
+```
+
 ## 线程池
 
-创建方式
+请查看开源 jdbc 中间件的实现代码分析。
 
 ---
+
+小结： 本文主要整理了 java 线程基础功能点，是 java 并发的基础。
+
 
  (゜-゜)つロ *参考并致谢《Java并发编程的艺术》*
