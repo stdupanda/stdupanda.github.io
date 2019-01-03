@@ -192,7 +192,7 @@ synchronized(obj){
 ```java
 synchronized(obj){
   // 改变条件
-    obj.notifyAll();
+  obj.notifyAll();
   // 对应的处理逻辑
 }
 ```
@@ -242,14 +242,14 @@ synchronized(obj){
 ```java
 // 对当前对象加锁
 public synchronized Object get(long mills) throws InterruptedException {
-    long future = System.currentTimeMillis() + mills;
-    long remaining = mills;// 等待持续时间
-    // 当超时大于0并且result返回值不满足要求
-    while ((result == null) && remaining > 0) {
-        wait(remaining);
-        remaining = future - System.currentTimeMillis();
-    }
-    return result;
+  long future = System.currentTimeMillis() + mills;
+  long remaining = mills;// 等待持续时间
+  // 当超时大于0并且result返回值不满足要求
+  while ((result == null) && remaining > 0) {
+    wait(remaining);
+    remaining = future - System.currentTimeMillis();
+  }
+  return result;
 }
 ```
 
@@ -261,5 +261,15 @@ public synchronized Object get(long mills) throws InterruptedException {
 
 小结： 本文主要整理了 java 线程基础功能点，是 java 并发的基础。
 
+```java
+//                .-~~~~~~~~~-._       _.-~~~~~~~~~-.
+//            __.'              ~.   .~              `.__
+//          .'//                  \./                  \\`.
+//        .'//                     |                     \\`.
+//      .'// .-~"""""""~~~~-._     |     _,-~~~~"""""""~-. \\`.
+//    .'//.-"                 `-.  |  .-'                 "-.\\`.
+//  .'//______.============-..   \ | /   ..-============.______\\`.
+//.'______________________________\|/______________________________`.
+```
 
  (゜-゜)つロ *参考并致谢《Java并发编程的艺术》*
