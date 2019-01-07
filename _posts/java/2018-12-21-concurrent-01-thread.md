@@ -3,7 +3,7 @@ layout: post
 title: java 并发基础01线程
 categories: Java
 description: java 并发基础01线程
-keywords: Java, java, jdk, openjdk
+keywords: Java, java, jdk, openjdk, thread, concurrent
 ---
 
 整理总结 java 线程基础功能点。
@@ -20,7 +20,7 @@ keywords: Java, java, jdk, openjdk
 如下代码可以打印一个普通的 java 进程包括哪些线程。
 
 ```java
-public class MultiThread{
+public class MultiThread {
   public static void main(String[] args) {
     // 获取Java线程管理MXBean
     ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
