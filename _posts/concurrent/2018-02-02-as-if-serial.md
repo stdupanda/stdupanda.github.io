@@ -11,3 +11,4 @@ keywords: java, concurrent, memory
 内存重排序
 
 学习 java 内存模型, 参考 http://www.infoq.com/cn/articles/java-memory-model-2
+https://www.programcreek.com/2011/12/monitors-java-synchronization-mechanism/
