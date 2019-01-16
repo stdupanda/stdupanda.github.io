@@ -1,3 +1,0 @@
-https://github.com/spring-cloud/spring-cloud-config/issues/907  采用配置中心后命令行参数无效的官方文档bug
-
-org.springframework.boot.context.properties.ConfigurationProperties.PropertySourceBootstrapProperties 描述不清楚
