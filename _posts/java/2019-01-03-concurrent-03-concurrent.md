@@ -335,38 +335,39 @@ public V put(K key, V value) {
 `AtomicLongFieldUpdater`
 `AtomicStampedReference`
 
-> 要想原子地更新字段类需要两步。第一步，因为原子更新字段类都是抽象类，每次使用的时候必须使用静态方法`newUpdater()`创建一个更新器，并且需要设置想要更新的类和属性。第二步，更新类的字段（属性）必须使用**`public volatile`**修饰符。
+> 要想原子地更新字段类需要两步。第一步，因为原子更新字段类都是抽象类，每次使用的时候必须使用静态方法`newUpdater()`创建一个更新器，并且需要设置想要更新的类和属性。第二步，更新类的字段（属性）必须使用 `public volatile` 修饰符。
 >
 > 以上3个类提供的方法几乎一样，所以仅以`AstomicIntegerFieldUpdater`为例进行讲解
-```java
-public class AtomicIntegerFieldUpdaterTest {
-  // 创建原子更新器，并设置需要更新的对象类和对象的属性
-  private static AtomicIntegerFieldUpdater<User> a = AtomicIntegerFieldUpdater.newUpdater(User.class, "old");
-  public static void main(String[] args) {
-    // 设置柯南的年龄是10岁
-    User conan = new User("conan"， 10);
-    // 柯南长了一岁，但是仍然会输出旧的年龄
-    System.out.println(a.getAndIncrement(conan));
-    // 输出柯南现在的年龄
-    System.out.println(a.get(conan));
-  }
-
-  public static class User {
-    private String name;
-    public volatile int old;
-    public User(String name， int old) {
-      this.name = name;
-      this.old = old;
-    }
-    public String getName() {
-      return name;
-    }
-    public int getOld() {
-      return old;
-    }
-  }
-}
-```
+>
+> ```java
+> public class AtomicIntegerFieldUpdaterTest {
+>   // 创建原子更新器，并设置需要更新的对象类和对象的属性
+>   private static AtomicIntegerFieldUpdater<User> a = AtomicIntegerFieldUpdater.newUpdater(User.class, "old");
+>   public static void main(String[] args) {
+>     // 设置柯南的年龄是10岁
+>     User conan = new User("conan"， 10);
+>     // 柯南长了一岁，但是仍然会输出旧的年龄
+>     System.out.println(a.getAndIncrement(conan));
+>     // 输出柯南现在的年龄
+>     System.out.println(a.get(conan));
+>   }
+> 
+>   public static class User {
+>     private String name;
+>     public volatile int old;
+>     public User(String name， int old) {
+>       this.name = name;
+>       this.old = old;
+>     }
+>     public String getName() {
+>       return name;
+>     }
+>     public int getOld() {
+>       return old;
+>     }
+>   }
+> }
+> ```
 
 # 并发工具类
 
@@ -413,46 +414,45 @@ public class CountDownLatchTest {
 >
 > 单个线程调用 `CyclicBarrier#await()` 方法，表明其到达了屏障，然后处于阻塞状态，直至所有线程都到达屏障才放行。
 
-```java
-package cn;
+> ```java
+> import java.util.concurrent.BrokenBarrierException;
+> import java.util.concurrent.CyclicBarrier;
+> 
+> public class CyclicBarrierTest {
+>     static CyclicBarrier barrier = new CyclicBarrier(4);
+> //    static CyclicBarrier barrier2 = new CyclicBarrier(4, new Runnable() {
+> //        @Override
+> //        public void run() {
+> //            System.out.println("all finished. 此处可以汇总各个线程的结果");
+> //        }
+> //    });
+> 
+>     public static void main(String[] args) {
+>         for (int i = 0; i < 3; i++) {
+>             final int t = i;
+>             new Thread(new Runnable() {
+>                 @Override
+>                 public void run() {
+>                     try {
+>                         System.out.println(t);
+>                         barrier.await();
+>                     } catch (InterruptedException | BrokenBarrierException e) {
+>                         e.printStackTrace();
+>                     }
+>                 }
+>             }).start();
+>         }
+>         try {
+>             barrier.await();
+>         } catch (InterruptedException | BrokenBarrierException e) {
+>             e.printStackTrace();
+>         }
+>         System.out.println("ok");
+>     }
+> }
+> 
+> ```
 
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-
-public class CyclicBarrierTest {
-    static CyclicBarrier barrier = new CyclicBarrier(4);
-//    static CyclicBarrier barrier2 = new CyclicBarrier(4, new Runnable() {
-//        @Override
-//        public void run() {
-//            System.out.println("all finished. 此处可以汇总各个线程的结果");
-//        }
-//    });
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 3; i++) {
-            final int t = i;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        System.out.println(t);
-                        barrier.await();
-                    } catch (InterruptedException | BrokenBarrierException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        }
-        try {
-            barrier.await();
-        } catch (InterruptedException | BrokenBarrierException e) {
-            e.printStackTrace();
-        }
-        System.out.println("ok");
-    }
-}
-
-```
 相比于 `CountDownLatch`, `CyclicBarrier` 更为灵活，而且前者的计数器只能使用一次，后者可以使用 `reset()` 重置，也可以获取阻塞的线程数量等。
 
 ## `Semaphore` 并发线程控制
