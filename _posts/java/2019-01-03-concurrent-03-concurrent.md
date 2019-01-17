@@ -10,7 +10,7 @@ keywords: Java, java, jdk, openjdk, concurrent, lock
 
 # 并发容器和框架
 
-## 并发操作 `map`
+## 并发 `map`
 
 ### `HashMap` 和 `HashSet` 的问题
 
@@ -96,7 +96,7 @@ public V put(K key, V value) {
 
 > 之所以进行再散列，目的是减少散列冲突，使元素能够均匀地分布在不同的Segment上，从而提高容器的存取效率。假如散列的质量差到极点，那么所有的素都在一个Segment中，不仅存取元素缓慢，分段锁也会失去意义。
 
-## 并发队列
+## 并发 `queue`
 
 > 在并发编程中，有时候需要使用线程安全的队列。如果要实现一个线程安全的队列有两种方式：一种是使用阻塞算法，另一种是使用非阻塞算法。使用阻算法的队列可以用一个锁（入队和出队用同一把锁）或两个锁（入队和出队用不同的锁）等方式来实现。非阻塞的实现方式则可以使用循环CAS的方式来实现。
 
@@ -132,7 +132,10 @@ public V put(K key, V value) {
 
 > ```java
 > ArrayBlockingQueue fairQueue = new ArrayBlockingQueue(1000,true);
+> ```
+>
 > 访问者的公平性是使用可重入锁实现的，代码如下。
+>
 > ```java
 > public ArrayBlockingQueue(int capacity, boolean fair) {
 >   if (capacity <= 0)
@@ -181,6 +184,91 @@ public V put(K key, V value) {
 > 7.LinkedBlockingDeque
 > 
 > LinkedBlockingDeque是一个由链表结构组成的双向阻塞队列。所谓双向队列指的是可以从队列的两端插入和移出元素。双向队列因为多了一个操作队列的入口，在多线程同时入队时，也就减少了一半的竞争。相比其他的阻塞队列，LinkedBlockingDeque多了addFirst、addLast、offerFirst、offerLast、peekFirst和peekLast等方法，以First单词结尾的方法，表示插入、获取（peek）或移除双端队列的第一个元素。以Last单词结尾的方法，表示插入、获取或移除双端队列的最后一个元素。另外，插入方法add等同于addLast，移除方法remove等效于removeFirst。但是take方法却等同于takeFirst，不知道是不是JDK的bug，使用时还是用带有First和Last后缀的方法更清楚。在初始化LinkedBlockingDeque时可以设置容量防止其过度膨胀。另外，双向阻塞队列可以运用在“工作窃取”模式中。
+
+## `Fork/Join` 框架
+
+> Fork/Join框架是Java 7提供的一个用于并行执行任务的框架，是一个把大任务分割成若干个小任务，最终汇总每个小任务结果后得到大任务结果的框架。
+
+### 工作窃取算法
+
+> 工作窃取（work-stealing）算法是指某个线程从其他队列里窃取任务来执行。那么，为什么需要使用工作窃取算法呢？假如我们需要做一个比较大的任务，可以把这个任务分割为若干互不依赖的子任务，为了减少线程间的竞争，把这些子任务分别放到不同的队列里，并为每个队列创建一个单独的线程来执行队列里的任务，线程和队列一一对应。比如A线程负责处理A队列里的任务。但是，有的线程会先把自己队列里的任务干完，而其他线程对应的队列里还有任务等待处理。干完活的线程与其等着，不如去帮其他线程干活，于是它就去其他线程的队列里窃取一个任务来执行。而在这时它们会访问同一个队列，所以为了减少窃取任务线程和被窃取任务线程之间的竞争，通常会使用 **双端队列** ，被窃取任务线程永远从双端队列的**头部**拿任务执行，而窃取任务的线程永远从双端队列的**尾部**拿任务执行。
+> 
+> - 优点
+> 
+> 充分利用线程并发操作执行任务，减少线程间的竞争切换；
+> 
+> - 缺点
+> 
+> 某些情况下还是存在竞争，比如双端队列中只有一个任务时。并且此算法会消耗更多的系统资源，比如创建多个线程，多个双端队列。
+
+### 使用流程
+
+1. 分割任务
+2. 执行任务
+3. 合并结果
+
+> ```java
+> import java.util.concurrent.ForkJoinPool;
+> import java.util.concurrent.Future;
+> import java.util.concurrent.RecursiveTask;
+> 
+> public class CountTask extends RecursiveTask<Integer> {
+>     private static final long serialVersionUID = 310195418127112037L;
+> 
+>     private static final int THRESHOLD = 2;// 阈值
+>     private int start;
+>     private int end;
+> 
+>     public CountTask(int start, int end) {
+>         this.start = start;
+>         this.end = end;
+>     }
+> 
+>     @Override
+>     protected Integer compute() {
+>         int sum = 0;
+>         // 如果任务足够小就计算任务
+>         boolean canCompute = (end - start) <= THRESHOLD;
+>         if (canCompute) {
+>             for (int i = start; i <= end; i++) {
+>                 sum += i;
+>             }
+>         } else {
+>             // 如果任务大于阈值，就分裂成两个子任务计算
+>             int middle = (start + end) / 2;
+>             CountTask leftTask = new CountTask(start, middle);
+>             CountTask rightTask = new CountTask(middle + 1, end);
+>             // 执行子任务
+>             leftTask.fork();
+>             rightTask.fork();
+>             // 等待子任务执行完，并得到其结果
+>             int leftResult = leftTask.join();
+>             int rightResult = rightTask.join();
+>             // 合并子任务
+>             sum = leftResult + rightResult;
+> 
+>             // 检查任务是否正常完成
+>             if(leftTask.isCompletedAbnormally()) {
+>                 System.out.println(leftTask.getException());
+>             }
+>         }
+>         return sum;
+>     }
+> 
+>     public static void main(String[] args) {
+>         ForkJoinPool forkJoinPool = new ForkJoinPool();
+>         // 生成一个计算任务，负责计算1+2+3+4
+>         CountTask task = new CountTask(1, 4);
+>         // 执行一个任务
+>         Future<Integer> result = forkJoinPool.submit(task);
+>         try {
+>             System.out.println(result.get());
+>         } catch (Exception e) {
+>             e.printStackTrace();
+>         }
+>     }
+> }
+> ```
 
 # 原子操作类
 
