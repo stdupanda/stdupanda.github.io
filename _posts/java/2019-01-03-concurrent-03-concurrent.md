@@ -527,6 +527,41 @@ public class CountDownLatchTest {
 
 # 线程池
 
+> - 降低资源消耗
+> - 提高响应速度
+> - 提高线程可管理性，拒绝野生线程
+> 
+> `ThreadPoolExecutor` 在执行 `execute()` 方法时，逻辑大意如下：
+
+![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/thread_pool_executor.png)
+
+> ThreadPoolExecutor执行execute方法分下面4种情况。
+> 
+> - 1）如果当前运行的线程少于corePoolSize，则创建新线程来执行任务（注意，执行这一步骤需要获取全局锁）。
+> - 2）如果运行的线程等于或多于corePoolSize，则将任务加入BlockingQueue。
+> - 3）如果无法将任务加入BlockingQueue（队列已满），则创建新的线程来处理任务（注意，执行这一步骤需要获取全局锁）。
+> - 4）如果创建新线程将使当前运行的线程超出maximumPoolSize，任务将被拒绝，并调用RejectedExecutionHandler.rejectedExecution()方法。
+> 
+> ThreadPoolExecutor采取上述步骤的总体设计思路，是为了在执行execute()方法时，尽可能地避免获取全局锁（那将会是一个严重的可伸缩瓶颈）。在ThreadPoolExecutor完成预热之后（当前运行的线程数大于等于corePoolSize），几乎所有的execute()方法调用都是执行步骤2，而步骤2不需要获取全局锁。
+>
+> 可以通过调用线程池的shutdown或shutdownNow方法来关闭线程池。它们的原理是遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。但是它们存在一定的区别，shutdownNow首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表，而shutdown只是将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程。只要调用了这两个关闭方法中的任意一个，isShutdown方法就会返回true。当所有的任务都已关闭后，才表示线程池关闭成功，这时调用isTerminaed方法会返回true。至于应该调用哪一种方法来关闭线程池，应该由提交到线程池的任务特性决定，通常调用shutdown方法来关闭线程池，如果任务不一定要执行完，则可以调用shutdownNow方法。
+>
+> 性质不同的任务可以用不同规模的线程池分开处理。CPU密集型任务应配置尽可能小的线程，如配置Ncpu+1个线程的线程池。由于IO密集型任务线程并不是一直在执行任务，则应配置尽可能多的线程，如2*Ncpu。混合型的任务，如果可以拆分，将其拆分成一个CPU密集型任务和一个IO密集型任务，只要这两个任务执行的时间相差不是太大，那么分解后执行的吞吐量将高于串行执行的吞吐量。如果这两个任务执行时间相差太大，则没必要进行分解。可以通过Runtime.getRuntime().availableProcessors()方法获得当前设备的CPU个数。
+>
+> 建议使用有界队列。有界队列能增加系统的稳定性和预警能力
+>
+> 如果在系统中大量使用线程池，则有必要对线程池进行监控，方便在出现问题时，可以根据线程池的使用状况快速定位问题。可以通过线程池提供的参数进行监控，在监控线程池的时候可以使用以下属性。
+>
+> - taskCount：线程池需要执行的任务数量。
+> - completedTaskCount：线程池在运行过程中已完成的任务数量，小于或等于taskCount。
+> - largestPoolSize：线程池里曾经创建过的最大线程数量。通过这个数据可以知道线程池是
+> 否曾经满过。如该数值等于线程池的最大大小，则表示线程池曾经满过。
+> - getPoolSize：线程池的线程数量。如果线程池不销毁的话，线程池里的线程不会自动销
+> 毁，所以这个大小只增不减。
+> - getActiveCount：获取活动的线程数。
+>
+> 通过扩展线程池进行监控。可以通过继承线程池来自定义线程池，重写线程池的beforeExecute、afterExecute和terminated方法，也可以在任务执行前、执行后和线程池关闭前执行一些代码来进行监控。例如，监控任务的平均执行时间、最大执行时间和最小执行时间等。
+
 # `Executor` 框架
 
 
