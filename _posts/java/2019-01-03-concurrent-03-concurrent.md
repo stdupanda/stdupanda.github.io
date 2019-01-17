@@ -272,6 +272,102 @@ public V put(K key, V value) {
 
 # 原子操作类
 
+> Java从JDK 1.5开始提供了 `java.util.concurrent.atomic` 包（以下简称Atomic包），这个包中的原子操作类提供了一种用法简单、性能高效、线程安全地更新一个变量的方式。因为变量的类型有很多种，所以在Atomic包里一共提供了13个类，属于4种类型的原子更新方式，分别是原子更新**基本类型**、原子更新**数组**、原子更新**引用**和原子更新**属性（字段）**。Atomic包里的类基本都是使用`Unsafe`实现的包装类。
+
+## 原子更新基本类型类
+
+`AtomicBoolean`, `AtomicInteger`, `AtomicLong`
+
+## 原子更新数组
+
+`AtomicIntegerArray`, `AtomicLongArray`, `AtomicIntegerArray`, `AtomicReferenceArray`
+
+## 原子更新引用类型
+
+要原子更新多个变量，就要使用这个原子更新引用类型提供的类。
+
+> - `AtomicReference` 原子更新引用类型
+> - `AtomicReferenceFieldUpdater` 原子更新引用类型里的字段
+> - `AtomicMarkableReference` 原子更新带有标记位的引用类型。可以原子更新一个布尔类型的标记位和引用类型
+> 
+> ```java
+> import java.util.concurrent.atomic.AtomicReference;
+> 
+> public class AtomicRefrenceTest {
+>     public static AtomicReference<User> atomicReference = new AtomicReference<User>();
+> 
+>     public static void main(String[] args) {
+>         User user1 = new User("user1");
+>         atomicReference.set(user1);
+>         System.out.println(atomicReference.get());
+>         User user2 = new User("user2");
+>         atomicReference.compareAndSet(user1, user2);
+>         System.out.println(atomicReference.get());
+>     }
+>     
+>     static class User {
+>         private String name;
+> 
+>         public User(String name) {
+>             this.name = name;
+>         }
+>         public String getName() {
+>             return name;
+>         }
+> 
+>         public void setName(String name) {
+>             this.name = name;
+>         }
+> 
+>         @Override
+>         public String toString() {
+>             return "User [name=" + name + "]";
+>         }
+>     }
+> }
+> ```
+
+## 原子更新字段类
+
+解决 ABA 问题
+
+`AtomicIntegerFieldUpdater`
+`AtomicLongFieldUpdater`
+`AtomicStampedReference`
+
+> 要想原子地更新字段类需要两步。第一步，因为原子更新字段类都是抽象类，每次使用的时候必须使用静态方法`newUpdater()`创建一个更新器，并且需要设置想要更新的类和属性。第二步，更新类的字段（属性）必须使用**`public volatile`**修饰符。
+>
+> 以上3个类提供的方法几乎一样，所以仅以`AstomicIntegerFieldUpdater`为例进行讲解
+```java
+public class AtomicIntegerFieldUpdaterTest {
+  // 创建原子更新器，并设置需要更新的对象类和对象的属性
+  private static AtomicIntegerFieldUpdater<User> a = AtomicIntegerFieldUpdater.newUpdater(User.class, "old");
+  public static void main(String[] args) {
+    // 设置柯南的年龄是10岁
+    User conan = new User("conan"， 10);
+    // 柯南长了一岁，但是仍然会输出旧的年龄
+    System.out.println(a.getAndIncrement(conan));
+    // 输出柯南现在的年龄
+    System.out.println(a.get(conan));
+  }
+
+  public static class User {
+    private String name;
+    public volatile int old;
+    public User(String name， int old) {
+      this.name = name;
+      this.old = old;
+    }
+    public String getName() {
+      return name;
+    }
+    public int getOld() {
+      return old;
+    }
+  }
+}
+```
+
 # 并发工具类
 
 # 线程池
