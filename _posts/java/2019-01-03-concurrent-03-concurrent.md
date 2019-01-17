@@ -370,6 +370,161 @@ public class AtomicIntegerFieldUpdaterTest {
 
 # 并发工具类
 
+下面整理 jdk 提供的常用并发工具类。
+
+## `CountDownLatch` 等待多线程完成
+
+```java
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+public class CountDownLatchTest {
+    // 等待 2 个线程完成再继续
+    static CountDownLatch latch = new CountDownLatch(2);
+    public static void main(String[] args) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(1);
+                latch.countDown();
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(2);
+                latch.countDown();
+            }
+        }).start();
+        try {
+//          latch.await();//不限定超时
+            latch.await(3, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+```
+
+## `CyclicBarrier` 同步屏障
+
+> 每个线程在到达一个屏障点（同步点）时都等待，一直到所有的线程都到达了这个屏障点后，屏障才打开，让所有这些线程一起返回。
+>
+> 单个线程调用 `CyclicBarrier#await()` 方法，表明其到达了屏障，然后处于阻塞状态，直至所有线程都到达屏障才放行。
+
+```java
+package cn;
+
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+
+public class CyclicBarrierTest {
+    static CyclicBarrier barrier = new CyclicBarrier(4);
+//    static CyclicBarrier barrier2 = new CyclicBarrier(4, new Runnable() {
+//        @Override
+//        public void run() {
+//            System.out.println("all finished. 此处可以汇总各个线程的结果");
+//        }
+//    });
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 3; i++) {
+            final int t = i;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        System.out.println(t);
+                        barrier.await();
+                    } catch (InterruptedException | BrokenBarrierException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
+        try {
+            barrier.await();
+        } catch (InterruptedException | BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+        System.out.println("ok");
+    }
+}
+
+```
+相比于 `CountDownLatch`, `CyclicBarrier` 更为灵活，而且前者的计数器只能使用一次，后者可以使用 `reset()` 重置，也可以获取阻塞的线程数量等。
+
+## `Semaphore` 并发线程控制
+
+> 控制同时访问特定线程的线程数量，保证合理使用公共资源，适用于流控调度等场景。
+> 
+> ```java
+> public class SemaphoreTest {
+>   private static final int THREAD_COUNT = 30;
+>   private static ExecutorServicethreadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+>   private static Semaphore s = new Semaphore(10);
+>   public static void main(String[] args) {
+>     for (inti = 0; i< THREAD_COUNT; i++) {
+>       threadPool.execute(new Runnable() {
+>         @Override
+>         public void run() {
+>           try {
+>             s.acquire();
+>             System.out.println("save data");
+>             s.release();
+>           } catch (InterruptedException e) {
+>               e.printStackTrace();
+>           }
+>         }
+>       });
+>     }
+>     threadPool.shutdown();
+>   }
+> }
+> ```
+
+## `Exchanger` 线程间数据交换
+
+> Exchanger（交换者）是一个用于线程间协作的工具类。Exchanger用于进行线程间的数据交换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程通过exchange方法交换数据，如果第一个线程先执行exchange()方法，它会一直等待第二个线程也执行exchange方法，当两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产出来的数据传递给对方。
+>
+> Exchanger可以用于遗传算法，遗传算法里需要选出两个人作为交配对象，这时候会交换两人的数据，并使用交叉规则得出2个交配结果。Exchanger也可以用于校对工作，比如我们需要将纸制银行流水通过人工的方式录入成电子银行流水，为了避免错误，采用AB岗两人进行录入，录入到Excel之后，系统需要加载这两个Excel，并对两个Excel数据进行校对，看看是否录入一致，代码如下：
+>
+> ```java
+> public class ExchangerTest {
+>     private static final Exchanger<String> exgr = new Exchanger<String>();
+> 
+>     private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
+> 
+>     public static void main(String[] args) {
+>         threadPool.execute(new Runnable() {
+>             @Override
+>             public void run() {
+>                 try {
+>                     String A = "银行流水A";// A录入银行流水数据
+>                     exgr.exchange(A);
+>                 } catch (InterruptedException e) {
+>                 }
+>             }
+>         });
+>         threadPool.execute(new Runnable() {
+>             @Override
+>             public void run() {
+>                 try {
+>                     String B = "银行流水B";// B录入银行流水数据
+>                     String A = exgr.exchange("B");
+>                     System.out.println("A和B数据是否一致：" + A.equals(B) + "，A录入的是：" + A + "，B录入是：" + B);
+>                 } catch (InterruptedException e) {
+>                 }
+>             }
+>         });
+>         threadPool.shutdown();
+>     }
+> }
+> ```
+> 如果两个线程有一个没有执行exchange()方法，则会一直等待，如果担心有特殊情况发生，避免一直等待，可以使用exchange（V x，longtimeout，TimeUnit unit）设置最大等待时长。
+
+
 # 线程池
 
 # `Executor` 框架
