@@ -574,9 +574,25 @@ public class CountDownLatchTest {
 
 # `Executor` 框架
 
+## `ThreadPoolExecutor`
 
+> Executor框架最核心的类是ThreadPoolExecutor，它是线程池的实现类，主要由下列4个组件构成。
+> 
+> - corePool：核心线程池的大小。
+> - maximumPool：最大线程池的大小。
+> - BlockingQueue：用来暂时保存任务的工作队列。
+> - RejectedExecutionHandler：当ThreadPoolExecutor已经关闭或ThreadPoolExecutor已经饱和时（达到了最大线程池大小且工作队列已满），execute()方法将要调用的Handler。
 
+## 分类
 
+通过 `Executors` 可以创建的 `ExecutorService` 分为如下几种：
+
+- newFixedThreadPool 内部采用无界队列，可能会 OOM
+- newSingleThreadExecutor 内部采用无界队列，可能会 OOM
+- newSingleThreadScheduledExecutor 实现定时的单工作线程的线程池
+- newCachedThreadPool 会根据需要创建新线程的线程池
+- newScheduledThreadPool 用来执行定时任务
+- newWorkStealingPool 采用工作窃取的线程池
 
 ---
 
