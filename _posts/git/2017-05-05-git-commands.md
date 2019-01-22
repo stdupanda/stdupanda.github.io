@@ -49,6 +49,7 @@ keywords: Python, Ubuntu, psutil
 | `git push origin <分支名> --force`                   | 彻底回退到某一个版本然后提交到远程库，删除对应的提交记录 |
 | `git tag`                                            | 列出现有标签 |
 | `git tag 20170428.v.1.2`                             | 添加一个轻量级标签 |
+| `git tag -a v1.2 -m "this is v1.2"`                  | 添加一个带附注的标签 |
 | `git push orign 20170428.v.1.2`                      | 推送标签到远程仓库 |
 | `git tag -d 20170428.v.1.2`                          | 删除一个标签 |
 | `git push orign :refs/tags/20170428.v.1.2`           | 删除远程仓库的标签 |
