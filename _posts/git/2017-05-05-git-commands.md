@@ -28,6 +28,7 @@ keywords: Python, Ubuntu, psutil
 | `git branch -a`                                      | 查看本地+远程分支 |
 | `git branch testing`                                 | 本地创建 testing 分支|
 | `git branch -d develop`                              | 删除 develop 分支 |
+| `git branch --track <branch> <remote-branch>`        | 新建一个本地分支并与指定远程分支建立追踪 |
 | `git checkout develop`                               | 切换到 develop 分支 |
 | `git status`                                         | 查看本地仓库当前状态  |
 | **提交、推送** |
@@ -42,11 +43,11 @@ keywords: Python, Ubuntu, psutil
 | `git push -u origin --delete develop`                | 同上        |
 | **版本管理** |
 | `git rm <file>`                                      | 从版本库中删除一个文件 |
-| `git reset <commit-id>(即：git reset –mixed)  `      | 把commit撤销，本地文件不受影响 |
-| `git reset HEAD <file>  `                            | 把暂存区的修改撤销掉（unstage）重新放回工作区 |
+| `git reset <commit-id>`(`-–mixed`)                   | 把commit撤销，本地文件不受影响 |
+| `git reset HEAD <file>`                              | 把暂存区的修改撤销掉（unstage）重新放回工作区 |
 | `git reset --hard HEAD`                              | 彻底回退到某一个版本，本地源码也会变为上一个源码内容 |
-| `git revert <commit-id>`                                   | 撤销指定的版本，本次撤销也会作为一次提交进行保存；版本会递增，不影响之前提交的内容|
-| `git push origin <分支名> --force`                   | 彻底回退到某一个版本然后提交到远程库，删除对应的提交记录 |
+| `git revert <commit-id>`                             | 撤销指定的版本，本次撤销也会作为一次提交进行保存；版本会递增，不影响之前提交的内容|
+| `git push origin <分支名> --force`                    | 彻底回退到某一个版本然后提交到远程库，删除对应的提交记录 |
 | `git tag`                                            | 列出现有标签 |
 | `git tag 20170428.v.1.2`                             | 添加一个轻量级标签 |
 | `git tag -a v1.2 -m "this is v1.2"`                  | 添加一个带附注的标签 |
