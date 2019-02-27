@@ -77,6 +77,27 @@ keywords: Python, Ubuntu, psutil
 
 ![git branch mode](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_flow.jpg)
 
+## 阿里AoneFlow(推荐！)
+
+AoneFlow 只使用三种分支类型：`master` 分支、`feature` 分支、`release` 分支，以及三条基本规则。
+
+- 规则一，开始工作前，从 `master` 创建 `feature` 分支。
+
+从代表最新已发布版本的 `master` 分支上创建一个通常以 `feature/` 前缀命名的特性分支，然后在这个分支上提交代码修改。也就是说，每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到 `master` 分支。 
+
+- 规则二，通过合并 `feature` 分支，形成 `release` 分支。
+
+从 `master` 分支上拉出一条新分支，将所有本次要集成或发布的 `feature` 分支依次合并过去，从而得到 `release` 分支。release 分支通常以 `release/` 前缀命名。 
+
+- 规则三，发布到线上正式环境后，合并相应的 `release` 分支到 `master` 分支，在 `master` 分支上添加 **`tag`**，同时删除该 `release` 分支关联的 `feature` 分支。
+
+为了避免在代码仓库里堆积大量历史上的 `feature` 分支，还应该清理掉已经上线部分 `feature` 分支。如果要回溯历史版本，只需在 `master` 分支上找到相应的版本的 `tag` 即可。 
+
+
+如果得修一个历史版本的Bug怎么办呢？那就老老实实地在 master 分支找到版本 tag 位置，然后从那个位置创建 Hotfix 分支并修改处理。
+
+
+
 ## merge 冲突处理
 
 - `git merge` 冲突解决
