@@ -1,8 +1,8 @@
 ---
 layout: post
-title: java 并发基础03并发类
+title: java并发基础03-并发类
 categories: Java
-description: java 并发基础03并发类
+description: java并发基础03-并发类
 keywords: Java, java, jdk, openjdk, concurrent, lock
 ---
 
@@ -127,7 +127,7 @@ public V put(K key, V value) {
 > - LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。
 
 > 1.ArrayBlockingQueue
-> 
+>
 > ArrayBlockingQueue是一个用数组实现的有界阻塞队列。此队列按照先进先出（FIFO）的原则对元素进行排序。默认情况下不保证线程公平的访问队列，所谓公平访问队列是指阻塞的线程，可以按照阻塞的先后顺序访问队列，即先阻塞线程先访问队列。非公平性是对先等待的线程是非公平的，当队列可用时，阻塞的线程都可以争夺访问队列的资格，有可能先阻塞的线程最后才访问队列。为了保证公平性，通常会降低吞吐量。我们可以使用以下代码创建一个公平的阻塞队列。
 
 > ```java
@@ -146,43 +146,43 @@ public V put(K key, V value) {
 >   notFull = lock.newCondition();
 > }
 > ```
-> 
+>
 > 2.LinkedBlockingQueue
-> 
+>
 > LinkedBlockingQueue是一个用链表实现的有界阻塞队列。此队列的默认和最大长度为Integer.MAX_VALUE。此队列按照先进先出的原则对元素进行排序。
-> 
+>
 > 3.PriorityBlockingQueue
-> 
+>
 > PriorityBlockingQueue是一个支持优先级的无界阻塞队列。默认情况下元素采取自然顺序升序排列。也可以自定义类实现compareTo()方法来指定元素排序规则，或者初始化PriorityBlockingQueue时，指定构造参数Comparator来对元素进行排序。需要注意的是不能保证同优先级元素的顺序。
-> 
+>
 > 4.DelayQueue
-> 
+>
 > DelayQueue是一个支持延时获取元素的无界阻塞队列。队列使用PriorityQueue来实现。队列中的元素必须实现Delayed接口，在创建元素时可以指定多久才能从队列中获取当前元素。只有在延迟期满时才能从队列中提取元素。DelayQueue非常有用，可以将DelayQueue运用在以下应用场景。
-> 
+>
 > ·缓存系统的设计：可以用DelayQueue保存缓存元素的有效期，使用一个线程循环查询
 > DelayQueue，一旦能从DelayQueue中获取元素时，表示缓存有效期到了。
-> 
+>
 > ·定时任务调度：使用DelayQueue保存当天将会执行的任务和执行时间，一旦从
 > DelayQueue中获取到任务就开始执行，比如TimerQueue就是使用DelayQueue实现的。
-> 
+>
 > 5.SynchronousQueue
-> 
+>
 > SynchronousQueue是一个不存储元素的阻塞队列。每一个put操作必须等待一个take操作，否则不能继续添加元素。它支持公平访问队列。默认情况下线程采用非公平性策略访问队列。使用以下构造方法可以创建公平性访问的SynchronousQueue，如果设置为true，则等待的线程会采用先进先出的顺序访问队列。
-> 
+>
 > ```java
 > public SynchronousQueue(boolean fair) {
 >   transferer = fair new TransferQueue() : new TransferStack();
 > }
 > ```
-> 
+>
 > SynchronousQueue可以看成是一个传球手，负责把生产者线程处理的数据直接传递给消费者线程。队列本身并不存储任何元素，非常适合传递性场景。SynchronousQueue的吞吐量高于LinkedBlockingQueue和ArrayBlockingQueue。
-> 
+>
 > 6.LinkedTransferQueue
-> 
+>
 > LinkedTransferQueue是一个由链表结构组成的无界阻塞TransferQueue队列。相对于其他阻塞队列，LinkedTransferQueue多了tryTransfer和transfer方法。
-> 
+>
 > 7.LinkedBlockingDeque
-> 
+>
 > LinkedBlockingDeque是一个由链表结构组成的双向阻塞队列。所谓双向队列指的是可以从队列的两端插入和移出元素。双向队列因为多了一个操作队列的入口，在多线程同时入队时，也就减少了一半的竞争。相比其他的阻塞队列，LinkedBlockingDeque多了addFirst、addLast、offerFirst、offerLast、peekFirst和peekLast等方法，以First单词结尾的方法，表示插入、获取（peek）或移除双端队列的第一个元素。以Last单词结尾的方法，表示插入、获取或移除双端队列的最后一个元素。另外，插入方法add等同于addLast，移除方法remove等效于removeFirst。但是take方法却等同于takeFirst，不知道是不是JDK的bug，使用时还是用带有First和Last后缀的方法更清楚。在初始化LinkedBlockingDeque时可以设置容量防止其过度膨胀。另外，双向阻塞队列可以运用在“工作窃取”模式中。
 
 ## `Fork/Join` 框架
@@ -192,13 +192,13 @@ public V put(K key, V value) {
 ### 工作窃取算法
 
 > 工作窃取（work-stealing）算法是指某个线程从其他队列里窃取任务来执行。那么，为什么需要使用工作窃取算法呢？假如我们需要做一个比较大的任务，可以把这个任务分割为若干互不依赖的子任务，为了减少线程间的竞争，把这些子任务分别放到不同的队列里，并为每个队列创建一个单独的线程来执行队列里的任务，线程和队列一一对应。比如A线程负责处理A队列里的任务。但是，有的线程会先把自己队列里的任务干完，而其他线程对应的队列里还有任务等待处理。干完活的线程与其等着，不如去帮其他线程干活，于是它就去其他线程的队列里窃取一个任务来执行。而在这时它们会访问同一个队列，所以为了减少窃取任务线程和被窃取任务线程之间的竞争，通常会使用 **双端队列** ，被窃取任务线程永远从双端队列的**头部**拿任务执行，而窃取任务的线程永远从双端队列的**尾部**拿任务执行。
-> 
+>
 > - 优点
-> 
+>
 > 充分利用线程并发操作执行任务，减少线程间的竞争切换；
-> 
+>
 > - 缺点
-> 
+>
 > 某些情况下还是存在竞争，比如双端队列中只有一个任务时。并且此算法会消耗更多的系统资源，比如创建多个线程，多个双端队列。
 
 ### 使用流程
@@ -211,19 +211,19 @@ public V put(K key, V value) {
 > import java.util.concurrent.ForkJoinPool;
 > import java.util.concurrent.Future;
 > import java.util.concurrent.RecursiveTask;
-> 
+>
 > public class CountTask extends RecursiveTask<Integer> {
 >     private static final long serialVersionUID = 310195418127112037L;
-> 
+>
 >     private static final int THRESHOLD = 2;// 阈值
 >     private int start;
 >     private int end;
-> 
+>
 >     public CountTask(int start, int end) {
 >         this.start = start;
 >         this.end = end;
 >     }
-> 
+>
 >     @Override
 >     protected Integer compute() {
 >         int sum = 0;
@@ -246,7 +246,7 @@ public V put(K key, V value) {
 >             int rightResult = rightTask.join();
 >             // 合并子任务
 >             sum = leftResult + rightResult;
-> 
+>
 >             // 检查任务是否正常完成
 >             if(leftTask.isCompletedAbnormally()) {
 >                 System.out.println(leftTask.getException());
@@ -254,7 +254,7 @@ public V put(K key, V value) {
 >         }
 >         return sum;
 >     }
-> 
+>
 >     public static void main(String[] args) {
 >         ForkJoinPool forkJoinPool = new ForkJoinPool();
 >         // 生成一个计算任务，负责计算1+2+3+4
@@ -289,13 +289,13 @@ public V put(K key, V value) {
 > - `AtomicReference` 原子更新引用类型
 > - `AtomicReferenceFieldUpdater` 原子更新引用类型里的字段
 > - `AtomicMarkableReference` 原子更新带有标记位的引用类型。可以原子更新一个布尔类型的标记位和引用类型
-> 
+>
 > ```java
 > import java.util.concurrent.atomic.AtomicReference;
-> 
+>
 > public class AtomicRefrenceTest {
 >     public static AtomicReference<User> atomicReference = new AtomicReference<User>();
-> 
+>
 >     public static void main(String[] args) {
 >         User user1 = new User("user1");
 >         atomicReference.set(user1);
@@ -304,21 +304,21 @@ public V put(K key, V value) {
 >         atomicReference.compareAndSet(user1, user2);
 >         System.out.println(atomicReference.get());
 >     }
->     
+>
 >     static class User {
 >         private String name;
-> 
+>
 >         public User(String name) {
 >             this.name = name;
 >         }
 >         public String getName() {
 >             return name;
 >         }
-> 
+>
 >         public void setName(String name) {
 >             this.name = name;
 >         }
-> 
+>
 >         @Override
 >         public String toString() {
 >             return "User [name=" + name + "]";
@@ -351,7 +351,7 @@ public V put(K key, V value) {
 >     // 输出柯南现在的年龄
 >     System.out.println(a.get(conan));
 >   }
-> 
+>
 >   public static class User {
 >     private String name;
 >     public volatile int old;
@@ -417,7 +417,7 @@ public class CountDownLatchTest {
 > ```java
 > import java.util.concurrent.BrokenBarrierException;
 > import java.util.concurrent.CyclicBarrier;
-> 
+>
 > public class CyclicBarrierTest {
 >     static CyclicBarrier barrier = new CyclicBarrier(4);
 > //    static CyclicBarrier barrier2 = new CyclicBarrier(4, new Runnable() {
@@ -426,7 +426,7 @@ public class CountDownLatchTest {
 > //            System.out.println("all finished. 此处可以汇总各个线程的结果");
 > //        }
 > //    });
-> 
+>
 >     public static void main(String[] args) {
 >         for (int i = 0; i < 3; i++) {
 >             final int t = i;
@@ -450,7 +450,7 @@ public class CountDownLatchTest {
 >         System.out.println("ok");
 >     }
 > }
-> 
+>
 > ```
 
 相比于 `CountDownLatch`, `CyclicBarrier` 更为灵活，而且前者的计数器只能使用一次，后者可以使用 `reset()` 重置，也可以获取阻塞的线程数量等。
@@ -458,7 +458,7 @@ public class CountDownLatchTest {
 ## `Semaphore` 并发线程控制
 
 > 控制同时访问特定线程的线程数量，保证合理使用公共资源，适用于流控调度等场景。
-> 
+>
 > ```java
 > public class SemaphoreTest {
 >   private static final int THREAD_COUNT = 30;
@@ -493,9 +493,9 @@ public class CountDownLatchTest {
 > ```java
 > public class ExchangerTest {
 >     private static final Exchanger<String> exgr = new Exchanger<String>();
-> 
+>
 >     private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
-> 
+>
 >     public static void main(String[] args) {
 >         threadPool.execute(new Runnable() {
 >             @Override
@@ -540,12 +540,12 @@ public class CountDownLatchTest {
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/thread_pool_executor.png)
 
 > ThreadPoolExecutor执行execute方法分下面4种情况。
-> 
+>
 > - 1）如果当前运行的线程少于corePoolSize，则创建新线程来执行任务（注意，执行这一步骤需要获取全局锁）。
 > - 2）如果运行的线程等于或多于corePoolSize，则将任务加入BlockingQueue。
 > - 3）如果无法将任务加入BlockingQueue（队列已满），则创建新的线程来处理任务（注意，执行这一步骤需要获取全局锁）。
 > - 4）如果创建新线程将使当前运行的线程超出maximumPoolSize，任务将被拒绝，并调用RejectedExecutionHandler.rejectedExecution()方法。
-> 
+>
 > ThreadPoolExecutor采取上述步骤的总体设计思路，是为了在执行execute()方法时，尽可能地避免获取全局锁（那将会是一个严重的可伸缩瓶颈）。在ThreadPoolExecutor完成预热之后（当前运行的线程数大于等于corePoolSize），几乎所有的execute()方法调用都是执行步骤2，而步骤2不需要获取全局锁。
 
 ## 关闭
@@ -577,7 +577,7 @@ public class CountDownLatchTest {
 ## `ThreadPoolExecutor`
 
 > Executor框架最核心的类是ThreadPoolExecutor，它是线程池的实现类，主要由下列4个组件构成。
-> 
+>
 > - corePool：核心线程池的大小。
 > - maximumPool：最大线程池的大小。
 > - BlockingQueue：用来暂时保存任务的工作队列。
