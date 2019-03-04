@@ -1,8 +1,8 @@
 ---
 layout: post
-title: java 并发基础01线程
+title: java并发基础01-线程
 categories: Java
-description: java 并发基础01线程
+description: java并发基础01-线程
 keywords: Java, java, jdk, openjdk, thread, concurrent
 ---
 
