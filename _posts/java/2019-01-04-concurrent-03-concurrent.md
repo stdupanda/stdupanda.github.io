@@ -78,7 +78,6 @@ public V put(K key, V value) {
 
 > ConcurrentHashMap初始化方法是通过initialCapacity、loadFactor和concurrencyLevel等几个参数来初始化segment数组、段偏移量segmentShift、段掩segmentMask和每个segment里的HashEntry数组来实现的。
 
-
 #### 锁分段定位
 
 > 既然ConcurrentHashMap使用分段锁Segment来保护不同段的数据，那么在插入和获取元素的时候，必须先通过散列算法定位到Segment。可以看到ConcurrntHashMap会首先使用Wang/Jenkins hash的变种算法对元素的hashCode进行一次再散列。
