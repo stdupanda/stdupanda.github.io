@@ -74,6 +74,8 @@ bootstrap.system_call_filter: false
 
 官网教程链接:
 
+[https://www.elastic.co/guide/index.html](https://www.elastic.co/guide/index.html "各个组件配置总入口")
+
 [https://www.elastic.co/guide/en/logstash/current/input-plugins.html](https://www.elastic.co/guide/en/logstash/current/input-plugins.html "查看如何配置 logback 和 log4j")
 
 [https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html](https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html "官网配置教程链接")
@@ -81,6 +83,8 @@ bootstrap.system_call_filter: false
 [https://www.elastic.co/guide/en/logstash/current/index.html](https://www.elastic.co/guide/en/logstash/current/index.html "官网教程链接")
 
 ### logstash 处理 redis, kafka, rabbitmq 输入源
+
+推荐使用**Beats**扫描采集文件并发送到 logstash
 
 ```shell
 cd logstash-6.2.4
@@ -98,6 +102,11 @@ input {
     db => 1
     # password => "" 可选
     threads => 3
+  }
+  # https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html
+  # 建议选择 beats 采集文件并发送到 logstash
+  beats {
+    port => 5044
   }
   # https://www.elastic.co/guide/en/logstash/current/plugins-inputs-kafka.html
   kafka {
@@ -132,7 +141,7 @@ output {
 ./bin/logstash -f /home/elk/my_logstash.conf # 即可启动 logstash 服务并应用配置的采集方式。
 ```
 
-需要注意的是，支持的 input 方式常用有： syslog, log4j, http, jdbc, kafka, rabbitmq, redis, websockt, **tcp(logback)**
+需要注意的是，支持的 input 方式常用有： syslog, log4j, http, jdbc, kafka, rabbitmq, redis, websockt, **tcp(logback)**, **File Beat**
 
 以上即配置 redis/kafka/rabbitmq 为总日志信息来源，elasticsearch 为 日志采集后发送的目的地。
 
