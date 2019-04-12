@@ -10,15 +10,17 @@ keywords: linux
 
 # 网络连接异常
 
-> 强烈建议直接使用 `setup` 命令去修改配置。
-
+> 建议直接使用 `setup` 命令去修改配置。
+>
 > `yum install setuptool ntsysv system-config-network-tui iptables`
+
+注意：新版本的 `setup` 内不再包括网卡配置，可以使用命令：**`nmtui`** (即： network manager tool ui) 来进行配置。
 
 ## 修改网络配置
 
 修改 `/etc/sysconfig/network-scripts/` 的，网卡名字是 `ifcfg-xxx`。
 
-```
+```shell
 TYPE=Ethernet
 BOOTPROTO=dhcp
 DEFROUTE=yes
@@ -38,8 +40,10 @@ DEVICE=enp0s3
 # 配置自动启动
 ONBOOT=yes
 ```
+
 以上是 `dhcp` 的方式。若需指定静态地址则：
-```
+
+```shell
 IPADDR=192.168.1.x
 NETMASK=255.255.255.0
 NETWORK=192.168.1.0
