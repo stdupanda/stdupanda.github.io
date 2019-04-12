@@ -16,6 +16,8 @@ keywords: linux, Ubuntu, ubuntu, ufw
 
 # 使用 `ufw`
 
+相关命令如下：
+
 | command                         | desc |
 |:--------------------------------|:------------|
 | `ufw enable/disable` | 启用 / 禁用 `ufw` 服务 |
