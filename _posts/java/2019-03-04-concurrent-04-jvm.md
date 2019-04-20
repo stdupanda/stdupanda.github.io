@@ -130,6 +130,8 @@ jdk8开始，HotSpot VM 移除永久代PermGen，改为MetaSpace元数据空间�
 >
 > Additionally, each garbage collector in HotSpot needed specialized code for dealing with metadata in the PermGen. Detaching metadata from PermGen not only allows the seamless management of Metaspace, but also allows for improvements such as simplification of full garbage collections and future concurrent de-allocation of class metadata.
 
+https://www.infoq.com/articles/Java-PERMGEN-Removed
+
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/permgen_to_metadata.jpg)
 
 由于元数据区使用本地内存，建议用户限制元数据区大小，或者增大机器内存；同时仍要加强系统质量监控管理。
@@ -182,6 +184,58 @@ M，CCS，MC，MU，CCSC，CCSU，MCMN，MCMX，CCSMN，CCSMX
 | `CCSMX` |Compressed Class Space Capacity - Maximum |
 
 [https://docs.oracle.com/javase/7/docs/technotes/tools/share/jstat.html](https://docs.oracle.com/javase/7/docs/technotes/tools/share/jstat.html "Oracle文档链接")
+
+# JVM 编程相关流程
+
+此部分包括了对象在jvm中的细节问题。
+
+## 对象内存结构
+
+在HotSpot虚拟机中，对象在内存中存储的布局可以分为3块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。
+
+### 对象头
+
+HotSpot虚拟机的对象头包括两部分信息，第一部分用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等，官方称它为“Mark Word”。
+
+对象头的另外一部分是类型指针，即对象指向它的类元数据的指针，虚拟机通过这个类型指针来确定这个对象是哪个类的实例。另外，如果对象是一个Java数组，那在对象头中还必须有一块用于记录数组长度的数据。
+
+### 实例数据
+
+实例数据部分是对象真正存储的有效信息，也是在程序代码中所定义的各种类型的字段内容，并且相同宽度的字段总是被分配到一起。
+
+### 对齐填充
+
+对齐填充部分非必须，无特定含义，它仅仅起着占位符的作用。由于HotSpot VM的自动内存管理系统要求对象起始地址必须是8字节的整数倍，换句话说，就是对象的大小必须是8字节的整数倍。而对象头部分正好是8字节的倍数（1倍或者2倍），因此，当对象实例数据部分没有对齐时，系统需要通过对齐填充部分来补全对象头
+
+## 类加载流程
+
+> 虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是虚拟机的类加载机制。
+
+### 运行期加载机制
+
+java 运行期加载机制牺牲了少许性能开销，但为自身带来了很大的灵活性。例如，面向接口编程时运行期指定实现类、自定义ClassLoader加载二进制字节流对应的类、jsp/osgi/cglib 等，都是其灵活性的体现。
+
+### 类加载过程的各个阶段
+
+加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Using）和卸载（Unloading）7个阶段。
+
+![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/class_load_process.png)
+
+#### 类的加载
+
+1. 通过一个类的 Binary Name（全限定名）来获取定义此类的二进制字节流。
+2. 将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。
+3. 在内存中生成一个代表这个类的 `java.lang.Class` 对象，作为方法区这个类的各种数据的访问入口。
+
+比如从 zip/jar/war/ear 包、网络、运行时计算、动态生成类 里获取类的二进制流；
+
+需要说明的是， `java.lang.reflect.Proxy` 就是通过 `ProxyGenerator.generateProxyClass` 来为特定接口生成形式为“*$Proxy”的代理类的二进制字节流。此处不在详细描述开源项目 `cglib(Byte Code Generation Library)`。
+
+## 对象创建流程
+
+虚拟机遇到一条new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一
+个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过。如果没
+有，那必须先执行相应的类加载过程，
 
 小结： 本文主要整理了 java 常用并发框架知识点。
 
