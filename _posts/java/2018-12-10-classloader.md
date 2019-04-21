@@ -38,6 +38,8 @@ keywords: Java, java, jdk, openjdk
 
 # 4. 类加载器 ClassLoader
 
+> The class ClassLoader use the **binary name** of a class to load a class, by locating or generating data that constitutes a definition for the class.
+
 ClassLoader 负责将字节码内容转换成内存形式的 Class 对象。当类加载器将 `.class` 文件装载完成后，jvm 内将会形成一个对应的元信息对象， 即 `Class<T>` 类。字节码可以来自于磁盘文件 *.class，也可以是 jar 包里的 *.class，也可以来自远程服务器提供的字节流，字节码的本质就是一个字节数组 `byte[]`，它有特定的复杂的内部格式，有很多复杂的加密技术就是在此基础上实现的。
 
 每个 `Class<T>` 类内部都有一个对应的 `ClassLoader` 对象。源码如下：
@@ -89,6 +91,10 @@ jdk 内置了一个 `URLClassLoader`，用户只需要传递规范的网络路�
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_order.png)
 
 ### 4.2.2. 双亲委派机制
+
+其实 jdk 文档介绍的很清楚：
+
+> The ClassLoader class uses a delegation model to search for classes and resources. Each instance of ClassLoader has an associated parent class loader. When requested to find a class or resource, a ClassLoader instance will delegate the search for the class or resource to its parent class loader before attempting to find the class or resource itself. The virtual machine's built-in class loader, called the "bootstrap class loader", does not itself have a parent but may serve as the parent of a ClassLoader instance. 
 
 JVM 在加载类时默认采用的是双亲委派机制。通俗的说，就是某个特定的类加载器在接到加载类请求时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以完成，则返回，否则自己尝试加载。
 
