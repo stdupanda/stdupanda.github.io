@@ -42,6 +42,10 @@ keywords: Java, java, jdk, openjdk
 
 ClassLoader 负责将字节码内容转换成内存形式的 Class 对象。当类加载器将 `.class` 文件装载完成后，jvm 内将会形成一个对应的元信息对象， 即 `Class<T>` 类。字节码可以来自于磁盘文件 *.class，也可以是 jar 包里的 *.class，也可以来自远程服务器提供的字节流，字节码的本质就是一个字节数组 `byte[]`，它有特定的复杂的内部格式，有很多复杂的加密技术就是在此基础上实现的。
 
+> 比较两个类是否“相等”，只有在这两个类是由同一个类加载器加载的前提下才有意义，否则，即使这两个类来源于同一个Class文件，被同一个虚拟机加载，只要加载它们的类加载器不同，那这两个类就必定不相等。
+
+上面这句话应该联系双亲委派机制来理解。
+
 每个 `Class<T>` 类内部都有一个对应的 `ClassLoader` 对象。源码如下：
 
 ```java
@@ -143,6 +147,8 @@ protected Class<?> loadClass(String name, boolean resolve)
     }
 }
 ```
+
+逻辑清晰易懂：先检查是否已经被加载过，若没有加载则调用父加载器的loadClass（）方法，若父加载器为空则默认使用启动类加载器作为父加载器。如果父类加载失败，抛出ClassNotFoundException异常后，再调用自己的findClass（）方法进行加载。
 
 **`Bootstrap ClassLoader` 是在找不到 parent 的时候才会被委派，而 `AppClassLoader` 的 parent 会被指定为 ExtensionClassLoader，而 `ExtensionClassLoder` 的 parent 则为 null。**
 
