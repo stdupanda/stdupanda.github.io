@@ -120,9 +120,9 @@ Java虚拟机规范对方法区的限制非常宽松，除了和Java堆一样不
 
 运行时常量池相对于Class文件常量池的另外一个重要特征是具备动态性，Java语言并不要求常量一定只有编译期才能产生，也就是并非预置入Class文件中常量池的内容才能进入方法区运行时常量池，运行期间也可能将新的常量放入池中，这种特性被开发人员利用得比较多的便是String类的intern()方法。既然运行时常量池是方法区的一部分，自然受到方法区内存的限制，当常量池无法再申请到内存时会抛出OutOfMemoryError异常。
 
-## 2.6. jdk8 后的 jvm 结构调整
+## 2.6. jdk8 开始取消 PermGen
 
-jdk8开始，HotSpot VM 移除永久代PermGen，改为MetaSpace元数据空间；
+jdk8 开始，HotSpot VM 移除永久代 `PermGen`，改为 `MetaSpace` 元数据空间；
 
 > With the advent of JDK8, we no longer have the PermGen. No, the metadata information is not gone, just that the space where it was held is no longer contiguous to the Java heap. The metadata has now moved to **native memory** to an area known as the “Metaspace”.
 >
@@ -185,9 +185,9 @@ M，CCS，MC，MU，CCSC，CCSU，MCMN，MCMX，CCSMN，CCSMX
 
 [https://docs.oracle.com/javase/7/docs/technotes/tools/share/jstat.html](https://docs.oracle.com/javase/7/docs/technotes/tools/share/jstat.html "Oracle文档链接")
 
-# 3. JVM 编程相关流程
+# 3. JVM 对象创建使用的细节
 
-此部分包括了对象在jvm中的细节问题。
+此部分包括了对象在 jvm 中的细节问题。
 
 ## 3.1. 对象内存结构
 
@@ -239,7 +239,7 @@ java 运行期加载机制牺牲了少许性能开销，但为自身带来了很
 
 ##### 3.2.2.2.1. 文件格式验证
 
-1. 文件头 `0xCAFEBABE`
+1. 文件头 `0xCAFEBABE` 占四个字节大小
 2. 主次版本号是否支持
 3. 常量类型是否支持
 4. 常量定义是否正确
@@ -280,10 +280,72 @@ java 运行期加载机制牺牲了少许性能开销，但为自身带来了很
 
 ## 3.3. 对象创建流程
 
-虚拟机遇到一条new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查其代表的类是否已被加载、解析和初始化过。如果没有，那必须先执行相应的类加载过程。在类加载检查通过后，接下来虚拟机将为新生对象分配内存。对象所需内存的大小在类加载完成后便可完全确定，为对象分配空间的任务等同于把一块确定大小的内存从堆中划分出来。
+虚拟机遇到一条 `new` 指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查其代表的类是否已被加载、解析和初始化过。如果没有，那必须先执行相应的**类加载**过程。在类加载检查通过后，接下来虚拟机将为新生对象分配内存。对象所需内存的大小在类加载完成后便可完全确定，为对象分配空间的任务等同于把一块确定大小的内存从堆中划分出来。
 
 > 假设Java堆中内存是绝对规整的，所有用过的内存都放在一边，空闲的内存放在另一边，中间放着一个指针作为分界点的指示器，那所分配内存就仅仅是把那个指针向空闲空间那边挪动一段与对象大小相等的距离，这种分配方式称为“指针碰撞”（Bump the Pointer）。如果Java堆中的内存并不是规整的，已使用的内存和空闲的内存相互交错，那就没有办法简单地进行指针碰撞了，虚拟机就必须维护一个列表，记录上哪些内存块是可用的，在分配的时候从列表中找到一块足够大的空间划分给对象实例，并更新列表上的记录，这种分配方式称为“空闲列表”（Free  List）。
+>
 > 执行new指令之后会接着执行＜init＞方法，把对象按照程序员的意愿进行初始化，这样一个真正可用的对象才算完全产生出来。
+
+## 3.4. OOM 类别
+
+### 3.4.1. 大量创建对象
+
+下面写一个简单的人为造成 OOM 的例子。
+
+```java
+public class OOMTest {
+    public static void main(String[] args) {
+        List<Object> list = new ArrayList<>();
+        for(;;) {
+            list.add(new Object());
+        }
+    }
+}
+```
+
+启动方式如下：
+
+```shell
+java -verbose:gc -Xmx10M -Xms10M -XX:+PrintGCDetails -XX:+HeapDumpOnOutOfMemoryError -XX:SurvivorRatio=8 OOMTest
+```
+
+### 3.4.2. 动态代理创建对象
+
+另一个方法区的例子：
+
+```java
+/**
+ * VM Args：-XX：PermSize=10M-XX：MaxPermSize=10M
+ *
+ * @author zzm
+ */
+public class JavaMethodAreaOOM {
+    public static void main(String[] args) {
+        while (true) {
+            Enhancer enhancer = new Enhancer();
+            enhancer.setSuperclass(OOMObject.class);
+            enhancer.setUseCache(false);
+            enhancer.setCallback(new MethodInterceptor() {
+                public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+                    return proxy.invokeSuper(obj, args);
+                }
+            });
+            enhancer.create();
+        }
+    }
+
+    static class OOMObject {
+    }
+}
+```
+
+方法区溢出也是一种常见的内存溢出异常，在经常动态生成大量Class的应用中，需要特别注意类的回收状况。比如上面程序使用了的CGLib字节码增强和动态语言，还有：大量JSP或动态产生JSP文件的应用（JSP第一次运行时需要编译为Java类）、基于OSGi的应用（即使是同一个类文件，被不同的加载器加载也会视为不同的类）等
+
+### 3.4.3. 直接内存导致的 OOM
+
+还有一种使用了 `native` 方法导致的内存溢出，比如调用 `nio` 包的一些类库；此时的内存dump很小，且没有明显异常。
+
+# 4. jvm 垃圾回收
 
 小结： 本文主要整理了 java 常用并发框架知识点。
 
