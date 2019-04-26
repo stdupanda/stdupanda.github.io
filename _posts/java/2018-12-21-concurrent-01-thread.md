@@ -205,7 +205,7 @@ synchronized(obj){
 
 ### 2.3.4. threadlocal
 
-每个线程内部有一个 `ThreadLocalMap` 变量，用于保存线程私有对象。而 `ThreadLocalMap` 的 key 为 `ThreadLocal<?>`，内部数组 `Entry` 是继承了 `WeakReference<ThreadLocal<?>>` 类，主要是为了避免阻止系统 GC。
+每个线程内部有一个 `ThreadLocalMap` 用于保存线程私有对象。值存储在 `Entry[]` 数组中，key 为 `ThreadLocal<?>`对象，通过其成员变量与 `0x61c88647` 累加运算得出数组的 index。需要说明的是，`Entry` 类是继承自 `WeakReference<ThreadLocal<?>>`，目的是为了优化系统 GC。也就是说 key 可以gc，但值可能不gc。
 
 > 和 `HashMap` 的最大的不同在于，ThreadLocalMap 结构非常简单，没有next引用，也就是说ThreadLocalMap中解决Hash冲突的方式并非链表的方式，而是采用线性探测的方式，所谓线性探测，就是根据初始key的hashcode值确定元素在table数组中的位置，如果发现这个位置上已经有其他key值的元素被占用，则利用固定的算法寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
 >
