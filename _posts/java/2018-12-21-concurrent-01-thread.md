@@ -8,9 +8,9 @@ keywords: Java, java, jdk, openjdk, thread, concurrent
 
 整理总结 java 线程基础功能点。
 
-# 线程简介
+# 1. 线程简介
 
-## 概念
+## 1.1. 概念
 
 > 现代操作系统在运行一个程序时，会为其创建一个进程。例如，启动一个Java程序，操作系统就会创建一个Java进程。现代操作系统调度的最小单元是线程，也叫轻量级进程（Light Weight Process），在一个进程里可以创建多个线程，这些线程都拥有各自的计数器、堆栈和局部变量等属性，并且能够访问共享的内存变量。处理器在这些线程上高速切换，让使用者感觉
 到这些线程在同时执行。
@@ -35,7 +35,7 @@ public class MultiThread {
 }
 ```
 
-## 线程状态
+## 1.2. 线程状态
 
 |状态|说明|
 |:---|:---|
@@ -48,13 +48,13 @@ public class MultiThread {
 
 参考 jdk1.8 doc，详解如下：
 
-### `BLOCKED`
+### 1.2.1. `BLOCKED`
 
 > Thread state for a thread blocked waiting for a monitor lock.
 >
 > A thread in the blocked state is waiting for a monitor lock to enter a synchronized block/method or reenter a synchronized block/method after calling `Object.wait`.
 
-### `WAITING`
+### 1.2.2. `WAITING`
 
 > Thread state for a waiting thread. A thread is in the waiting state due to calling one of the following methods:
 >
@@ -64,7 +64,7 @@ public class MultiThread {
 >
 > A thread in the waiting state is waiting for another thread to perform a particular action. For example, a thread that has called `Object.wait()` on an object is waiting for another thread to call `Object.notify()` or `Object.notifyAll()` on that object. A thread that has called  `Thread.join()` is waiting for a specified thread to terminate.
 
-### `TIMED_WAITING`
+### 1.2.3. `TIMED_WAITING`
 
 > Thread state for a waiting thread with a specified waiting time.
 >
@@ -76,7 +76,7 @@ public class MultiThread {
 > - `LockSupport.parkNanos`
 > - `LockSupport.parkUntil`
 
-### 状态转换总结
+### 1.2.4. 状态转换总结
 
 图示如下:
 
@@ -84,9 +84,9 @@ public class MultiThread {
 
 > 特别说明，关于 `BLOCKED` 状态，阻塞状态是线程阻塞在进入 `synchronized` 关键字修饰的方法或代码块（获取锁）时的状态，但是阻塞在 `java.concurrent` 包中 `Lock` 接口的线程状态却是等待状态，因为 `java.concurrent`包中Lock接口对于阻塞的实现均使用了 `LockSupport` 类中的相关方法。
 
-# 基本操作
+# 2. 基本操作
 
-## 中断
+## 2.1. 中断
 
 线程的一个标志位，表示一个运行中的线程是否**被其他线程进行了中断操作**。举例对于运行的线程t，任意线程通过调用 t.interrupt() 来对 t 进行中断操作。
 
@@ -94,7 +94,7 @@ public class MultiThread {
 
 jdk 在很多类中，都是先清除中断标志位，然后抛出 `InterruptedException`；此时再调用 `isInterrupted()` 方法就会返回 false。
 
-## 安全操作线程
+## 2.2. 安全操作线程
 
 不允许使用已过时的 `suspend()/resume()/stop()` 方法来操作线程；暂停和恢复操作应改为使用**等待/通知**机制进行实现。
 
@@ -120,9 +120,9 @@ private static class Runner implements Runnable {
 
 上述例子中，进行线程中断或者调用 `cancel()` 方法均可以优雅结束线程。
 
-## 线程间通信
+## 2.3. 线程间通信
 
-### volatile 和 synchronized
+### 2.3.1. volatile 和 synchronized
 
 使用 volatile 修饰变量、使用 synchronized 修饰方法都是通过*共享内存*作为中介实现的线程间通信方式；
 
@@ -132,9 +132,9 @@ private static class Runner implements Runnable {
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/object_monitor.png)
 
-### 等待通知机制
+### 2.3.2. 等待通知机制
 
-#### 基本方法
+#### 2.3.2.1. 基本方法
 
 实现“等待通知”机制的相关方法(以下假设当前对象为o，执行方法的当前线程为t)
 
@@ -164,11 +164,11 @@ private static class Runner implements Runnable {
 
 > 在图中，WaitThread 首先获取了对象的锁，然后调用对象的 `wait()` 方法，从而放弃了锁并进入了对象的等待队列 WaitQueue 中，进入等待状态。由于 WaitThread 释放了对象的锁，NotifyThread 随后获取了对象的锁，并调用对象的 `notify()` 方法，将 WaitThread 从 WaitQueue 移到 SynchronizedQueue 中，此时 WaitThread 的状态变为阻塞状态。NotifyThread 释放了锁之后，WaitThread 再次获取到锁并从 wait() 方法返回继续执行。
 
-#### 流程总结
+#### 2.3.2.2. 流程总结
 
 等待通知，即消费者生产者，遵循特定的原则。
 
-##### 消费者流程
+##### 2.3.2.2.1. 消费者流程
 
 - 获取对象的锁
 - 若条件不满足则调用对象的`wait()`方法，被通知后仍要检查条件
@@ -183,7 +183,7 @@ synchronized(obj){
 }
 ```
 
-##### 生产者流程
+##### 2.3.2.2.2. 生产者流程
 
 - 获得对象的锁
 - 改变条件
@@ -197,19 +197,20 @@ synchronized(obj){
 }
 ```
 
-### thread.join()
+### 2.3.3. thread.join()
 
 若线程A执行了 `t.join()`，则A会等待 t 线程执行完后才会从 `t.join` 出返回。类似的方法还包括 `join(long)`,`join(long,int)` 具备超时返回。
 
 需要知道的是， `join()` 的具体实现还是调用的 `wait()` 方法。
 
-### threadlocal
+### 2.3.4. threadlocal
 
-其内部实现的保存信息结构为 `ThreadLocalMap`，而 `ThreadLocalMap` 的数据接口是一个固定 key 为 `ThreadLocal<?>` 的 `WeakReference<ThreadLocal<?>>` 实现类，主要是为了避免阻止系统 GC。
+每个线程内部有一个 `ThreadLocalMap` 变量，用于保存线程私有对象。而 `ThreadLocalMap` 的 key 为 `ThreadLocal<?>`，内部数组 `Entry` 是继承了 `WeakReference<ThreadLocal<?>>` 类，主要是为了避免阻止系统 GC。
 
-> 和HashMap的最大的不同在于，ThreadLocalMap结构非常简单，没有next引用，也就是说ThreadLocalMap中解决Hash冲突的方式并非链表的方式，而是采用线性探测的方式，所谓线性探测，就是根据初始key的hashcode值确定元素在table数组中的位置，如果发现这个位置上已经有其他key值的元素被占用，则利用固定的算法寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
+> 和 `HashMap` 的最大的不同在于，ThreadLocalMap 结构非常简单，没有next引用，也就是说ThreadLocalMap中解决Hash冲突的方式并非链表的方式，而是采用线性探测的方式，所谓线性探测，就是根据初始key的hashcode值确定元素在table数组中的位置，如果发现这个位置上已经有其他key值的元素被占用，则利用固定的算法寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
 >
 > ThreadLocalMap解决Hash冲突的方式就是简单的步长加1或减1，寻找下一个相邻的位置。
+>
 > ```java
 > /**
 >  * Increment i modulo len.
@@ -225,19 +226,20 @@ synchronized(obj){
 >     return ((i - 1 >= 0) ? i - 1 : len - 1);
 > }
 > ```
+>
 > 显然ThreadLocalMap采用线性探测的方式解决Hash冲突的效率很低，如果**有大量不同的ThreadLocal对象放入map中时发送冲突，或者发生二次冲突，则效率很低**。
 > 所以这里引出的良好建议是：每个线程只存一个变量，这样的话所有的线程存放到map中的Key都是相同的ThreadLocal，如果一个线程要保存多个变量，就需要创建多个ThreadLocal，多个ThreadLocal放入Map中时会极大的增加Hash冲突的可能。
-> 由于ThreadLocalMap的key是弱引用，而Value是强引用。这就导致了一个问题，ThreadLocal在没有外部对象强引用时，发生GC时弱引用Key会被回收，而Value不会回收，如果创建ThreadLocal的线程一直持续运行，那么这个Entry对象中的value就有可能一直得不到回收，发生内存泄露。
-> 既然Key是弱引用，那么我们要做的事，就是在调用ThreadLocal的get()、set()方法时完成后再调用remove方法，将Entry节点和Map的引用关系移除，这样整个Entry对象在GC Roots分析后就变成不可达了，下次GC的时候就可以被回收。
+> 由于ThreadLocalMap的**key是弱引用，而Value是强引用**。这就导致了一个问题，ThreadLocal在没有外部对象强引用时，发生GC时弱引用Key会被回收，而Value不会回收，如果创建ThreadLocal的线程一直持续运行，那么这个Entry对象中的value就有可能一直得不到回收，发生内存泄露。
+> 既然Key是弱引用，那么我们要做的事，就是在调用ThreadLocal的get()、set()方法时完成后再调用`remove()`方法，将Entry节点和Map的引用关系移除，这样整个Entry对象在GC Roots分析后就变成不可达了，下次GC的时候就可以被回收。
 > 如果使用ThreadLocal的set方法之后，没有显示的调用remove方法，就有可能发生内存泄露，所以养成良好的编程习惯十分重要，使用完ThreadLocal之后，记得调用remove方法。
 
 用jdk文档中对 `ThreadLocal` 的描述：
 
 > Each thread holds an implicit reference to its copy of a thread-localvariable as long as the thread is alive and the ThreadLocalinstance is accessible; after a thread goes away, all of its copies ofthread-local instances are subject to garbage collection (unless otherreferences to these copies exist).
 
-# 经典实例
+# 3. 经典实例
 
-## 等待超时
+## 3.1. 等待超时
 
 ```java
 // 对当前对象加锁
@@ -253,7 +255,7 @@ public synchronized Object get(long mills) throws InterruptedException {
 }
 ```
 
-## 线程池
+## 3.2. 线程池
 
 请查看开源 jdbc 中间件的实现代码分析。
 
