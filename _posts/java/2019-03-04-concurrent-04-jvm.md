@@ -361,7 +361,7 @@ public class JavaMethodAreaOOM {
 
 ### 4.1.2. 可达性分析算法
 
-`Reachability Analysis` 算法的基本思路就是通过一系列的称为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference  Chain），当一个对象到GC  Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的。
+`Reachability Analysis` 算法的基本思路就是通过一系列的称为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC  Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的。
 
 
 小结： 本文主要整理了 java 常用并发框架知识点。
