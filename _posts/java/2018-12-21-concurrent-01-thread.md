@@ -201,7 +201,7 @@ synchronized(obj){
 
 若线程A执行了 `t.join()`，则A会等待 t 线程执行完后才会从 `t.join` 出返回。类似的方法还包括 `join(long)`,`join(long,int)` 具备超时返回。
 
-需要知道的是， `join()` 的具体实现还是调用的 `wait()` 方法。
+需要知道的是， `join()` 的具体实现还是调用的 `wait()` 方法， `join()` 方法是被 `synchronized` 修饰的，也就意味着调用 `t.join()` 时已经获取到了 `t` 的对象锁。
 
 ### 2.3.4. `Threadlocal`
 
