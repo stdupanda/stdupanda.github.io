@@ -124,7 +124,7 @@ private static class Runner implements Runnable {
 
 ### 2.3.1. volatile 和 synchronized
 
-使用 volatile 修饰变量、使用 synchronized 修饰方法都是通过*共享内存*作为中介实现的线程间通信方式；
+使用 volatile 修饰变量、使用 synchronized 修饰方法都是通过 *共享内存* 作为中介实现的线程间通信方式；
 
 > 对于 synchronized 关键字，无论是修饰方法还是代码段，最终在 class 文件内都是操作的一个 monitor 对象监视器，对应的jvm指令即 moniterenter、monitorexit；
 >
@@ -203,11 +203,11 @@ synchronized(obj){
 
 需要知道的是， `join()` 的具体实现还是调用的 `wait()` 方法。
 
-### 2.3.4. threadlocal
+### 2.3.4. `Threadlocal`
 
-每个线程内部有一个 `ThreadLocalMap` 用于保存线程私有对象。值存储在 `Entry[]` 数组中，key 为 `ThreadLocal<?>`对象，通过其成员变量与 `0x61c88647` 累加运算得出数组的 index。需要说明的是，`Entry` 类是继承自 `WeakReference<ThreadLocal<?>>`，目的是为了优化系统 GC。也就是说 key 可以gc，但值可能不gc。
+每个线程内部有一个 `ThreadLocalMap` 用于保存线程私有对象。值存储在 `Entry[]` 数组中，key 为 `ThreadLocal<?>`对象，通过其成员变量与 `0x61c88647` 累加运算得出数组的 index。需要说明的是，`Entry` 类是继承自 `WeakReference<ThreadLocal<?>>`，目的是为了优化系统 GC。也就是说 key 会被gc，但值可能不会被gc。
 
-> 和 `HashMap` 的最大的不同在于，ThreadLocalMap 结构非常简单，没有next引用，也就是说ThreadLocalMap中解决Hash冲突的方式并非链表的方式，而是采用线性探测的方式，所谓线性探测，就是根据初始key的hashcode值确定元素在table数组中的位置，如果发现这个位置上已经有其他key值的元素被占用，则利用固定的算法寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
+> 和 `HashMap` 的最大的不同在于，ThreadLocalMap 结构非常简单，没有next引用，也就是说ThreadLocalMap中解决Hash冲突的方式并非链表的方式，而是采用**线性探测**的方式，所谓线性探测，就是根据初始key的hashcode值确定元素在table数组中的位置，如果发现这个位置上已经有其他key值的元素被占用，则利用固定的算法寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
 >
 > ThreadLocalMap解决Hash冲突的方式就是简单的步长加1或减1，寻找下一个相邻的位置。
 >
@@ -257,7 +257,7 @@ public synchronized Object get(long mills) throws InterruptedException {
 
 ## 3.2. 线程池
 
-请查看开源 jdbc 中间件的实现代码分析。
+请参考开源 jdbc 连接池的实现代码分析。
 
 ---
 
