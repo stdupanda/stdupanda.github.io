@@ -35,7 +35,7 @@ public class MultiThread {
 }
 ```
 
-## 上下文切换损耗
+## 1.2. 上下文切换损耗
 
 > CPU通过给每个线程分配CPU时间片来实现线程切换机制，也就是通过时间片分配算法过来循环执行任务，当前任务执行一个时间片后会切换到下一个任务，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。
 
@@ -46,7 +46,7 @@ vmstat 1
 # 结果集中的 CS，context switch 即为上下文切换次数
 ```
 
-## 避免上下文切换
+## 1.3. 避免上下文切换
 
 - 无锁并发编程
 
@@ -64,7 +64,7 @@ Java的Atomic包使用CAS算法来更新数据，而不需要加锁。
 
 在单线程里实现多任务的调度，并在单线程里维持多个任务间的切换。
 
-## 1.2. 线程状态
+## 1.4. 线程状态
 
 |状态|说明|
 |:---|:---|
@@ -77,13 +77,13 @@ Java的Atomic包使用CAS算法来更新数据，而不需要加锁。
 
 参考 jdk1.8 doc，详解如下：
 
-### 1.2.1. `BLOCKED`
+### 1.4.1. `BLOCKED`
 
 > Thread state for a thread blocked waiting for a monitor lock.
 >
 > A thread in the blocked state is waiting for a monitor lock to enter a synchronized block/method or reenter a synchronized block/method after calling `Object.wait`.
 
-### 1.2.2. `WAITING`
+### 1.4.2. `WAITING`
 
 > Thread state for a waiting thread. A thread is in the waiting state due to calling one of the following methods:
 >
@@ -93,7 +93,7 @@ Java的Atomic包使用CAS算法来更新数据，而不需要加锁。
 >
 > A thread in the waiting state is waiting for another thread to perform a particular action. For example, a thread that has called `Object.wait()` on an object is waiting for another thread to call `Object.notify()` or `Object.notifyAll()` on that object. A thread that has called  `Thread.join()` is waiting for a specified thread to terminate.
 
-### 1.2.3. `TIMED_WAITING`
+### 1.4.3. `TIMED_WAITING`
 
 > Thread state for a waiting thread with a specified waiting time.
 >
@@ -105,7 +105,7 @@ Java的Atomic包使用CAS算法来更新数据，而不需要加锁。
 > - `LockSupport.parkNanos`
 > - `LockSupport.parkUntil`
 
-### 1.2.4. 状态转换总结
+### 1.4.4. 状态转换总结
 
 图示如下:
 
@@ -153,7 +153,9 @@ private static class Runner implements Runnable {
 
 ### 2.3.1. volatile 和 synchronized
 
-使用 volatile 修饰变量、使用 synchronized 修饰方法都是通过 *共享内存* 作为中介实现的线程间通信方式；
+使用 volatile 修饰变量、使用 synchronized 修饰方法都是通过 **共享内存** 作为中介实现的线程间通信方式；
+
+### 2.3.2. `synchronized` 实现原理
 
 > 对于 synchronized 关键字，无论是修饰方法还是代码段，最终在 class 文件内都是操作的一个 monitor 对象监视器，对应的jvm指令即 moniterenter、monitorexit；
 >
@@ -161,9 +163,9 @@ private static class Runner implements Runnable {
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/object_monitor.png)
 
-### 2.3.2. 等待通知机制
+### 2.3.3. 等待通知机制
 
-#### 2.3.2.1. 基本方法
+#### 2.3.3.1. 基本方法
 
 实现“等待通知”机制的相关方法(以下假设当前对象为o，执行方法的当前线程为t)
 
@@ -193,11 +195,11 @@ private static class Runner implements Runnable {
 
 > 在图中，WaitThread 首先获取了对象的锁，然后调用对象的 `wait()` 方法，从而放弃了锁并进入了对象的等待队列 WaitQueue 中，进入等待状态。由于 WaitThread 释放了对象的锁，NotifyThread 随后获取了对象的锁，并调用对象的 `notify()` 方法，将 WaitThread 从 WaitQueue 移到 SynchronizedQueue 中，此时 WaitThread 的状态变为阻塞状态。NotifyThread 释放了锁之后，WaitThread 再次获取到锁并从 wait() 方法返回继续执行。
 
-#### 2.3.2.2. 流程总结
+#### 2.3.3.2. 流程总结
 
 等待通知，即消费者生产者，遵循特定的原则。
 
-##### 2.3.2.2.1. 消费者流程
+##### 2.3.3.2.1. 消费者流程
 
 - 获取对象的锁
 - 若条件不满足则调用对象的`wait()`方法，被通知后仍要检查条件
@@ -212,7 +214,7 @@ synchronized(obj){
 }
 ```
 
-##### 2.3.2.2.2. 生产者流程
+##### 2.3.3.2.2. 生产者流程
 
 - 获得对象的锁
 - 改变条件
@@ -226,13 +228,13 @@ synchronized(obj){
 }
 ```
 
-### 2.3.3. thread.join()
+### 2.3.4. thread.join()
 
 若线程A执行了 `t.join()`，则A会等待 t 线程执行完后才会从 `t.join` 出返回。类似的方法还包括 `join(long)`,`join(long,int)` 具备超时返回。
 
 需要知道的是， `join()` 的具体实现还是调用的 `wait()` 方法， `join()` 方法是被 `synchronized` 修饰的，也就意味着调用 `t.join()` 时已经获取到了 `t` 的对象锁。
 
-### 2.3.4. `Threadlocal`
+### 2.3.5. `Threadlocal`
 
 每个线程内部有一个 `ThreadLocalMap` 用于保存线程私有对象。值存储在 `Entry[]` 数组中，key 为 `ThreadLocal<?>`对象，通过其成员变量与 `0x61c88647` 累加运算得出数组的 index。需要说明的是，`Entry` 类是继承自 `WeakReference<ThreadLocal<?>>`，目的是为了优化系统 GC。也就是说 key 会被gc，但值可能不会被gc。
 
