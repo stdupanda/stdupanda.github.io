@@ -23,7 +23,7 @@ Thread t = new Thread(new Runnable() {
   @Override
   public void run() {
     for (int i = 0; i < 10000; i++) {
-	  new Thread(new Runnable() {
+      new Thread(new Runnable() {
           @Override
           public void run() {
             map.put(UUID.randomUUID().toString(), "");
@@ -125,7 +125,7 @@ public V put(K key, V value) {
 > - LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。
 > - LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。
 
-> 1.ArrayBlockingQueue
+> 1. ArrayBlockingQueue
 >
 > ArrayBlockingQueue是一个用数组实现的有界阻塞队列。此队列按照先进先出（FIFO）的原则对元素进行排序。默认情况下不保证线程公平的访问队列，所谓公平访问队列是指阻塞的线程，可以按照阻塞的先后顺序访问队列，即先阻塞线程先访问队列。非公平性是对先等待的线程是非公平的，当队列可用时，阻塞的线程都可以争夺访问队列的资格，有可能先阻塞的线程最后才访问队列。为了保证公平性，通常会降低吞吐量。我们可以使用以下代码创建一个公平的阻塞队列。
 
@@ -146,25 +146,25 @@ public V put(K key, V value) {
 > }
 > ```
 >
-> 2.LinkedBlockingQueue
+> 2. LinkedBlockingQueue
 >
 > LinkedBlockingQueue是一个用链表实现的有界阻塞队列。此队列的默认和最大长度为Integer.MAX_VALUE。此队列按照先进先出的原则对元素进行排序。
 >
-> 3.PriorityBlockingQueue
+> 3. PriorityBlockingQueue
 >
 > PriorityBlockingQueue是一个支持优先级的无界阻塞队列。默认情况下元素采取自然顺序升序排列。也可以自定义类实现compareTo()方法来指定元素排序规则，或者初始化PriorityBlockingQueue时，指定构造参数Comparator来对元素进行排序。需要注意的是不能保证同优先级元素的顺序。
 >
-> 4.DelayQueue
+> 4. DelayQueue
 >
 > DelayQueue是一个支持延时获取元素的无界阻塞队列。队列使用PriorityQueue来实现。队列中的元素必须实现Delayed接口，在创建元素时可以指定多久才能从队列中获取当前元素。只有在延迟期满时才能从队列中提取元素。DelayQueue非常有用，可以将DelayQueue运用在以下应用场景。
 >
-> ·缓存系统的设计：可以用DelayQueue保存缓存元素的有效期，使用一个线程循环查询
+> - 缓存系统的设计：可以用DelayQueue保存缓存元素的有效期，使用一个线程循环查询
 > DelayQueue，一旦能从DelayQueue中获取元素时，表示缓存有效期到了。
 >
-> ·定时任务调度：使用DelayQueue保存当天将会执行的任务和执行时间，一旦从
+> - 定时任务调度：使用DelayQueue保存当天将会执行的任务和执行时间，一旦从
 > DelayQueue中获取到任务就开始执行，比如TimerQueue就是使用DelayQueue实现的。
 >
-> 5.SynchronousQueue
+> 5. SynchronousQueue
 >
 > SynchronousQueue是一个不存储元素的阻塞队列。每一个put操作必须等待一个take操作，否则不能继续添加元素。它支持公平访问队列。默认情况下线程采用非公平性策略访问队列。使用以下构造方法可以创建公平性访问的SynchronousQueue，如果设置为true，则等待的线程会采用先进先出的顺序访问队列。
 >
@@ -176,11 +176,11 @@ public V put(K key, V value) {
 >
 > SynchronousQueue可以看成是一个传球手，负责把生产者线程处理的数据直接传递给消费者线程。队列本身并不存储任何元素，非常适合传递性场景。SynchronousQueue的吞吐量高于LinkedBlockingQueue和ArrayBlockingQueue。
 >
-> 6.LinkedTransferQueue
+> 6. LinkedTransferQueue
 >
 > LinkedTransferQueue是一个由链表结构组成的无界阻塞TransferQueue队列。相对于其他阻塞队列，LinkedTransferQueue多了tryTransfer和transfer方法。
 >
-> 7.LinkedBlockingDeque
+> 7. LinkedBlockingDeque
 >
 > LinkedBlockingDeque是一个由链表结构组成的双向阻塞队列。所谓双向队列指的是可以从队列的两端插入和移出元素。双向队列因为多了一个操作队列的入口，在多线程同时入队时，也就减少了一半的竞争。相比其他的阻塞队列，LinkedBlockingDeque多了addFirst、addLast、offerFirst、offerLast、peekFirst和peekLast等方法，以First单词结尾的方法，表示插入、获取（peek）或移除双端队列的第一个元素。以Last单词结尾的方法，表示插入、获取或移除双端队列的最后一个元素。另外，插入方法add等同于addLast，移除方法remove等效于removeFirst。但是take方法却等同于takeFirst，不知道是不是JDK的bug，使用时还是用带有First和Last后缀的方法更清楚。在初始化LinkedBlockingDeque时可以设置容量防止其过度膨胀。另外，双向阻塞队列可以运用在“工作窃取”模式中。
 
@@ -572,6 +572,8 @@ public class CountDownLatchTest {
 > 通过扩展线程池进行监控。可以通过继承线程池来自定义线程池，重写线程池的beforeExecute、afterExecute和terminated方法，也可以在任务执行前、执行后和线程池关闭前执行一些代码来进行监控。例如，监控任务的平均执行时间、最大执行时间和最小执行时间等。
 
 # `Executor` 框架
+
+整理
 
 ## `ThreadPoolExecutor`
 
