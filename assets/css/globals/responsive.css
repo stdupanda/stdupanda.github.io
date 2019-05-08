@@ -1,8 +1,9 @@
 .container {
   width: auto;
   /*1020=1024-4*/
+  /*1276=1280-4*/
   /*1362=1366-4*/
-  max-width: 1362px;
+  max-width: 1276px;
   padding-left: 20px;
   padding-right: 20px
 }
