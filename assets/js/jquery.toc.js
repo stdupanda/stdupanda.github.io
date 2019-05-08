@@ -6,8 +6,9 @@
       noBackToTopLinks: false,
       title: '文章目录',
       minimumHeaders: 2,
-      headers: 'h1, h2, h3, h4, h5, h6',
-      listType: 'ol', // values: [ol|ul]
+      // 此处需确认 h1
+      headers: 'h2, h3, h4, h5, h6', // which headers you want to link to. By default h1, h2, h3, h4, h5, h6 are displayed
+      listType: 'ul', // values: [ol|ul]
       showEffect: 'show', // values: [show|slideDown|fadeIn|none]
       showSpeed: 0 // set to 0 to deactivate effect
     },
