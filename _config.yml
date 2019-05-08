@@ -57,7 +57,7 @@ subscribe_rss: /feed.xml
 # ---------------- #
 markdown: kramdown
 kramdown:
-    input: GFM
+  input: GFM
 highlighter: rouge
 paginate: 9
 lsi: false
@@ -65,17 +65,17 @@ quiet: false
 excerpt_separator: "\n\n"
 permalink: /:year/:month/:day/:title/
 gems:
-    - rouge
+  - rouge
 #     - jekyll-html-pipeline
-    - jekyll-paginate
-    - jekyll-sitemap
-    - jekyll-feed
-    - jemoji
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-feed
+  - jemoji
 #     - jekyll-mentions
 collections:
-    wiki:
-        output: true
-        permalink: /wiki/:path/
+  wiki:
+    output: true
+    permalink: /wiki/:path/
 
 # ---------------- #
 #      Socials     #
@@ -101,21 +101,21 @@ youyan_username: 2138178
 lazy_load_duoshuo: true
 
 gitalk:
-    clientID: 8f17272c510f4e20dcc2
-    clientSecret: ba026b57038416b0cd334d4901dcdf226721a87e
-    repo: ghpage_issue
-    owner: stdupanda
-    admin: stdupanda
+  clientID: 8f17272c510f4e20dcc2
+  clientSecret: ba026b57038416b0cd334d4901dcdf226721a87e
+  repo: ghpage_issue
+  owner: stdupanda
+  admin: stdupanda
 
 # ---------------- #
 #    Analytics     #
 # ---------------- #
 google:
-    analytics_id: UA-85920043-1
+  analytics_id: UA-85920043-1
 
 # ---------------- #
 #      Datas       #
 # ---------------- #
-skill_software_keywords: [Java, Design Patterns, Android, C#]
+skill_software_keywords: [Java, Architect, Concurrency, 微服务架构, 系统设计, 问题处理]
 skill_mobile_app_keywords: [Android, Fast Develop]
-skill_windows_keywords: [simple C#]
+#skill_windows_keywords: [simple C#]
