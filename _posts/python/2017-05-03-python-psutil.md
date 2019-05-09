@@ -10,7 +10,8 @@ keywords: Python, Ubuntu, psutil
 
 它主要应用于系统监控，分析和限制系统资源及进程的管理。它实现了同等命令行工具提供的功能，如ps、top、lsof、netstat、ifconfig、who、df、kill、free、nice、ionice、iostat、iotop、uptime、pidof、tty、taskset、pmap等。目前支持32位和64位的Linux、Windows、OS X、FreeBSD和Sun Solaris等操作系统，
 
-# 配置 Python
+## 配置 Python
+
 ```bash
 sudo apt-get install python
 sudo apt-get install python-dev
@@ -21,13 +22,15 @@ cd psutil-3.2.1
 sudo python setup.py install
 # 即可完成安装
 ```
-# 创建 py 脚本
+
+## 创建 py 脚本
 
 创建 py 脚本文件：
+
 ```bash
 vim get_sys_info.py
 ```
-内容如下：
+
 ```python
 #!/usr/bin/env python
 #coding:utf-8
@@ -86,16 +89,19 @@ if __name__ == "__main__":
   else:
     Sysinfo()
 ```
-# 脚本运行方式
+
+## 脚本运行方式
 
 脚本运行方式有2种
 
 - 不加参数，直接输出当前操作系统信息
+
 ```bash
 python get_sys_info.py
 ```
 
 - 加入“-t 一个数字”，查看给定秒内的平均网络速度
+
 ```bash
 python get_sys_info.py -t 10
 ```
