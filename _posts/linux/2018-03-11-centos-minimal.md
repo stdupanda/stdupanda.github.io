@@ -8,7 +8,7 @@ keywords: linux
 
 本文记录最小化安装 centos 后的各种问题解决。
 
-# 网络连接异常
+## 网络连接异常
 
 > 建议直接使用 `setup` 命令去修改配置。
 >
@@ -16,7 +16,7 @@ keywords: linux
 
 注意：新版本的 `setup` 内不再包括网卡配置，可以使用命令：**`nmtui`** (即： network manager tool ui) 来进行配置。
 
-## 修改网络配置
+### 修改网络配置
 
 修改 `/etc/sysconfig/network-scripts/` 的，网卡名字是 `ifcfg-xxx`。
 
@@ -51,16 +51,16 @@ GATEWAY=
 BROADCAST=
 ```
 
-## 配置 DNS
+### 配置 DNS
 
-`vim /etc/resolv.conf `
+`vim /etc/resolv.conf`
 
 ```bash
 nameserver 202.96.134.133
 nameserver 8.8.8.8
 ```
 
-## 重启网络服务
+### 重启网络服务
 
 ```bash
 /etc/init.d/network restart
@@ -70,18 +70,3 @@ systemctl status network -l
 ```
 
 重启服务再 `ip addr`查看下配置是否已生效。
-
-# mysql
-
-## 安装
-
-```shell
-yum install wget
-wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.21-1.el6.x86_64.rpm-bundle.tar
-wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-5.7.21-1.el6.x86_64.rpm-bundle.tar
-#解压到某个路径，安装全部的 rpm 包
-yum install mysql-*.rpm
-```
-安装过程若无提示密码则尝试查看日志： `grep password` 即可。
-
-`mysql` 其余问题请参考： [MySQL 运维整理]( https://stdupanda.github.io/2018/03/10/mysql/ "  ")
