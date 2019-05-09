@@ -318,11 +318,11 @@ class FIFOMutex {
 > ConditionObject是同步器AbstractQueuedSynchronizer的内部类，因为Condition的操作需要获取相关联的锁，所以作为同步器的内部类也较为合理。每个Cndition对象都包含着一个队列（以下称为等待队列），该队列是Condition对象实现等待/通知功能的关键。
 >
 > 下面将分析Condition的实现，主要包括：等待队列、等待和通知。
-
+>
 > 等待队列是一个FIFO的队列，在队列中的每个节点都包含了一个线程引用，该线程就是在Condition对象上等待的线程，如果一个线程调用了Condition.awai()方法，那么该线程将会释放锁、构造成节点加入等待队列并进入等待状态。事实上，节点的定义复用了同步器中节点的定义，也就是说，同步队列和等待队中节点类型都是同步器的静态内部类AbstractQueuedSynchronizer.Node。
 >
 > 一个Condition包含一个等待队列，Condition拥有首节点（firstWaiter）和尾节点（lastWaiter）。当前线程调用Condition.await()方法，将会以当前线程构造节点，并将节点从尾部加入等待队列。
-
+>
 > 调用Condition的await()方法（或者以await开头的方法），会使当前线程进入等待队列并释放锁，同时线程状态变为等待状态。当从await()方法返回时，当线程一定获取了Condition相关联的锁。如果从队列（同步队列和等待队列）的角度看await()方法，当调用await()方法时，相当于同步队列的首节点（获取锁的节点）移动到Condition的等待队列中。
 
 ```java
