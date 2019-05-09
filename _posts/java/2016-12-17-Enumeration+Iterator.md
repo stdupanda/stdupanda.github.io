@@ -30,5 +30,3 @@ Enumeration速度是Iterator的2倍，同时占用更少的内存，但是，Ite
 链接：https://www.zhihu.com/question/42961567/answer/95050993
 来源：知乎
 著作权归作者所有，转载请联系作者获得授权。
-
-```

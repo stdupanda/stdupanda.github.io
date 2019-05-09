@@ -10,13 +10,13 @@ keywords: Java, java, annotation, Annotation
 
 > Annotation是一种应用于类、方法、参数、变量、构造器及包声明中的特殊修饰符。它是一种由 JSR-175 标准选择用来描述元数据的一种工具。
 
-# 作用
+## 作用
 
 > - 生成文档，如 `javadoc` 规范中的 `@param` `@return` 等
 > - 实现代码依赖 如 `spring` 的注解
 > - 编译检查格式 如 `@Override` 等
 
-# `JDK` 四个元注解
+## `JDK` 四个元注解
 
 可在 `java.lang.annotation` 包中查看
 
@@ -25,11 +25,11 @@ keywords: Java, java, annotation, Annotation
 > - @Documented 注解是否将包含在JavaDoc中，定义此 Annotation 会将此注解包含在 javadoc 中
 > - @Inherited  是否允许子类继承该注解
 
-# 说明
+## 说明
 
 详情参见 `jdk`，常用整理如下：
 
-## `@Target`
+### `@Target`
 
 > If an @Target meta-annotation is not present on an annotation type T , then an annotation of type T may be written as a modifier **for any declaration except a type parameter declaration.**
 
@@ -41,7 +41,7 @@ keywords: Java, java, annotation, Annotation
 |`ElementType.PARAMETER`|Formal parameter declaration|
 |...|...|
 
-## `@Retention`
+### `@Retention`
 
 |取值|说明|
 |----------|--------|
@@ -49,9 +49,9 @@ keywords: Java, java, annotation, Annotation
 |`RetentionPolicy.CLASS`|Annotations are to be recorded in the class file by the compiler but need not be retained by the VM at run time.  **This is the default behavior**.|
 |`RetentionPolicy.SOURCE`|Annotations are to be discarded by the compiler.|
 
-## `@Documented` & `@Inherited`
+### `@Documented` & `@Inherited`
 
-# 解析注解
+## 解析注解
 
 可以关注下 `java.lang.reflect` 包的 `AnnotatedElement` 接口。
 
@@ -64,9 +64,9 @@ Annotation[] getDeclaredAnnotations();
 ...
 ```
 
-# 测试
+## 测试
 
-## 自定义注解类
+### 自定义注解类
 
 ```java
 import java.lang.annotation.Documented;
@@ -86,7 +86,7 @@ public @interface MyAnnotation {
 }
 ```
 
-## 测试类
+### 测试类
 
 ```java
 @MyAnnotation(name = "sss")
