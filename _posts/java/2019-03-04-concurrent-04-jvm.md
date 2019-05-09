@@ -6,8 +6,6 @@ description: java并发基础04-jvm
 keywords: Java, java, jdk, openjdk, concurrent, lock, jvm
 ---
 
-整理 jvm 相关内容。
-
 JVM 以一个进程(Process)的身份运行在Linux系统上，了解Linux与进程的内存关系，是理解JVM与Linux内存的关系的基础。
 
 ## Linux 内存空间
