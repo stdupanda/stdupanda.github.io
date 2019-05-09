@@ -247,7 +247,4 @@ private void initClassLoaders() {
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_tomcat.png)
 
-
-好了，就整理到这里吧。
-
 建议访问 Oracle [官网链接](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/findingclasses.html) 以进一步掌握类加载流程。

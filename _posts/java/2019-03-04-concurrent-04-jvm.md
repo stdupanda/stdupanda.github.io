@@ -128,7 +128,7 @@ jdk8 开始，HotSpot VM 移除永久代 `PermGen`，改为 `MetaSpace` 元数�
 >
 > Additionally, each garbage collector in HotSpot needed specialized code for dealing with metadata in the PermGen. Detaching metadata from PermGen not only allows the seamless management of Metaspace, but also allows for improvements such as simplification of full garbage collections and future concurrent de-allocation of class metadata.
 
-https://www.infoq.com/articles/Java-PERMGEN-Removed
+更多可以阅读： [Where Has the Java PermGen Gone?](https://www.infoq.com/articles/Java-PERMGEN-Removed "Where Has the Java PermGen Gone?")
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/permgen_to_metadata.jpg)
 
@@ -361,7 +361,6 @@ public class JavaMethodAreaOOM {
 
 `Reachability Analysis` 算法的基本思路就是通过一系列的称为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC  Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的。
 
-
 小结： 本文主要整理了 java 常用并发框架知识点。
 
 ```java
@@ -376,7 +375,6 @@ public class JavaMethodAreaOOM {
 ```
 
 ***致谢：***
-
-美团技术团队 http://www.open-open.com/lib/view/open1420814127390.html
-
 周志明 《深入理解java虚拟机：JVM高级特性与最佳实践》
+
+美团技术团队： [Linux与JVM的内存关系分析](http://www.open-open.com/lib/view/open1420814127390.html "Linux与JVM的内存关系分析")

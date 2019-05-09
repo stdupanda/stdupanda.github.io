@@ -82,7 +82,7 @@ public V put(K key, V value) {
 ##### 锁分段定位
 
 > 既然ConcurrentHashMap使用分段锁Segment来保护不同段的数据，那么在插入和获取元素的时候，必须先通过散列算法定位到Segment。可以看到ConcurrntHashMap会首先使用Wang/Jenkins hash的变种算法对元素的hashCode进行一次再散列。
-
+>
 > ```java
 > private static int hash(int h) {
 >   h += (h << 15) ^ 0xffffcd7d;
@@ -93,7 +93,7 @@ public V put(K key, V value) {
 >   return h ^ (h >>> 16);
 > }
 > ```
-
+>
 > 之所以进行再散列，目的是减少散列冲突，使元素能够均匀地分布在不同的Segment上，从而提高容器的存取效率。假如散列的质量差到极点，那么所有的素都在一个Segment中，不仅存取元素缓慢，分段锁也会失去意义。
 
 ### 并发 `queue`
