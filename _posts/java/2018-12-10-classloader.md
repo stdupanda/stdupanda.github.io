@@ -8,15 +8,15 @@ keywords: Java, java, jdk, openjdk
 
 整理总结 `jvm` 类加载器机制。
 
-# 1. 前言
+## 前言
 
 对于 Class 对象大家应该不陌生， 然而当说到编译器处理 `.java` 文件后形成的 `.class` 字节码文件时， 按需加载策略是怎样的呢？ `Class` 对象是如何创建又存储在哪儿呢？
 
 熟悉 jvm 加载处理 class 的流程有助于掌握整个 jvm 的运行机制， 因此写篇文件记录一下。
 
-# 2. 字节码文件的编译和加载
+## 字节码文件的编译和加载
 
-## 2.1. 编译流程
+### 编译流程
 
 整体流程就是：
 
@@ -26,17 +26,17 @@ keywords: Java, java, jdk, openjdk
 
 `.java` -> 词法、语法、语义分析器 -> 抽象语法树 -> 字节码生成器 -> 代码生成器 -> 字节码
 
-## 2.2. 加载流程
+### 加载流程
 
 `.class` -> ClassLoader -> 字节码校验器 -> 解释器 -> OS
 
-# 3. JVM 基础结构
+## JVM 基础结构
 
 如图：
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/jvm.jpg)
 
-# 4. 类加载器 ClassLoader
+## 类加载器 ClassLoader
 
 > The class ClassLoader use the **binary name** of a class to load a class, by locating or generating data that constitutes a definition for the class.
 
@@ -64,41 +64,41 @@ public final class Class<T> implements java.io.Serializable,
 }
 ```
 
-## 4.1. `ClassLoader` 类别
+### `ClassLoader` 类别
 
 JVM 中内置了三个重要的 ClassLoader，分别是 Bootstrap ClassLoader、ExtClassLoader 和 AppClassLoader。
 
-### 4.1.1. Bootstrap ClassLoader
+#### Bootstrap ClassLoader
 
 `Bootstrap ClassLoader` 是由底层代码实现并被嵌入到了 JVM 中，我们将它称之为「根加载器」，当 JVM 启动时，`Bootstrap ClassLoader` 也随着启动，负责加载 JVM 运行时核心类，这些类位于 `JAVA_HOME/lib/rt.jar` 文件中，我们常用内置库都在里面，比如 `java.util.*`、`java.io.*`、`java.nio.*`、`java.lang.*` 等等。可以用指令 `-Xbootclasspath` 指定自定义路径。
 
-### 4.1.2. `ExtClassLoader`
+#### `ExtClassLoader`
 
 `ExtClassLoader` 位于 jdk 的 `rt.jar` 内 `sun.misc.Launcher$ExtClassLoader`，继承自 `URLClassLoader`, 负责加载 JVM 扩展类，比如 swing 系列、内置的 js 引擎、xml 解析器 等等，这些库名通常以 javax 开头，它们的 jar 包位于 `JAVA_HOME/lib/ext/*.jar` 中，有很多 jar 包。可以用指令 `-D java.ext.dirs` 自定义指定路径。
 
-### 4.1.3. `AppClassLoader`
+#### `AppClassLoader`
 
 `AppClassLoader` 位于 jdk 的 `rt.jar` 内 `sun.misc.Launcher$AppClassLoader`， 继承自 `URLClassLoader`, 是直接面向我们用户的类加载器，它会加载 Classpath 环境变量里定义的路径中的 jar 包和目录。我们自己编写的代码以及使用的第三方 jar 包通常都是由它来加载的。`AppClassLoader` 可以由 `ClassLoader` 类提供的静态方法 getSystemClassLoader() 得到，，当我们的 main 方法执行的时候，这第一个用户类的加载器就是 AppClassLoader。
 
-### 4.1.4. 介绍一下 `URLClassLoader`
+#### 介绍一下 `URLClassLoader`
 
 jdk 内置了一个 `URLClassLoader`，用户只需要传递规范的网络路径给构造器，就可以使用 `URLClassLoader` 来加载对应类库了。`URLClassLoader` 不但可以加载本地路径的类库，还可以加载远程类库，取决于构造器中不同的地址形式。`ExtClassLoader` 和 `AppClassLoader` 都是 `URLClassLoader` 的子类，它们都是从本地文件系统里加载类库。
 
-### 4.1.5. 总结
+#### 总结
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_order2.png)
 
-## 4.2. `ClassLoader` 运行机制
+### `ClassLoader` 运行机制
 
-### 4.2.1. 校验加载顺序
+#### 校验加载顺序
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_order.png)
 
-### 4.2.2. 双亲委派机制
+#### 双亲委派机制
 
 其实 jdk 文档介绍的很清楚：
 
-> The ClassLoader class uses a delegation model to search for classes and resources. Each instance of ClassLoader has an associated parent class loader. When requested to find a class or resource, a ClassLoader instance will delegate the search for the class or resource to its parent class loader before attempting to find the class or resource itself. The virtual machine's built-in class loader, called the "bootstrap class loader", does not itself have a parent but may serve as the parent of a ClassLoader instance. 
+> The ClassLoader class uses a delegation model to search for classes and resources. Each instance of ClassLoader has an associated parent class loader. When requested to find a class or resource, a ClassLoader instance will delegate the search for the class or resource to its parent class loader before attempting to find the class or resource itself. The virtual machine's built-in class loader, called the "bootstrap class loader", does not itself have a parent but may serve as the parent of a ClassLoader instance.
 
 JVM 在加载类时默认采用的是双亲委派机制。通俗的说，就是某个特定的类加载器在接到加载类请求时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以完成，则返回，否则自己尝试加载。
 
@@ -158,13 +158,13 @@ protected Class<?> loadClass(String name, boolean resolve)
 >
 > `ExtClassLoader` 的构造函数很容易看，parent 直接传入的是 `null`。
 
-## 4.3. 用户自定义类加载器和线程上下文类加载器
+### 用户自定义类加载器和线程上下文类加载器
 
 自定义类加载器需要注意 `loadClass()`、`findClass()` 和 `defineClass()` 这三个方法的覆写
 
 此处不详细介绍用户自定义类加载器。
 
-### 4.3.1. 线程上下文类加载器
+#### 线程上下文类加载器
 
 线程上下文类加载器，可通过方法 `getContextClassLoader()` 和 `setContextClassLoader()` 获取和设置。在没有指定线程上下文类加载器的情况下，线程将继承父线程的上下文类加载器。Java 应用运行的初始线程的上下文类加载器是应用类加载器，所以在不指定的情况下就默认是应用类加载器。
 
