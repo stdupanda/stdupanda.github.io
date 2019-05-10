@@ -154,11 +154,11 @@ Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。
 
 - `wait` & `sleep`
 
-| `wait`|`sleep`|
+| wait|sleep|
 |:--|:--|
 | 释放锁 | 持有锁 |
 | 需先获取锁 |—|
-| 需在loop中，进行检查 |—|
+| 需在loop中判断条件是否满足 |—|
 
 ### 线程状态
 
@@ -209,7 +209,7 @@ Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/thread_state.png)
 
-> 特别说明，关于 `BLOCKED` 状态，阻塞状态是线程阻塞在进入 `synchronized` 关键字修饰的方法或代码块（获取锁）时的状态，但是阻塞在 `java.concurrent` 包中 `Lock` 接口的线程状态却是等待状态，因为 `java.concurrent`包中Lock接口对于阻塞的实现均使用了 `LockSupport` 类中的相关方法。
+> 特别说明，关于 `BLOCKED` 状态，阻塞状态是线程阻塞在进入 `synchronized` 关键字修饰的方法或代码块（获取锁）时的状态，但是阻塞在 `java.concurrent` 包中 `Lock` 接口的线程状态却是等待状态，因为 `java.concurrent`包中 `Lock` 接口对于阻塞的实现均使用了 `LockSupport` 类中的相关方法。
 
 ## 基本操作
 
@@ -255,9 +255,9 @@ private static class Runner implements Runnable {
 
 #### `synchronized` 实现原理
 
-> 对于 synchronized 关键字，无论是修饰方法还是代码段，最终在 class 文件内都是操作的一个 monitor 对象监视器，对应的jvm指令即 moniterenter、monitorexit；
+> 对于 synchronized 关键字，无论是修饰方法还是代码段，最终在 class 文件内都是操作的一个 monitor 对象监视器，对应的 jvm 指令即 `moniterenter`、`monitorexit`；
 >
-> 任意线程对Object（Object由synchronized保护）的访问，首先要获得 Object 的监视器。如果获取失败，线程进入同步队列，线程状态变为 BLOCKED。当访问 Object 的前驱（获得了锁的线程）释放了锁，则该释放操作唤醒阻塞在同步队列中的线程，使其重新尝试对监视器的获取。
+> 任意线程对 Object（Object由synchronized保护）的访问，首先要获得 Object 的监视器。如果获取失败，线程进入同步队列，线程状态变为 BLOCKED。当访问 Object 的前驱（获得了锁的线程）释放了锁，则该释放操作唤醒阻塞在同步队列中的线程，使其重新尝试对监视器的获取。
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/object_monitor.png)
 
@@ -275,7 +275,7 @@ private static class Runner implements Runnable {
 |`notify()`|t获取了o的对象锁后通知一个在o上等待的线程使其从obj.wait()方法返回|
 |`notifyAll()`|通知所有等待在o的对象锁上的线程|
 
-以上仅为简述，**必须详细查看jdk文档的javadoc文档及实例！**
+以上仅为简述，**必须详细查看 jdk 文档的注释及实例！**
 
 > 1）使用 `wait()`、`notify()` 和 `notifyAll()` 时需要先对调用对象加锁。
 >
@@ -328,17 +328,21 @@ synchronized(obj){
 
 #### thread.join()
 
-若线程A执行了 `t.join()`，则A会等待 t 线程执行完后才会从 `t.join` 出返回。类似的方法还包括 `join(long)`,`join(long,int)` 具备超时返回。
+若线程 A 执行了 `t.join()`，则 A 会等待 t 线程执行完后才会从 `t.join` 出返回。类似具备超时返回的方法还包括 `join(long)`,`join(long,int)` 等。
 
-需要知道的是， `join()` 的具体实现还是调用的 `wait()` 方法， `join()` 方法是被 `synchronized` 修饰的，也就意味着调用 `t.join()` 时已经获取到了 `t` 的对象锁。
+> 需要知道的是， `join()` 的具体实现还是调用的 `wait()` 方法， `join()` 方法是被 `synchronized` 修饰的，也就意味着调用 `t.join()` 时已经获取到了 `t` 的对象锁。
 
 #### `Threadlocal`
 
-每个线程内部有一个 `ThreadLocalMap` 用于保存线程私有对象。值存储在 `Entry[]` 数组中，key 为 `ThreadLocal<?>`对象，通过其成员变量与 `0x61c88647` 累加运算得出数组的 index。需要说明的是，`Entry` 类是继承自 `WeakReference<ThreadLocal<?>>`，目的是为了优化系统 GC。也就是说 key 会被gc，但值可能不会被gc。
+jdk文档中对 `ThreadLocal` 的描述：
 
-> 和 `HashMap` 的最大的不同在于，ThreadLocalMap 结构非常简单，没有next引用，也就是说ThreadLocalMap中解决Hash冲突的方式并非链表的方式，而是采用**线性探测**的方式，所谓线性探测，就是根据初始key的hashcode值确定元素在table数组中的位置，如果发现这个位置上已经有其他key值的元素被占用，则利用固定的算法寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
+> Each thread holds an implicit reference to its copy of a thread-local variable as long as the thread is alive and the ThreadLocal instance is accessible; after a thread goes away, all of its copies of thread-local instances are subject to garbage collection (unless other references to these copies exist).
+
+每个线程内部有一个 `ThreadLocalMap` 类型的成员变量，用于保存线程私有对象。值存储在 `Entry[]` 数组中，key 为 `ThreadLocal<?>` 对象，通过其成员变量与 `0x61c88647` 累加运算得出 `Entry[]` 数组的 index。需要说明的是，`Entry` 类是继承自 `WeakReference<ThreadLocal<?>>`，目的是为了优化系统 GC。也就是说 key 会被 gc，但值可能不会被 gc。
+
+> 和 `HashMap` 的最大的不同在于，ThreadLocalMap 结构非常简单，没有 next 引用，也就是说 ThreadLocalMap 中解决 Hash 冲突的方式并非链表的方式，而是采用**线性探测**的方式，所谓线性探测，就是根据初始 key 的 hashcode 值确定元素在 table 数组中的位置，如果发现这个位置上已经有其他 key 值的元素被占用，则利用**固定的算法**寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
 >
-> ThreadLocalMap解决Hash冲突的方式就是简单的步长加1或减1，寻找下一个相邻的位置。
+> ThreadLocalMap 解决 Hash 冲突的方式就是简单的步长加 1 或减 1，寻找下一个相邻的位置。
 >
 > ```java
 > /**
@@ -356,15 +360,13 @@ synchronized(obj){
 > }
 > ```
 >
-> 显然ThreadLocalMap采用线性探测的方式解决Hash冲突的效率很低，如果**有大量不同的ThreadLocal对象放入map中时发送冲突，或者发生二次冲突，则效率很低**。
-> 所以这里引出的良好建议是：每个线程只存一个变量，这样的话所有的线程存放到map中的Key都是相同的ThreadLocal，如果一个线程要保存多个变量，就需要创建多个ThreadLocal，多个ThreadLocal放入Map中时会极大的增加Hash冲突的可能。
-> 由于ThreadLocalMap的**key是弱引用，而Value是强引用**。这就导致了一个问题，ThreadLocal在没有外部对象强引用时，发生GC时弱引用Key会被回收，而Value不会回收，如果创建ThreadLocal的线程一直持续运行，那么这个Entry对象中的value就有可能一直得不到回收，发生内存泄露。
-> 既然Key是弱引用，那么我们要做的事，就是在调用ThreadLocal的get()、set()方法时完成后再调用`remove()`方法，将Entry节点和Map的引用关系移除，这样整个Entry对象在GC Roots分析后就变成不可达了，下次GC的时候就可以被回收。
-> 如果使用ThreadLocal的set方法之后，没有显示的调用remove方法，就有可能发生内存泄露，所以养成良好的编程习惯十分重要，使用完ThreadLocal之后，记得调用remove方法。
-
-用jdk文档中对 `ThreadLocal` 的描述：
-
-> Each thread holds an implicit reference to its copy of a thread-localvariable as long as the thread is alive and the ThreadLocalinstance is accessible; after a thread goes away, all of its copies ofthread-local instances are subject to garbage collection (unless otherreferences to these copies exist).
+> 显然 ThreadLocalMap 采用线性探测的方式解决 Hash 冲突的效率很低，如果**有大量不同的 ThreadLocal 对象放入 map 中时更容易发送冲突，或者发生二次冲突**。
+>
+> 所以这里引出的良好建议是：每个线程只存一个变量，这样的话所有的线程存放到 map 中的 Key 都是相同的 ThreadLocal。如果一个线程要保存多个变量，就需要创建多个 ThreadLocal，多个 ThreadLocal 放入 Map 中就容易造成 Hash 冲突。
+> 
+> 由于 ThreadLocalMap 的 **key 是弱引用，而 Value 是强引用**。这就导致了一个问题，ThreadLocal 在没有外部对象强引用时，发生 GC 时弱引用 Key 会被回收，而 Value 不会回收，如果创建 ThreadLocal 的线程一直持续运行，那么这个 Entry 对象中的 value 就有可能一直得不到回收，发生内存泄露。
+>
+> 既然 Key 是弱引用，那么我们要做的事，就是在调用 ThreadLocal 的 `get()`、`set()` 方法时完成后再调用 **`remove()`** 方法，将 Entry 节点和 Map 的引用关系移除，这样整个 Entry 对象在 GC Roots 分析后就变成不可达了，下次 GC 的时候就可以被回收。否则就有可能发生内存泄露。
 
 ## 经典实例
 
