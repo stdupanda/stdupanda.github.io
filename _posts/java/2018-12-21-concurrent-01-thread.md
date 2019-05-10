@@ -43,15 +43,17 @@ public class MultiThread {
 
 程序一般不会直接去使用内核线程，而是去使用内核线程的一种高级接口——轻量级进程（Light Weight Process,LWP），也就是通常意义上所讲的线程，每个轻量级进程都由一个内核线程支持，即一对一的线程模型。
 
-由于内核线程的支持，每个轻量级进程都成为一个独立的调度单元，即使有一个轻量级进程在系统调用中阻塞了，也不会影响整个进程继续工作，但是轻量级进程具有它的局限性：首先，由于是基于内核线程实现的，所以各种线程操作，如创建、析构及同步，都需要进行系统调用。而系统调用的代价相对较高，需要在用户态（User Mode）和内核态（KernelMode）中来回切换。其次，每个轻量级进程都需要有一个内核线程的支持，因此轻量级进程要消耗一定的内核资源（如内核线程的栈空间），因此一个系统支持轻量级进程的数量是有限的。
+由于内核线程的支持，每个轻量级进程都成为一个独立的调度单元，即使有一个轻量级进程在系统调用中阻塞了，也不会影响整个进程继续工作，但是轻量级进程具有它的局限性：首先，由于是基于内核线程实现的，所以各种线程操作，如创建、析构及同步，都需要进行系统调用。而系统调用的代价相对较高，需要在用户态（User Mode）和内核态（Kernel Mode）中来回切换。其次，每个轻量级进程都需要有一个内核线程的支持，因此轻量级进程要消耗一定的内核资源（如内核线程的栈空间），也就是说一个系统支持轻量级进程的数量是有限的。
 
-2.使用用户线程实现
+- 使用用户线程实现
 
 用户线程的建立、同步、销毁和调度完全在用户态中完成，不需要内核的帮助。如果程序实现得当，这种线程不需要切换到内核态，因此操作可以是非常快速且低消耗的，也可以支持规模更大的线程数量，部分高性能数据库中的多线程就是由用户线程实现的。这种进程与用户线程之间1：N的关系称为一对多的线程模型，
 
 使用用户线程的优势在于不需要系统内核支援，劣势也在于没有系统内核的支援，所有的线程操作都需要用户程序自己处理。线程的创建、切换和调度都是需要考虑的问题，而且由于操作系统只把处理器资源分配到进程，那诸如“阻塞如何处理”、“多处理器系统中如何将线程映射到其他处理器上”这类问题解决起来将会异常困难，甚至不可能完成。
 
-3.使用用户线程加轻量级进程混合实现
+早期的 java 曾经采用过此模式。
+
+- 使用用户线程加轻量级进程混合实现
 
 在这种混合实现下，既存在用户线程，也存在轻量级进程。用户线程还是完全建立在用户空间中，因此用户线程的创建、切换、析构等操作依然廉价，并且可以支持大规模的用户线程并发。而操作系统提供支持的轻量级进程则作为用户线程和内核线程之间的桥梁，这样可以使用内核提供的线程调度功能及处理器映射，并且用户线程的系统调用要通过轻量级线程来完成，大大降低了整个进程被完全阻塞的风险。在这种混合模式中，用户线程与轻量级进程的数量比是不定的，即为N：M的关系，这种就是多对多的线程模型。
 
@@ -61,22 +63,22 @@ public class MultiThread {
 
 > CPU通过给每个线程分配CPU时间片来实现线程切换机制，也就是通过时间片分配算法过来循环执行任务，当前任务执行一个时间片后会切换到下一个任务，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。
 
-在 Linux 上通过 `vmstat` 查看上下文切换次数。
+在 Linux 上可以通过 `vmstat` 查看上下文切换次数。
 
 ```shell
 vmstat 1
-# 结果集中的 CS，context switch 即为上下文切换次数
+# 结果集中的 CS (context switch) 即为上下文切换次数
 ```
 
 ### 如何避免上下文切换
 
 - 无锁并发编程
 
-多线程竞争锁时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁，如将数据的ID按照Hash算法取模分段，不同的线程处理不同段的数据。
+多线程竞争锁时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁，如将数据的 ID 按照 Hash 算法取模分段，不同的线程处理不同段的数据。
 
-- CAS算法
+- CAS 算法
 
-Java的Atomic包使用CAS算法来更新数据，而不需要加锁。
+Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。
 
 - 使用最少线程
 
@@ -85,6 +87,78 @@ Java的Atomic包使用CAS算法来更新数据，而不需要加锁。
 - 使用协程
 
 在单线程里实现多任务的调度，并在单线程里维持多个任务间的切换。
+
+### 重要方法
+
+- wait
+
+> Causes the current thread to wait until either another thread invokes the notify() method or the notifyAll() method for this object, or a specified amount of time has elapsed.
+>
+> **The current thread must own this object's monitor.**
+>
+> This method causes the current thread (call it T) to place itself in the **wait set** for this object and then to **relinquish any and all synchronization claims on this object**. Thread T becomes disabled for thread scheduling purposes and lies dormant until one of four things happens:
+>
+> 1. Some other thread invokes the notify method for this object and thread T happens to be arbitrarily chosen as the thread to be awakened.
+>
+> 2. Some other thread invokes the notifyAll method for this object.
+>
+> 3. Some other thread interrupts thread T.
+>
+> 4. The specified amount of real time has elapsed, more or less. If timeout is zero, however, then real time is not taken into consideration and the thread simply waits until notified.
+>
+> The thread T is then removed from the **wait set** for this object and re-enabled for thread scheduling. It then competes in the usual manner with other threads for the right to synchronize on the object; once it has gained control of the object, all its synchronization claims on the object are restored to the status quo ante - that is, to the situation as of the time that the wait method was invoked. Thread T then returns from the invocation of the wait method. Thus, on return from the wait method, the synchronization state of the object and of thread T is exactly as it was when the wait method was invoked.
+>
+> A thread can also wake up without being notified, interrupted, or timing out, a so-called spurious wakeup. While this will rarely occur in practice, applications must guard against it by testing for the condition that should have caused the thread to be awakened, and continuing to wait if the condition is not satisfied. In other words, **waits should always occur in loops**, like this one:
+>
+> ```java
+> synchronized (obj) {
+>     while (<condition does not hold>)
+>         obj.wait(timeout);
+>     ... // Perform action appropriate to condition
+> }
+> ```
+>
+> (For more information on this topic, see Section 3.2.3 in Doug Lea's "Concurrent Programming in Java (Second Edition)" (Addison-Wesley, 2000), or Item 50 in Joshua Bloch's "Effective Java Programming Language Guide" (Addison-Wesley, 2001).
+>
+> If the current thread is interrupted by any thread before or while it is waiting, then an InterruptedException is thrown. This exception is not thrown until the lock status of this object has been restored as described above.
+>
+> Note that the wait method, as it places the current thread into the wait set for this object, unlocks only this object; any other objects on which the current thread may be synchronized remain locked while the thread waits.
+>
+> This method should only be called by a thread that is the owner of this object's monitor. See the **notify** method for a description of the ways in which a thread can become the owner of a monitor.
+
+- notify
+
+> Wakes up a single thread that is waiting on this object's monitor. If any threads are waiting on this object, one of them is chosen to be awakened. The choice is **arbitrary肆意** and occurs at the discretion自行决定 of the implementation. A thread waits on an object's monitor by calling one of the wait methods.
+>
+> The awakened thread will not be able to proceed **until the current thread relinquishes放弃 the lock on this object**. The awakened thread will compete in the usual manner with any other threads that might be actively competing to synchronize on this object; for example, the awakened thread enjoys no reliable privilege or disadvantage in being the next thread to lock this object.
+>
+> This method should only be called by a thread that is **the owner of this object's monitor**. A thread becomes the owner of the object's monitor in one of three ways:
+>
+> - By executing a synchronized instance method of that object.
+> - By executing the body of a synchronized statement that synchronizes on the object.
+> - For objects of type Class, by executing a synchronized static method of that class.
+>
+> Only one thread at a time can own an object's monitor.
+
+- notifyAll
+
+> Wakes up all threads that are waiting on this object's monitor. A thread waits on an object's monitor by calling one of the wait methods.
+>
+> The awakened threads will not be able to proceed **until the current thread relinquishes the lock on this object**. The awakened threads will compete in the usual manner with any other threads that might be actively competing to synchronize on this object; for example, the awakened threads enjoy no reliable privilege or disadvantage in being the next thread to lock this object.
+>
+> This method should only be called by a thread that is **the owner of this object's monitor**. See the notify method for a description of the ways in which a thread can become the owner of a monitor.
+
+- sleep
+
+> Causes the currently executing thread to sleep (temporarily cease execution) for the specified number of milliseconds, subject to the precision and accuracy of system timers and schedulers. The thread **does not lose ownership of any monitors**
+
+- `wait` & `sleep`
+
+| `wait`|`sleep`|
+|:--|:--|
+| 释放锁 | 持有锁 |
+| 需先获取锁 |—|
+| 需在loop中，进行检查 |—|
 
 ### 线程状态
 
@@ -97,7 +171,7 @@ Java的Atomic包使用CAS算法来更新数据，而不需要加锁。
 |TIMED_WAITING|超时等待，在指定时间内返回|
 |TERMINATED|已终止|
 
-参考 jdk1.8 doc，详解如下：
+参考 jdk1.8 源码，详解如下：
 
 #### `BLOCKED`
 
@@ -113,7 +187,9 @@ Java的Atomic包使用CAS算法来更新数据，而不需要加锁。
 > - `Thread.join` with no timeout
 > - `LockSupport.park`
 >
-> A thread in the waiting state is waiting for another thread to perform a particular action. For example, a thread that has called `Object.wait()` on an object is waiting for another thread to call `Object.notify()` or `Object.notifyAll()` on that object. A thread that has called  `Thread.join()` is waiting for a specified thread to terminate.
+> A thread in the waiting state is waiting for another thread to perform a particular action.
+>
+> For example, a thread that has called `Object.wait()` on an object is waiting for another thread to call `Object.notify()` or `Object.notifyAll()` on that object. A thread that has called  `Thread.join()` is waiting for a specified thread to terminate.
 
 #### `TIMED_WAITING`
 
@@ -197,7 +273,7 @@ private static class Runner implements Runnable {
 |`wait(long)`|等待一段时间后没通知就返回|
 |`wait(long,int)`|对超时时间更细粒度的控制|
 |`notify()`|t获取了o的对象锁后通知一个在o上等待的线程使其从obj.wait()方法返回|
-|`notifyAll()`|通知所有等待在obj上的线程|
+|`notifyAll()`|通知所有等待在o的对象锁上的线程|
 
 以上仅为简述，**必须详细查看jdk文档的javadoc文档及实例！**
 
@@ -327,4 +403,4 @@ public synchronized Object get(long mills) throws InterruptedException {
 //.'______________________________\|/______________________________`.
 ```
 
- (゜-゜)つロ *参考并致谢《Java并发编程的艺术》*
+ (゜-゜)つロ *参考并致谢《Java并发编程的艺术》《深入理解Java虚拟机》*
