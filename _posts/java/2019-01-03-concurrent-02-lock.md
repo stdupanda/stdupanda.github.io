@@ -89,7 +89,7 @@ try {
 | `tryLock()` |尝试阻塞地获取锁，调用此方法后立即返回，返回是否获取到了锁|
 | `newConditon()` |获取等待通知组件，该组件和当前的锁绑定，当前线程只有获取了锁，才能调用该组件的`wait()`方法，而调用后，当前线程将释放锁|
 
-#### 队列同步器
+#### 队列同步器 AQS
 
 > 队列同步器 `AbstractQueuedSynchronizer`（以下简称同步器），是用来构建锁或者其他同步组件的基础框架，它使用了一个 int 成员变量表示同步状态，通过内置的 FIFO 队列来完成资源获取线程的排队工作，并发包的作者（Doug Lea）期望它能够成为实现大部分同步需求的基础。同步器的主要使用方式是继承，子类通过继承同步器并实现它的抽象方法来管理同步状态，在抽象方法的现过程中免不了要对同步状态进行更改，这时就需要使用同步器提供的 3 个方法（getState()、setState(int newState) 和 compareAndSetState(intexpect, int update)）来进行操作，因为它们能够保证状态的改变是安全的。
 >
@@ -103,9 +103,9 @@ try {
 >
 > 重写同步器指定的方法时，需要使用同步器提供的如下 3 个方法来访问或修改同步状态。
 >
-> - getState()：获取当前同步状态。
-> - setState(int newState)：设置当前同步状态。
-> - compareAndSetState(int expect,int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性。
+> - `getState()`：获取当前同步状态。
+> - `setState(int newState)`：设置当前同步状态。
+> - `compareAndSetState(int expect,int update)`：使用CAS设置当前状态，该方法能够保证状态设置的原子性。
 
 同步器可重写的方法包括：
 
@@ -117,18 +117,17 @@ try {
 
 实现自定义同步组件时，将要调用 AQS 提供的几个模板方法：
 
-- acquire(int arg)
-- acquireInterruptibly(int arg)
-- tryAcquireNanos(int arg, long nanos)
-- acquireShared(int arg)
-- acquireSharedInterruptibly(int arg)
-- tryAcquireSharedNanos(int arg, long nanos)
-- release(int arg)
-- releaseShared(int arg)
-- getQueuedThreads()
+- `acquire(int arg)`
+- `acquireInterruptibly(int arg)`
+- `tryAcquireNanos(int arg, long nanos)`
+- `acquireShared(int arg)`
+- `acquireSharedInterruptibly(int arg)`
+- `tryAcquireSharedNanos(int arg, long nanos)`
+- `release(int arg)`
+- `releaseShared(int arg)`
+- `getQueuedThreads()`
 
 > 上述几个模板方法分3类：**独占式获取与释放**同步状态、**共享式获取与释放**同步状态和**查询同步队列中的等待线程情况**。自定义同步组件将使用同步器提供的模板方法来实现自己的同步语义。
----
 
 ```java
 // 类似 AQS 的 lock 工具
@@ -167,6 +166,8 @@ class FIFOMutex {
 > 这里提到一个锁获取的公平性问题，如果在绝对时间上，先对进行获取的请求一定先被满足，那么这个锁是公平的，反之，是不公平的。公平的获取锁，也就是等待时间最长的线程最优先获取锁，也可以说锁获取是顺序。ReentrantLock 提供了一个构造函数，能够控制锁是否是公平的。事实上，公平的锁机制往往没有非公平的效率高，但是，并不是任何场景都是以 TPS 作为唯的指标，公平锁能够减少“饥饿”发生的概率，等待越久的请求越是能够得到优先满足。
 
 #### 读写锁
+
+##### 定义
 
 > ReadWriteLock 仅定义了获取读锁和写锁的两个方法，即 `readLock()` 方法和 `writeLock()`方法，而其实现——ReentrantReadWriteLock，除了接口方法之外，还提了一些便于外界监控其内部工作状态的方法，这些方法以及描述如下表所示。
 
@@ -224,7 +225,9 @@ public class Cache {
 > 写锁是一个支持重进入的**排它锁**。如果当前线程已经获取了写锁，则增加写状态。如果当前线程在获取写锁时，读锁已经被获取（读状态不为0）或者该线程是已经获取写锁的线程，则当前线程进入等待状态。
 >
 > 读锁是一个支持重进入的**共享锁**，它能够被多个线程同时获取，在没有其他写线程访问（或者写状态为0）时，读锁总会被成功地获取，而所做的也只是（线安全的）增加读状态。如果当前线程已经获取了读锁，则增加读状态。如果当前线程在获取读锁时，写锁已被其他线程获取，则进入等待状态。获取读锁的实从 Java 5 到 Java 6 变得复杂许多，主要原因是新增了一些功能，例如 `getReadHoldCount()` 方法，作用是返回当前线程获取读锁的次数。读状态是所有线程获取读锁次数的总和，而每个线程各自获取读锁的次数只能选择保存在 ThreadLocal 中，由线程自身维护，这使获取读锁的实现变得复杂。
->
+
+##### 锁降级
+
 > **锁降级** 指的是**写锁降级成为读锁**。如果当前线程拥有写锁，然后将其释放，最后再获取读锁，这种分段完成的过程不能称之为锁降级。锁降级是指**把持住（当拥有的）写锁，再获取到读锁，随后释放（先前拥有的）写锁**的过程。
 
 ```java
