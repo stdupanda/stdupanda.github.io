@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 编译 openjdk8
+title: 编译 openjdk 8
 categories: Java
 description: 编译 openjdk8
 keywords: Java, java, jdk, openjdk
