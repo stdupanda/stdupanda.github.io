@@ -12,7 +12,7 @@ JVM 以一个进程的身份运行在操作系统上，掌握 JVM 内部组成�
 
 Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。根据《Java 虚拟机规范(JavaSE 7版)》的规定，Java 虚拟机所管理的内存将会包括以下几个运行时数据区域：
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/JVM_runtime_region.png)
+![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/jvm_runtime_region.png)
 
 > JVM 的内存管理方式的优点如下：
 >
@@ -96,7 +96,7 @@ Java 虚拟机规范对方法区的限制非常宽松，除了和 Java 堆一样
 
 根据 Java 虚拟机规范的规定，当方法区无法满足内存分配需求时，将抛出 OutOfMemoryError 异常。
 
-可以通过 -XX:MaxPermSize 设定永久代最大可分配的内存空间，默认大小是 64M(64 位 JVM 由于指针膨胀，默认是 85M)
+可以通过 -XX:MaxPermSize 设定永久代最大可分配的内存空间，默认大小是 64M(64 位 JVM 由于指针膨胀，默认是 85 M)
 
 #### 方法区和永久代的区别
 
@@ -137,7 +137,18 @@ jdk8 开始，HotSpot VM 移除永久代 `PermGen`，改为 `MetaSpace` 元数�
 
 > **由于元数据区使用本地内存，建议用户限制元数据区大小，或者增大机器内存；同时仍要加强系统质量监控管理。**
 
-#### 永久代取消原因
+- heap
+  - young gen
+    - eden
+    - survivor
+      - s0/from
+      - s1/to
+  - old/tenure gen
+- metaspace
+
+> only 'Eden' and 'From' space are available for allocations. 'To' is kept free to be used for copying surviving objects and is omitted while reporting the Young generation capacity.
+
+### 永久代取消原因
 
 - 永久代的垃圾收集是和老年代(old generation)捆绑在一起的，因此无论谁满了，都会触发永久代和老年代的垃圾收集。
 
@@ -149,7 +160,7 @@ G1 仅仅在 PermGen 满了或者G1 并发垃圾收集速度不够的时候才�
 
 另一种更说法是为了利于和 Oracle 的 JRocket 合并。
 
-#### metaspace 元数据区
+### metaspace 元数据区
 
 `java -XX:+PrintFlagsInitial|grep space` 查看 meta 区大小
 
@@ -272,7 +283,7 @@ java 运行期加载机制牺牲了少许性能开销，但为自身带来了很
 >
 > 执行 new 指令之后会接着执行 \<init> 方法，把对象按照程序员的意愿进行初始化，这样一个真正可用的对象才算完全产生出来。
 
-## JVM 垃圾回收
+## 垃圾回收判定
 
 垃圾回收是 JVM 内存管理的核心部分。
 
@@ -312,7 +323,7 @@ GC 发生时对象会直接被回收。
 
 `Reachability Analysis` 算法的基本思路就是通过一系列的称为 “GC Roots” 的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到 GC Roots 没有任何引用链相连（用图论的话来说，就是**从 GC Roots 到这个对象不可达**）时，则证明此对象是不可用的。
 
-### GC 回收逃逸
+### GC 逃逸
 
 某个对象被判定要 GC 后会被放置在 F-Queue 队列之中，JVM 会建立一个低优先级的 Finalizer 线程去访问这个队列，触发对象的 `finalize()` 方法，但并不一定会等待方法结束（是为了避免队列中其他对象一直等待被处理，甚至导致 GC 操作崩溃）。
 
@@ -373,6 +384,29 @@ Finalizer 线程访问 F-Queue 队列后会标记其中的对象，之后就会�
 
 值得注意的地方是，任何一个对象的 `finalize()` 方法都**只会被系统自动调用一次**，下一次回收时对象的 `finalize()` 方法不会被再次执行，对象最终还是会被回收。
 
+### 对象分配策略
+
+- 对象优先在 eden 分配
+- 大对象直接进入 tenured gen
+- 长期存活对象将进入 tenured gen
+
+默认 -XX:MaxTenuringThreshold=15
+
+- 动态对象年龄判定
+
+如果 Survivor 空间中相同年龄所有对象大小的总和大于 Survivor 空间的一半，年龄大于或等于该年龄的对象就可以直接进入老年代，无须等到 MaxTenuringThreshold 中要求的年龄。
+
+### GC 类型及触发原因
+
+- Minor GC 新生代垃圾回收
+  - eden 内存不足
+  - 发生了 Full GC
+- Full GC(Major GC) 老年代回收
+  - tenured 内存不足
+  - survivor 移动到老年代失败
+  - old 内最大连续内存空间不足
+  - 手动调用 `System.gc()`
+
 ## 垃圾回收算法
 
 下面介绍常用的垃圾回收算法。
@@ -406,7 +440,7 @@ Finalizer 线程访问 F-Queue 队列后会标记其中的对象，之后就会�
 
 这样一来内存分配时也就不用考虑内存碎片等复杂情况，只要移动堆顶指针，按顺序分配内存即可。实现简单，运行高效。但是显然这种算法的代价很大，直接将内存缩小为了原来的一半。
 
-需要注意的是，现代商业 JVM 大部分都是基于复制算法来回收的新生代，但并不是按照 1:1 的比例分配内存，默认是 8:1:1(Eden:Survivor:“浪费空间”)，即 90% 的新生代空间是可用的，10% 用来做复制操作。
+需要注意的是，现代商业 JVM 大部分都是基于复制算法来回收的新生代，但并不是按照 1:1 的比例分配内存，默认是 8:1:1(Eden:Survivor:“浪费空间”，eden:s0:s1)，即 90% 的新生代空间是可用的，10% 用来做复制操作。
 
 ### 标记-整理算法
 
@@ -523,8 +557,8 @@ G1 能充分使用多个CPU（CPU或者CPU核心）来缩短 Stop-The-World 停�
 
 G1 将整个Java堆等分为多个独立区域（Region），新生代和老年代不再是物理隔离的，是一部分 Region（不需要连续）的集合。
 
-> G1收集器之所以能建立可预测的停顿时间模型，是因为它可以有计划地避免在整个Java堆中进行全区域的垃圾收集。
-
+> G1 收集器之所以能建立可预测的停顿时间模型，是因为它可以有计划地避免在整个Java 堆中进行全区域的垃圾收集。
+>
 > G1 跟踪各个 Region 里面的垃圾堆积的价值大小（回收所获得的空间大小以及回收所需时间的经验值），并在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大的 Region（这也就是 Garbage-First 名称的来由）。这种使用 Region 划分内存空间以及有优先级的区域回收方式，保证了 G1 收集器在有限的时间内可以获取尽可能高的收集效率。
 
 ## JVM 问题排查整理
