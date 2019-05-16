@@ -630,30 +630,7 @@ public class JavaMethodAreaOOM {
 
 - jdk8 之后的 metaspace 不断申请内存被 OS kill
 
-### jstat 分析定位
 
-可以使用 `jstat` 查看 metaspace字段。
-
-M，CCS，MC，MU，CCSC，CCSU，MCMN，MCMX，CCSMN，CCSMX
-
-| 项目 | 说明|
-|:---|:--|
-| `M`     | Metaspace - Percent Used |
-| `CCS`   | Compressed Class Space - Percent Used |
-| `MC`    | Metaspace Capacity - Current |
-| `MU`    | Metaspace Used |
-| `CCSC`  | Compressed Class Space Capacity - Current |
-| `CCSU`  | Compressed Class Space Used |
-| `MCMN`  | Metaspace Capacity - Minimum |
-| `MCMX`  | Metaspace Capacity - Maximum |
-| `CCSMN` | Compressed Class Space Capacity - Minimum |
-| `CCSMX` |Compressed Class Space Capacity - Maximum |
-
-[https://docs.oracle.com/javase/7/docs/technotes/tools/share/jstat.html](https://docs.oracle.com/javase/7/docs/technotes/tools/share/jstat.html "Oracle文档链接")
-
-SWAP 和 GC 同时发生会导致 GC 时间很长，JVM 严重卡顿，极端的情况下会导致服务崩溃。原因如下：JVM 进行 GC 时，时需要对相应堆分区的已用 内存进行遍历；假如GC的时候，有堆的一部分内容被交换到SWAP中，遍历到这部分的时候就需要将其交换回内存，同时由于内存空间不足，就需要把内存中堆的另外一部分换到SWAP中去；于是在遍历堆分区的过程中，(极端情况下)会把整个堆分区轮流往SWAP写一遍。Linux对SWAP的回收是滞后的，我们就会看到大量SWAP占用。此类问题可尝试用减小堆大小或者增加物理内存等方式解决。
-
-部署Java服务的Linux系统，在内存分配上，需要避免SWAP的使用；具体如何分配需要综合考虑不同场景下JVM对Java永久代 、Java堆(新生代和老年代)、线程栈、Java NIO所使用内存的需求。
 
 小结： 本文主要整理了 JVM 相关知识点。
 
