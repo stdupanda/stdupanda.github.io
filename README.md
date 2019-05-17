@@ -8,7 +8,7 @@
 
 [jekyll博客主题们](http://jekyllthemes.org/)
 
-Fored from [mzlogin](https://github.com/mzlogin/mzlogin.github.io)2016-09-19,基于 [DONGChuan](http://dongchuan.github.io/) 修改,Wiki 部分保留自原作者[mzlogin](https://github.com/mzlogin/mzlogin.github.io)2016-09-19
+Forked from [mzlogin](https://github.com/mzlogin/mzlogin.github.io) 2016-09-19,基于 [DONGChuan](http://dongchuan.github.io/) 修改,Wiki 部分保留自原作者[mzlogin](https://github.com/mzlogin/mzlogin.github.io)2016-09-19
 
 ## 致谢
 
