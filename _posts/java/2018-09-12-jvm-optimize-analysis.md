@@ -12,6 +12,130 @@ keywords: Java, java, jdk, openjdk, JVM
 
 [1] Oracle 官方帮助文档入口：[Java Platform, Standard Edition Documentation](https://docs.oracle.com/en/java/javase/index.html)
 
+[2] java 命令行参数（遇到奇怪的 `-XX` 时可以参考这里）： [java command line options](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html "")
+
+[3] Oracle 官方文档： [JVM 优化 guide](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/toc.html)
+
+[4] G1 优化 guide： [点击打开默认是 G1 介绍部分](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/g1_gc.html#garbage_first_garbage_collection)
+
+## JVM 参数
+
+通过适当的设置 JVM 参数，有利于系统优化以及故障问题分析定位。
+
+- 基本参数
+
+|参数|说明|
+|:---|:---|
+|`-XshowSettings:all`||
+|`-XX:+PrintCommandLineFlags`||
+|`-javaagent:<path>`||
+|`-X`|打印 `-X` 相关参数的帮助信息|
+|`-XX:ErrorFile=filename`|默认是 `./hs_err_pid%p.log`|
+
+- 类加载相关参数
+
+|参数|说明|
+|:---|:---|
+|`-Xbootclasspath[/a或/p]:path`|append 或 prepend|
+|`-XX:+TraceClassLoading`||
+|`-XX:+TraceClassResolution`||
+|`-XX:+TraceClassUnloading`||
+
+- GC 和内存分配相关参数
+
+|参数|说明|
+|:---|:---|
+|`-XX:+DisableExplicitGC`|`System.gc()`|
+|`-Xnoclassgc`|不允许 gc|
+|`-XX:InitialHeapSize=6m`|建议和 `-Xmx80m`/`-XX:MaxHeapSize=80m` 设置相同大小|
+|`-Xss1m`| thread stack size (in bytes) 同 `-XX:ThreadStackSize=1m` 64 位 linux 默认是 1m|
+|`-Xmn6G`|initial and maximum size (in bytes) of the heap for the young generation。 建议是 between a half and a quarter of the overall heap size|
+|`-Xms6G`| initial size (in bytes) of the heap|
+|`-Xmx80m`| maximum size (in bytes) of the memory allocation pool 同 `-XX:MaxHeapSize=80m`，建议和 `-XX:InitialHeapSize` 设置相同大小|
+|`-XX:MaxDirectMemorySize=6m`| maximum total size (in bytes) of the New I/O (the java.nio package) direct-buffer allocations.|
+
+- gc 日志记录相关
+
+|参数|说明|
+|:---|:---|
+|`-Xloggc:/home/log/gc-%t.log`|将 GC 日志记录到指定文件中|
+|`-XX:+PrintGC`||
+|`-XX:ErrorFile=filename`||
+|`-XX:+PrintGCDetails`||
+|`-XX:+PrintGCDateStamps`||
+|`-XX:+PrintGCTimeStamps`||
+|`-XX:+PrintGCApplicationStoppedTime`||
+|`-XX:+UseGCLogFileRotation`|注意重启后日志文件的影响|
+|`-XX:NumberOfGCLogFiles=6`||
+|`-XX:GCLogFileSize=6M`||
+
+- Serviceability 相关参数
+
+点击进入[官方文档入口](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html#BABFJDIC "Oracle jdk 文档入口")
+
+|参数|说明|
+|:---|:---|
+|`-XX:+HeapDumpOnOutOfMemoryError`||
+|`-XX:HeapDumpPath=path`|默认是 `/java_pid%p.hprof`|
+|`-XX:LogFile=path`|默认是 `./hotspot.log`|
+
+配合 GCeasy、GCViewer 等工具分析 GC 日志。
+
+## G1 相关设置
+
+官网详情可参看 [java启动参数详解](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html#BABFAFAE)
+
+`-XX:+UseG1GC` 开启 G1 收集器。
+
+### Important Defaults
+
+|Option and Default Value|Option|
+|:---|:---|
+|`-XX:G1HeapRegionSize=n`|Sets the size of a G1 region. The value will be a power of two and can range from 1 MB to 32 MB. The goal is to have around 2048 regions based on the minimum Java heap size.|
+|`-XX:MaxGCPauseMillis=200`|Sets a target value for desired maximum pause time. The default value is 200 milliseconds. The specified value does not adapt to your heap size.|
+|`-XX:G1NewSizePercent=5`|Sets the percentage of the heap to use as the minimum for the young generation size. The default value is 5 percent of your Java heap. This is an experimental flag. See How to Unlock Experimental VM Flags for an example. This setting replaces the -XX:DefaultMinNewGenPercent setting.|
+|`-XX:G1MaxNewSizePercent=60`|Sets the percentage of the heap size to use as the maximum for young generation size. The default value is 60 percent of your Java heap. This is an experimental flag. See How to Unlock Experimental VM Flags for an example. This setting replaces the -XX:DefaultMaxNewGenPercent setting.|
+|`-XX:ParallelGCThreads=n`|Sets the value of the STW worker threads. Sets the value of n to the number of logical processors. The value of n is the same as the number of logical processors up to a value of 8. If there are more than eight logical processors, sets the value of n to approximately 5/8 of the logical processors. This works in most cases except for larger SPARC systems where the value of n can be approximately 5/16 of the logical processors.|
+`-XX:ConcGCThreads=n`|Sets the number of parallel marking threads. Sets n to approximately 1/4 of the number of parallel garbage collection threads (ParallelGCThreads).|
+`-XX:InitiatingHeapOccupancyPercent=45`|Sets the Java heap occupancy threshold that triggers a marking cycle. The default occupancy is 45 percent of the entire Java heap.|
+`-XX:G1MixedGCLiveThresholdPercent=85`|Sets the occupancy threshold for an old region to be included in a mixed garbage collection cycle. The default occupancy is 85 percent. This is an experimental flag. See How to Unlock Experimental VM Flags for an example. This setting replaces the -XX:G1OldCSetRegionLiveThresholdPercent setting.|
+`-XX:G1HeapWastePercent=5`|Sets the percentage of heap that you are willing to waste. The Java HotSpot VM does not initiate the mixed garbage collection cycle when the reclaimable percentage is less than the heap waste percentage. The default is 5 percent.|
+`-XX:G1MixedGCCountTarget=8`|Sets the target number of mixed garbage collections after a marking cycle to collect old regions with at most G1MixedGCLIveThresholdPercent live data. The default is 8 mixed garbage collections. The goal for mixed collections is to be within this target number.|
+`-XX:G1OldCSetRegionThresholdPercent=10`|Sets an upper limit on the number of old regions to be collected during a mixed garbage collection cycle. The default is 10 percent of the Java heap.|
+`-XX:G1ReservePercent=10`|Sets the percentage of reserve memory to keep free so as to reduce the risk of to-space overflows. The default is 10 percent. When you increase or decrease the percentage, make sure to adjust the total Java heap by the same amount.|
+ 
+ 
+### Recommendations
+
+When you evaluate and fine-tune G1 GC, keep the following recommendations in mind:
+ 
+- Young Generation Size
+
+**Avoid explicitly setting young generation size** with the `-Xmn` option or any or other **related** option such as `-XX:NewRatio`. Fixing the size of the young generation overrides the target pause-time goal.
+
+- Pause Time Goals
+
+When you evaluate or tune any garbage collection, there is always a latency versus throughput trade-off.
+
+The G1 GC is an incremental garbage collector with uniform pauses, but also more overhead on the application threads. The throughput goal for the G1 GC is 90 percent application time and 10 percent garbage collection time. Compare this to the Java HotSpot VM parallel collector. The throughput goal of the parallel collector is 99 percent application time and 1 percent garbage collection time. Therefore, when you evaluate the G1 GC for throughput, relax your pause time target. Setting too aggressive a goal indicates that you are willing to bear an increase in garbage collection overhead, which has a direct effect on throughput. When you evaluate the G1 GC for latency, you set your desired (soft) real-time goal, and the G1 GC will try to meet it. As a side effect, throughput may suffer. See the section Pause Time Goal in Garbage-First Garbage Collector for additional information.
+
+- Taming Mixed Garbage Collections
+
+Experiment with the following options when you tune mixed garbage collections. See the "Important Defaults" above for information about these options:
+
+> `-XX:InitiatingHeapOccupancyPercent`: Use to change the marking threshold.
+>
+> `-XX:G1MixedGCLiveThresholdPercent` and `-XX:G1HeapWastePercent`: Use to change the mixed garbage collection decisions.
+>
+> `-XX:G1MixedGCCountTarget` and `-XX:G1OldCSetRegionThresholdPercent`: Use to adjust the CSet for old regions.
+
+### Overflow and Exhausted Log Messages
+
+- gc 日志的 `to-space exhausted` 或者 `to-space overflow` 问题
+  - Increase `-XX:G1ReservePercent` option (and the total heap accordingly) to increase the amount of reserve memory for "to-space".
+  - Start the marking cycle earlier by reducing the value of -XX:InitiatingHeapOccupancyPercent.
+  - Increase `-XX:ConcGCThreads` option to increase the number of parallel marking threads.
+
 ## JVM 问题排查整理
 
 ### OOM 问题
@@ -82,6 +206,14 @@ Linux 对 SWAP 的回收是滞后的，我们就会看到大量 SWAP 占用。
 此类问题可尝试用减小堆大小或者增加物理内存等方式解决；部署 Java 服务的 Linux 要避免SWAP的使用；
 
 -XX:+DisableExplicitGC
+
+## Lage Page
+
+Also known as huge pages, large pages are memory pages that are significantly larger than the standard memory page size (which varies depending on the processor and operating system). Large pages optimize processor Translation-Lookaside Buffers.
+
+A Translation-Lookaside Buffer (TLB) is a page translation cache that holds the most-recently used virtual-to-physical address translations. TLB is a scarce system resource. A TLB miss can be costly as the processor must then read from the hierarchical page table, which may require multiple memory accesses. By using a larger memory page size, a single TLB entry can represent a larger memory range. There will be less pressure on TLB, and memory-intensive applications may have better performance.
+
+However, large pages page memory can negatively affect system performance. For example, when a large mount of memory is pinned by an application, it may create a shortage of regular memory and cause excessive paging in other applications and slow down the entire system. Also, a system that has been up for a long time could produce excessive fragmentation, which could make it impossible to reserve enough large page memory. When this happens, either the OS or JVM reverts to using regular pages.
 
 ## 常用 jdk 自带工具
 
