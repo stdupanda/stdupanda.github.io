@@ -537,6 +537,14 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时�
 
 ### G1 收集器
 
+> `-XX:+UseG1GC`
+>
+> Enables the use of the garbage-first (G1) garbage collector. It is a server-style garbage collector, targeted for multiprocessor machines with a large amount of RAM. It meets GC pause time goals with high probability, while maintaining good throughput. The G1 collector is recommended for applications requiring large heaps (sizes of around 6 GB or larger) with limited GC latency requirements (stable and predictable pause time below 0.5 seconds).
+>
+> By default, this option is disabled and the collector is chosen automatically based on the configuration of the machine and type of the JVM.
+
+（详见 [https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html#BABFAFAE](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html#BABFAFAE)）
+
 G1（Garbage-First）收集器具备如下特点：
 
 - 并行与并发
