@@ -38,7 +38,7 @@ keywords: web, tcp, ip, tcpip, shake, wave
 
 - LISTEN 
 
-represents waiting for a connection request from any remoteTCP and port.
+represents waiting for a connection request from any remote TCP and port.
 
 - SYN-SENT
 
@@ -130,6 +130,8 @@ represents no connection state at all.
                               +---------+                   +---------+
 ```
 
+图片版请<a href="https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/tcp_connection_state_diagram.png" target="_blank">点击这里查看</a>
+
 ## Control Bits
 
 - URG:  Urgent Pointer field significant
@@ -148,7 +150,6 @@ The sequence number of the first data octet in this segment (except when SYN is 
 
 If the ACK control bit is set this field contains the value of the next sequence number the sender of the segment is expecting to receive.  Once a connection is established this is always sent.
 
-
 ## 标志位 ACK SYN FIN
 
 |标志位|含义|
@@ -157,17 +158,40 @@ If the ACK control bit is set this field contains the value of the next sequence
 |SYN|同步位，用于在建立连接时同步序号。初始建立连接时并无历史接收数据，所以 ack 也无法设置，此时按照正常的机制就无法运行了，SYN 的作用就是来解决此问题：当接收端收到 SYN=1 的报文时就会直接将 ack 设置为接收到的 seq+1 值，注意这里的值并不是校验后设置的，而是根据 SYN 直接设置的，这样正常的机制就可以运行了，所以 SYN 叫做同部位。需注意的是，SYN 在前两次握手时都为1，因为通信的双方都需要设置一个初始值。|
 |FIN|终止位，用于在数据传输完毕后释放连接|
 
-
 # 三次握手 & 四次挥手
 
 ## 流程图
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/tcp_hand_shake_wave.png)
+![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/tcp_handshake_wave.png)
 
-## 注意点
+## 知识点整理
 
-- TCP 传输为全双工模式，client 与 server 是对等的，可以同时传输数据，连接和关闭都需要双方同时进行。
-- 三次握手中前两次可以保证服务端可以正确接收并放回请求，后两次可以保证客户端可以正确接收并返回请求，且在三次握手的过程中还使用了 SYN 标志位初始化了双方的 ack 值。四次挥手就是双方分别发送 FIN 标识来关闭连接并让对方确认。
-- 若发出一次握手后就不回应第三次握手，服务器端会认为是第二次握手的数据传输失败，就会再次发送第二次握手报文，默认会一直发送 5 次，第五次后还收不到第三次的握手报文则丢弃请求，这就是 DDOS 攻击中的 SYN Flood 攻击。
+- 可靠传输的工作原理
+  - 停止等待协议
+  - 连续 ARQ 协议
+- 可靠传输的实现
+  - 以字节为单位的滑动窗口
+    - 未收到确认时，可以先把窗口内数据都发送出去
+    - 已发送的数据在确认前均需保留以备重发
+    - 发送窗口不可以超过接收窗口
+    - 接收方采用累积确认方式（只需对按序到达的最后一个分组发送确认，即确认了所有分组）
+  - 超时重传
+  - 选择确认
+- 利用滑动窗口实现流量控制
+- 拥塞控制
+  - 慢开始，设置较小的发送窗口
+  - 拥塞避免，逐渐增大发送窗口
+  - 快重传，让发送方尽早知道报文丢失
+  - 快恢复，重传丢失的报文
+- 三次握手（三报文握手）
+  - 前两次可以保证 B 可以正确接收并放回请求，后两次可以保证 A 可以正确接收并返回请求
+  - 防止 B 接收到已失效的 A 的连接请求报文后建立连接，浪费资源
+  - 若 A 故意不进行第三次通讯，B 会一直发送最多 5 次，浪费自身资源。这就是 DDOS 攻击中的 SYN Flood 攻击。
+- 四次挥手
+  - B 收到 A 的断开请求后响应一个确认报文；此时 A 已没有要发送的数据了；
+  - A 经过 2 MSL(maximum segment lifetime) 后才进入到 CLOSED 状态；
+    - 保证 A 发送的最后一个 ACK 报文能到达 B，否则 B 无法正常关闭
+    - 保证 B 能来得及把所有数据发给 A
+  - B 端有保活机制，2h 未收到 A 数据后，会每隔 75s 发送最多 10 次检测报文后关闭连接 
 - UDP 协议是无连接的，和 TCP 相比减少了沟通时间。
 - HTTP 协议底层传输默认是基于可靠的 TCP，出于效率 Google 制定了一套基于 UDP 的 QUIC(Quick UDP Internet Connection)协议，但未广泛使用。
