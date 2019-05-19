@@ -158,7 +158,7 @@ If the ACK control bit is set this field contains the value of the next sequence
 |SYN|同步位，用于在建立连接时同步序号。初始建立连接时并无历史接收数据，所以 ack 也无法设置，此时按照正常的机制就无法运行了，SYN 的作用就是来解决此问题：当接收端收到 SYN=1 的报文时就会直接将 ack 设置为接收到的 seq+1 值，注意这里的值并不是校验后设置的，而是根据 SYN 直接设置的，这样正常的机制就可以运行了，所以 SYN 叫做同部位。需注意的是，SYN 在前两次握手时都为1，因为通信的双方都需要设置一个初始值。|
 |FIN|终止位，用于在数据传输完毕后释放连接|
 
-# 三次握手 & 四次挥手
+## 连接建立和释放
 
 ## 流程图
 
@@ -192,6 +192,14 @@ If the ACK control bit is set this field contains the value of the next sequence
   - A 经过 2 MSL(maximum segment lifetime) 后才进入到 CLOSED 状态；
     - 保证 A 发送的最后一个 ACK 报文能到达 B，否则 B 无法正常关闭
     - 保证 B 能来得及把所有数据发给 A
-  - B 端有保活机制，2h 未收到 A 数据后，会每隔 75s 发送最多 10 次检测报文后关闭连接 
+  - B 端有保活机制，2h 未收到 A 数据后，会每隔 75s 发送最多 10 次检测报文后关闭连接
+- 粘包/拆包问题
+  - 消息定长
+  - 固定分隔符
+  - 报头中设计报文体长度字段
+  - netty 的解决方式
+    - `LengthFieldBasedFrameDecoder`
+    - `FixedLengthFrameDecoder`
+    - `LineBasedFrameDecoder`/`DelimiterBaseFrameDecoder`
 - UDP 协议是无连接的，和 TCP 相比减少了沟通时间。
 - HTTP 协议底层传输默认是基于可靠的 TCP，出于效率 Google 制定了一套基于 UDP 的 QUIC(Quick UDP Internet Connection)协议，但未广泛使用。
