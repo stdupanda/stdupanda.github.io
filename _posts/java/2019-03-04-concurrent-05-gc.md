@@ -6,7 +6,7 @@ description: java并发基础05-GC
 keywords: Java, java, jdk, openjdk, concurrent, lock, JVM, gc, 垃圾回收, 垃圾
 ---
 
-JVM 以一个进程的身份运行在操作系统上，掌握 JVM 内部组成与运行机制，是深入掌握 java 的基础。
+JVM 以一个进程的身份运行在操作系统上，掌握 JVM 的 GC 机制，有利于更加深入掌握 java 语言。
 
 本文主要讲解 JVM 的垃圾回收机制。关于 JVM 组成请[点击查看](https://stdupanda.github.io/2019/03/04/concurrent-04-jvm)。
 
