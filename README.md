@@ -1,8 +1,8 @@
-## 我的 gh 博客
+## 我的博客
 
 [![Build Status](https://travis-ci.org/stdupanda/stdupanda.github.io.svg?branch=master)](https://travis-ci.org/stdupanda/stdupanda.github.io)
 
-使用 `github` 的博客，记录自己工作和生活的点点滴滴。
+使用 github page 记录自己工作和生活的点点滴滴。
 
 点击访问[博客主页](https://stdupanda.github.io)
 
