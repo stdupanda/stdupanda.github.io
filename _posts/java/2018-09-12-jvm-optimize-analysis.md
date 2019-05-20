@@ -12,7 +12,7 @@ keywords: Java, java, jdk, openjdk, JVM
 
 [1] Oracle 官方帮助文档入口：[Java Platform, Standard Edition Documentation](https://docs.oracle.com/en/java/javase/index.html)
 
-[2] java 命令行参数（遇到奇怪的 `-XX` 时可以参考这里）： [java command line options](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html "")
+[2] java 命令行参数（遇到奇怪的 `-XX` 时可以参考这里）： [java command line options](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html)
 
 [3] Oracle 官方文档： [JVM 优化 guide](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/toc.html)
 
@@ -174,7 +174,8 @@ public class JavaMethodAreaOOM {
             enhancer.setSuperclass(OOMObject.class);
             enhancer.setUseCache(false);
             enhancer.setCallback(new MethodInterceptor() {
-                public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+                public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy)
+                    throws Throwable {
                     return proxy.invokeSuper(obj, args);
                 }
             });
