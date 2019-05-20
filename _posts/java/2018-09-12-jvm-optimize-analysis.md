@@ -62,12 +62,18 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-XX:+PrintGC`||
 |`-XX:ErrorFile=filename`||
 |`-XX:+PrintGCDetails`||
-|`-XX:+PrintGCDateStamps`||
-|`-XX:+PrintGCTimeStamps`||
+|`-XX:+PrintGCDateStamps`|记录详细时间，如：`2014-02-28T23:58:42.314+0800`|
+|`-XX:+PrintGCTimeStamps`|记录时间戳|
 |`-XX:+PrintGCApplicationStoppedTime`||
 |`-XX:+UseGCLogFileRotation`|注意重启后日志文件的影响|
 |`-XX:NumberOfGCLogFiles=6`||
 |`-XX:GCLogFileSize=6M`||
+
+可以使用下列公交分析 GC 日志：
+
+[1] [GCeasy](https://gceasy.io/)
+
+[2] [GCViewer](https://github.com/chewiebug/GCViewer) 
 
 - Serviceability 相关参数
 
@@ -78,8 +84,6 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-XX:+HeapDumpOnOutOfMemoryError`||
 |`-XX:HeapDumpPath=path`|默认是 `/java_pid%p.hprof`|
 |`-XX:LogFile=path`|默认是 `./hotspot.log`|
-
-配合 GCeasy、GCViewer 等工具分析 GC 日志。
 
 ## G1 相关设置
 
