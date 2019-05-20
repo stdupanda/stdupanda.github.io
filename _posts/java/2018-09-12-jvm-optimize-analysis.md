@@ -58,10 +58,8 @@ keywords: Java, java, jdk, openjdk, JVM
 
 |参数|说明|
 |:---|:---|
-|`-Xloggc:/home/log/gc-%t.log`|将 GC 日志记录到指定文件中|
-|`-XX:+PrintGC`||
-|`-XX:ErrorFile=filename`||
 |`-XX:+PrintGCDetails`||
+|`-Xloggc:/home/log/gc-%t.log`|将 GC 日志记录到指定文件中|
 |`-XX:+PrintGCDateStamps`|记录详细时间，如：`2014-02-28T23:58:42.314+0800`|
 |`-XX:+PrintGCTimeStamps`|记录时间戳|
 |`-XX:+PrintGCApplicationStoppedTime`||
@@ -69,11 +67,11 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-XX:NumberOfGCLogFiles=6`||
 |`-XX:GCLogFileSize=6M`||
 
-可以使用下列公交分析 GC 日志：
+示例如下：
 
-[1] [GCeasy](https://gceasy.io/)
+`-XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<file>`
 
-[2] [GCViewer](https://github.com/chewiebug/GCViewer) 
+GC 日志分析工具有：[GCeasy](https://gceasy.io/)、[GCViewer](https://github.com/chewiebug/GCViewer) 
 
 - Serviceability 相关参数
 
@@ -107,7 +105,6 @@ keywords: Java, java, jdk, openjdk, JVM
 `-XX:G1MixedGCCountTarget=8`|Sets the target number of mixed garbage collections after a marking cycle to collect old regions with at most G1MixedGCLIveThresholdPercent live data. The default is 8 mixed garbage collections. The goal for mixed collections is to be within this target number.|
 `-XX:G1OldCSetRegionThresholdPercent=10`|Sets an upper limit on the number of old regions to be collected during a mixed garbage collection cycle. The default is 10 percent of the Java heap.|
 `-XX:G1ReservePercent=10`|Sets the percentage of reserve memory to keep free so as to reduce the risk of to-space overflows. The default is 10 percent. When you increase or decrease the percentage, make sure to adjust the total Java heap by the same amount.|
- 
  
 ### Recommendations
 
@@ -227,7 +224,7 @@ However, large pages page memory can negatively affect system performance. For e
 |命令|用途|简单用法|
 |:--|:---|:---|
 | jps | 列出 jvm 进程| `jps -lvm` |
-| jstack | 线程分析 | `jstack -F -l <pid> > x.jstack` |
+| jstack | 线程分析 | `jstack -F -l <pid> > x.tdump` |
 | jmap | 内存分析 | `jmap -dump:format=b,file=x.hprof <pid> -F` |
 | jinfo | 查看 jvm 信息 | `jinfo -sysprops <pid>` |
 | jstat | jvm 统计信息监控 | `jstat -gc <pid> 3s 6` |
