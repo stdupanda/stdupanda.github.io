@@ -308,7 +308,7 @@ However, large pages page memory can negatively affect system performance. For e
 
 详情参看 [https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jinfo.html](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jinfo.html)
 
-```shell
+```
 jinfo <pid>                   # Prints both command-line flags and system property name-value pairs.
 jinfo <pid> -sysprops         # Prints Java system properties as name-value pairs.
 jinfo <pid> -flag name        # Prints the name and value of the specified command-line flag. 
@@ -320,17 +320,17 @@ jinfo <pid> -flag name=value  # Sets the specified command-line flag to the spec
 
 详情参看 [https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jmap.html](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jmap.html)
 
-```shell
+```
 # Prints a heap summary of the garbage collection used, the head configuration, and generation-wise heap usage.
 # In addition, the number and size of interned Strings are printed.
 jmap -heap <pid> 
-jmap -F -dump:[live,] format=b, file=filename <pid>
+jmap -F -dump:[live,] format=b,file=filename <pid>
 ```
 
 ### jstack
 
 详情参看 [https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstack.html](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstack.html)
 
-```shell
+```
 jstack -F -l <pid> > t.log
 ```
