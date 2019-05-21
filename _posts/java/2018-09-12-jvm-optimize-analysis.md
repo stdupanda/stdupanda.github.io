@@ -67,9 +67,7 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-XX:NumberOfGCLogFiles=6`||
 |`-XX:GCLogFileSize=6M`||
 
-示例如下：
-
-`-XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<file>`
+推荐阅读文档：[https://blog.gceasy.io/2016/11/15/rotating-gc-log-files/](https://blog.gceasy.io/2016/11/15/rotating-gc-log-files/)
 
 GC 日志分析工具有：[GCeasy](https://gceasy.io/)、[GCViewer](https://github.com/chewiebug/GCViewer) 
 
