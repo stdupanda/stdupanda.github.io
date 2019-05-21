@@ -257,7 +257,7 @@ However, large pages page memory can negatively affect system performance. For e
 
 下面整理常用的 option 及结果对照。
 
-`-gcutil` 输出结果含义：
+- `-gcutil` 输出结果含义：
 
 |field|desc|
 |:--|:--|
@@ -273,14 +273,14 @@ However, large pages page memory can negatively affect system performance. For e
 |FGCT| Full garbage collection time |
 |GCT | Total garbage collection time |
 
-`-gccause` 的输出是在 `-gcutil` 基础上增加两列：
+- `-gccause` 的输出是在 `-gcutil` 基础上增加两列：
 
 |field|desc|
 |:--|:--|
 |LGCC| Cause of last garbage collection|
 |GCC | Cause of current garbage collection|
 
-`-gc` 输出结果含义：
+- `-gc` 输出结果含义：
 
 |field|desc|
 |:--|:--|
