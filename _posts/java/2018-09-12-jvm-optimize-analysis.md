@@ -18,6 +18,12 @@ keywords: Java, java, jdk, openjdk, JVM
 
 [4] G1 优化 guide： [点击打开默认是 G1 介绍部分](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/g1_gc.html#garbage_first_garbage_collection)
 
+[5] 为什么 heap 总有一部分内存“不被使用”： [HotSpot JVM throwing OOM even when there is memory available](https://blogs.oracle.com/poonam/hotspot-jvm-throwing-oom-even-when-there-is-memory-available-v2)
+
+[6] G1 回收器里的永久代 [About G1 Garbage Collector, Permanent Generation and Metaspace](https://blogs.oracle.com/poonam/about-g1-garbage-collector%2c-permanent-generation-and-metaspace)
+
+[7] [Getting Started with the G1 Garbage Collector](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/G1GettingStarted/index.html)
+
 ## JVM 参数
 
 通过适当的设置 JVM 参数，有利于系统优化以及故障问题分析定位。
