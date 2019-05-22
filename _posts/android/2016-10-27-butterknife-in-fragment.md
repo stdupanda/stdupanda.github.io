@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Fragment中使用ButterKnife初始化view失败
-categories: Android
+categories: 归档
 description: Fragment中使用ButterKnife初始化view失败，查找问题并解决
 keywords: android, Android, ButterKnife
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 修改Android手机主机名
-categories: Android
+categories: 归档
 description: 修改Android手机主机名
 keywords: android, Android, 手机, 主机
 ---

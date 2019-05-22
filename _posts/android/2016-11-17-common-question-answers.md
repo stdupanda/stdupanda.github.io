@@ -1,9 +1,9 @@
 ---
 layout: post
 title: 常见Android开发问题整理
-categories: z归档
+categories: 归档
 description: 常见Android开发问题整理
-keywords: android, Android,
+keywords: android, Android, 归档
 ---
 
 记录常见Android开发问题并整理其解决方法。

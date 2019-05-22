@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 修改Gradle使用国内源
-categories: Android
+categories: 归档
 description: 修改Gradle使用国内源
 keywords: android, Android, studio
 ---
