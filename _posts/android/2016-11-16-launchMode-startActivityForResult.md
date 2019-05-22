@@ -1,7 +1,7 @@
 ---
 layout: post
 title: startActivityForResult+onActivityResult
-categories: Android
+categories: 归档
 description: startActivityForResult启动新的Activity时onActivityResult立刻执行
 keywords: android, Android, launchMode
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Android基本界面模型
-categories: Android
+categories: 归档
 description: Android底部导航，左右滑动开发程序
 keywords: android, Android, java
 ---
