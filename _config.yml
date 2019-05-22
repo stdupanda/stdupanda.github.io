@@ -124,5 +124,5 @@ skill_mobile_app_keywords: [Android, Fast Develop]
 #      Mermaid     #
 # ---------------- #
 mermaid:
-  switch: on
+  switch:
   version: 7.1.2
