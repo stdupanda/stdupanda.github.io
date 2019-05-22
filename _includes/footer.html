@@ -54,7 +54,7 @@
     </div>
     {% endif %}
 </body>
-    {% if site.mermaid.switch %}
+    {% if site.mermaid.status == 'enable' %}
     <!-- https://github.com/knsv/mermaid/issues/772 -->
     <script src="https://unpkg.com/mermaid@{{ site.mermaid.version }}/dist/mermaid.min.js"></script>
     <script>

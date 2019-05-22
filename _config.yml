@@ -122,7 +122,8 @@ skill_mobile_app_keywords: [Android, Fast Develop]
 
 # ---------------- #
 #      Mermaid     #
+# (status:enable/disable)
 # ---------------- #
 mermaid:
-  switch:
+  status: disable
   version: 7.1.2
