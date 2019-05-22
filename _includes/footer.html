@@ -54,4 +54,12 @@
     </div>
     {% endif %}
 </body>
+    <!-- https://github.com/knsv/mermaid/issues/772 -->
+    {% if site.mermaid.switch %}
+    <script src="https://unpkg.com/mermaid@{{ site.mermaid.version }}/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({startOnLoad:true, theme:'neutral'});
+        mermaid.init(undefined, ".language-mermaid");
+    </script>
+    {% endif %}
 </html>

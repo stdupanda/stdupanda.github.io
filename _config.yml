@@ -119,3 +119,10 @@ google:
 skill_software_keywords: [Java, Architect, Concurrency, 微服务架构, 系统设计]
 skill_mobile_app_keywords: [Android, Fast Develop]
 #skill_windows_keywords: [simple C#]
+
+# ---------------- #
+#      Mermaid     #
+# ---------------- #
+mermaid:
+  switch: on
+  version: 7.1.2
