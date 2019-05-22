@@ -8,7 +8,7 @@ keywords: Python, Ubuntu, psutil
 
 常用的 git 命令总结。
 
-# 常用命令速查表
+## 常用命令速查表
 
 | command                                              | desc |
 |:-----------------------------------------------------|:------------|
@@ -69,47 +69,46 @@ keywords: Python, Ubuntu, psutil
 | **其他操作** |
 | `git rev-parse HEAD`                                 | 查看 HEAD 对应的 SHA-1 版本号 |
 
-# 使用说明
+## 使用说明
 
-## branch & flow 图示
+### branch & flow 图示
 
 ![git merge --no-ff](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_merge_no_ff.png)
 
 ![git branch mode](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/git_flow.jpg)
 
-## 阿里AoneFlow(推荐！)
+### 阿里AoneFlow(推荐！)
 
 AoneFlow 只使用三种分支类型：`master` 分支、`feature` 分支、`release` 分支，以及三条基本规则。
 
 - 规则一，开始工作前，从 `master` 创建 `feature` 分支。
 
-从代表最新已发布版本的 `master` 分支上创建一个通常以 `feature/` 前缀命名的特性分支，然后在这个分支上提交代码修改。也就是说，每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到 `master` 分支。 
+从代表最新已发布版本的 `master` 分支上创建一个通常以 `feature/` 前缀命名的特性分支，然后在这个分支上提交代码修改。也就是说，每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到 `master` 分支。
 
 - 规则二，通过合并 `feature` 分支，形成 `release` 分支。
 
-从 `master` 分支上拉出一条新分支，将所有本次要集成或发布的 `feature` 分支依次合并过去，从而得到 `release` 分支。release 分支通常以 `release/` 前缀命名。 
+从 `master` 分支上拉出一条新分支，将所有本次要集成或发布的 `feature` 分支依次合并过去，从而得到 `release` 分支。release 分支通常以 `release/` 前缀命名。
 
 - 规则三，发布到线上正式环境后，合并相应的 `release` 分支到 `master` 分支，在 `master` 分支上添加 **`tag`**，同时删除该 `release` 分支关联的 `feature` 分支。
 
-为了避免在代码仓库里堆积大量历史上的 `feature` 分支，还应该清理掉已经上线部分 `feature` 分支。如果要回溯历史版本，只需在 `master` 分支上找到相应的版本的 `tag` 即可。 
-
+为了避免在代码仓库里堆积大量历史上的 `feature` 分支，还应该清理掉已经上线部分 `feature` 分支。如果要回溯历史版本，只需在 `master` 分支上找到相应的版本的 `tag` 即可。
 
 如果得修一个历史版本的Bug怎么办呢？那就老老实实地在 master 分支找到版本 tag 位置，然后从那个位置创建 Hotfix 分支并修改处理。
 
-
-
-## merge 冲突处理
+### merge 冲突处理
 
 - `git merge` 冲突解决
 
 合并时若有冲突回提示你 `Unmerged paths` 和 `Untracked files`，并会提示类似格式的冲突文件列表：
-```
+
+```diff
 /xxx/xx.properties~HEAD
 /xxx/xx.properties~develop
 ```
+
 解决方式如下：
 
-```
+```diff
 Git is a distributed version control system.
 Git is free software distributed under the GPL.
 Git has a mutable index called stage.
@@ -120,6 +119,7 @@ Creating a new branch is quick & simple.
 Creating a new branch is quick AND simple.
 >>>>>>> branch2
 ```
+
 在执行了 `git merge branch_name` 之后，合并时有冲突的文件在打开后就出现类似的内容，其中可以看到 `git` 用 `<<<<<<<`，`=======`，`>>>>>>>` 标记出不同分支的内容，我们修改如下后保存：
 
 `Creating a new branch is quick and simple.`
@@ -127,9 +127,6 @@ Creating a new branch is quick AND simple.
 然后提交：`git add xx.properties`,`git commit -m "conflict fixed"`,这样冲突就解决了。
 
 `git log --graph --pretty=oneline --abbrev-commit` 查看分支合并情况。
-
-
-
 
 然后应该分析如何处理其中的问题，进行处理，将 `git` 添加的这部分进行处理，
 
@@ -141,10 +138,8 @@ Creating a new branch is quick AND simple.
 
 [git-scm英文版](https://git-scm.com/book/en/v2 "https://git-scm.com/book/en/v2")
 
-# 相关工具
+## 相关工具
 
-## git for windows
-
-### 修改 git bash 的样式
+### git for windows
 
 默认情况下， 安装好后的 git bash 会在标题和输入命令的时候显示 `MINGW64` ，而且命令和提示不在同一行。若需要自定义则可以修改 `C:\Program Files\Git\etc\profile.d` 文件。
