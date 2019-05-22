@@ -532,23 +532,95 @@ public ThreadPoolExecutor(int corePoolSize,
                           TimeUnit unit,
                           BlockingQueue<Runnable> workQueue,
                           ThreadFactory threadFactory,
-                          RejectedExecutionHandler handler){}
+                          RejectedExecutionHandler handler){
+}
 ```
+
+- 用于保存任务的 `workQueue` 队列主要类型
+  - ArrayBlockingQueue：
+
+    基于数组结构的有界阻塞队列
+
+  - LinkedBlockingQueue：
+
+    基于链表结构的阻塞队列，此队列按FIFO排序元素，吞吐量通常要高于 ArrayBlockingQueue。`Executors.newFixedThreadPool()` 使用了这个队列。
+
+  - SynchronousQueue：
+
+    一个不存储元素的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于Linked-BlockingQueue，`Executors.newCachedThreadPool()` 使用了这个队列。
+
+  - PriorityBlockingQueue
+
+    一个具有优先级的无限阻塞队列。
 
 可以分析源码，`submit()` 方法内部也还是调用了 `execute()`。
 
-> `ThreadPoolExecutor` 在执行 `execute()` 方法时，逻辑大意如下：
+- 提交任务
+
+> `ThreadPoolExecutor` 在执行 `execute()` 方法提交任务时，逻辑大意如下：
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/thread_pool_executor.png)
 
 > ThreadPoolExecutor 执行 `execute()` 方法分下面 4 种情况。
 >
-> - 1）如果当前运行的线程少于 corePoolSize，则创建新线程来执行任务（注意，执行这一步骤需要获取全局锁）。
+> - 1）如果当前运行的线程（即便是 idle 状态）少于 corePoolSize，则创建新线程来执行任务（这一步骤需要获取全局锁）。
 > - 2）如果运行的线程等于或多于 corePoolSize，则将任务加入 BlockingQueue。
-> - 3）如果无法将任务加入 BlockingQueue（队列已满），则创建新的线程来处理任务（注意，执行这一步骤需要获取全局锁）。
+> - 3）如果无法将任务加入 BlockingQueue（队列已满），则创建新的线程来处理任务（这一步骤需要获取全局锁）。
 > - 4）如果创建新线程将使当前运行的线程超出 maximumPoolSize，任务将被拒绝，并调用 `RejectedExecutionHandler.rejectedExecution()` 方法。
 >
-> ThreadPoolExecutor 采取上述步骤的总体设计思路，是为了在执行 `execute()` 方法时，尽可能地避免获取全局锁（那将会是一个严重的可伸缩瓶颈）。在 ThreadPoolExecutor 完成预热之后（当前运行的线程数大于等于 corePoolSize），几乎所有的 `execute()` 方法调用都是执行步骤 2，而步骤 2 不需要获取全局锁。
+> ThreadPoolExecutor 采取上述步骤的总体设计思路，是为了在执行 `execute()` 方法时，尽可能地避免获取全局锁带来的性能瓶颈。在 ThreadPoolExecutor 完成预热之后（当前运行的线程数大于等于 corePoolSize），几乎所有的 `execute()` 方法调用都是执行步骤 2，以尽量避免获取全局锁。
+
+- 执行任务
+
+ThreadPoolExecutor 内部定义了 Worker 类，用于执行提交的任务；每个 Worker 一直获取待执行的任务，保证任务完成后返回执行结果。
+
+主要流程就在如下代码，建议配合 debug 跟踪：
+
+```java
+final void runWorker(Worker w) {
+    Thread wt = Thread.currentThread();
+    Runnable task = w.firstTask;
+    w.firstTask = null;
+    w.unlock(); // allow interrupts
+    boolean completedAbruptly = true;
+    try {
+        while (task != null || (task = getTask()) != null) {// 一直获取任务
+            w.lock();
+            // If pool is stopping, ensure thread is interrupted;
+            // if not, ensure thread is not interrupted.  This
+            // requires a recheck in second case to deal with
+            // shutdownNow race while clearing interrupt
+            if ((runStateAtLeast(ctl.get(), STOP) ||
+                    (Thread.interrupted() &&
+                    runStateAtLeast(ctl.get(), STOP))) &&
+                !wt.isInterrupted())
+                wt.interrupt();
+            try {
+                beforeExecute(wt, task);
+                Throwable thrown = null;
+                try {
+                    task.run();
+                } catch (RuntimeException x) {
+                    thrown = x; throw x;
+                } catch (Error x) {
+                    thrown = x; throw x;
+                } catch (Throwable x) {
+                    thrown = x; throw new Error(x);
+                } finally {
+                    afterExecute(task, thrown);
+                }
+            } finally {
+                task = null;
+                w.completedTasks++;
+                w.unlock();
+            }
+        }
+        completedAbruptly = false;
+    } finally {
+        processWorkerExit(w, completedAbruptly);
+    }
+}
+```
 
 ### 关闭
 
@@ -612,4 +684,3 @@ public ThreadPoolExecutor(int corePoolSize,
 ```
 
  (゜-゜)つロ *参考并致谢《Java并发编程的艺术》*
- 
