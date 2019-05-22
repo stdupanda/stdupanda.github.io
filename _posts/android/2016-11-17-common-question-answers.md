@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 常见Android开发问题整理
-categories: Android
+categories: z归档
 description: 常见Android开发问题整理
 keywords: android, Android,
 ---
