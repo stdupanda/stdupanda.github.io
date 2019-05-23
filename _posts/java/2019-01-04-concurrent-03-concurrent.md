@@ -570,9 +570,14 @@ public ThreadPoolExecutor(int corePoolSize,
 >
 > ThreadPoolExecutor 采取上述步骤的总体设计思路，是为了在执行 `execute()` 方法时，尽可能地避免获取全局锁带来的性能瓶颈。在 ThreadPoolExecutor 完成预热之后（当前运行的线程数大于等于 corePoolSize），几乎所有的 `execute()` 方法调用都是执行步骤 2，以尽量避免获取全局锁。
 
-- 执行任务
-
-ThreadPoolExecutor 内部定义了 Worker 类，用于执行提交的任务；每个 Worker 一直获取待执行的任务，保证任务完成后返回执行结果。
+- 任务提交和执行流程
+  - ThreadPoolExecutor 内部类 Worker 用于执行具体任务
+  - `HashSet<Worker> workers` 用于存储各个 worker 对象
+  - 提交任务过程中判断并初始化 worker 实例，也就是一个工作线程
+  - 每个 worker 都一直获取待执行的任务，保证任务完成后返回执行结果。
+  - 具体任务执行过程中
+    - worker 会捕捉异常，保障 `afterExecute(Runnable r, Throwable t)` 可以被执行
+    - 但最终会抛出捕捉到的异常，导致 worker 跳出循环，无法获取新的任务
 
 主要流程就在如下代码，建议配合 debug 跟踪：
 
