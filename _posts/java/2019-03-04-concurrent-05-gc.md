@@ -301,6 +301,8 @@ G1 跟踪各个 Region 里面的垃圾堆积的价值大小（回收所获得的
   - mixed gc ：对象晋升到老年代速度太快时（回收整个新生代以及一部分老年代）
   - full gc ： 老年代空间不足时（是一种 serial gc）
 
+也可以看这里：[Getting Started with the G1 Garbage Collector](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/G1GettingStarted/index.html)
+
 ### ZGC 收集器
 
 自 JDK 11 开始支持，是一个可扩展的低延迟回收器，其特点如下：
