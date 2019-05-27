@@ -12,7 +12,9 @@ JVM 以一个进程的身份运行在操作系统上，掌握 JVM 内部组成�
 
 ## JVM 内存区域划分
 
-Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。根据《Java 虚拟机规范(JavaSE 7版)》的规定，Java 虚拟机所管理的内存将会包括以下几个运行时数据区域：
+Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。
+
+根据《Java 虚拟机规范(JavaSE 7版)》的规定，Java 虚拟机所管理的内存将会包括以下几个运行时数据区域：
 
 ![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/jvm_runtime_region.png)
 
