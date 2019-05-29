@@ -16,7 +16,7 @@ Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分
 
 根据《Java 虚拟机规范(JavaSE 7版)》的规定，Java 虚拟机所管理的内存将会包括以下几个运行时数据区域：
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/jvm_runtime_region.png)
+![image](/images/posts/jvm_runtime_region.png)
 
 > JVM 的内存管理方式的优点如下：
 >
@@ -137,7 +137,7 @@ jdk8 开始，HotSpot VM 移除永久代 `PermGen`，改为 `MetaSpace` 元数�
 - [Where Has the Java PermGen Gone?](https://www.infoq.com/articles/Java-PERMGEN-Removed "Where Has the Java PermGen Gone?")
 - [About G1 Garbage Collector, Permanent Generation and Metaspace](https://blogs.oracle.com/poonam/about-g1-garbage-collector%2c-permanent-generation-and-metaspace "About G1 Garbage Collector, Permanent Generation and Metaspace")
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/permgen_to_metadata.jpg)
+![image](/images/posts/permgen_to_metadata.jpg)
 
 > **由于元数据区使用本地内存，建议用户限制元数据区大小，或者增大机器内存；同时仍要加强系统质量监控管理。**
 
@@ -218,7 +218,7 @@ java 运行期加载机制牺牲了少许性能开销，但为自身带来了很
 
 加载(Loading)、验证(Verification)、准备(Preparation)、解析(Resolution)、初始化(Initialization)、使用(Using)和卸载(Unloading)7个阶段。
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/class_load_process.png)
+![image](/images/posts/class_load_process.png)
 
 - 加载
 

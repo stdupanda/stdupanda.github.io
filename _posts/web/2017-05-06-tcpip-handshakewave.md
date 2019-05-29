@@ -130,7 +130,7 @@ represents no connection state at all.
                               +---------+                   +---------+
 ```
 
-图片版请<a href="https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/tcp_connection_state_diagram.png" target="_blank">点击这里查看</a>
+图片版请<a href="/images/posts/tcp_connection_state_diagram.png" target="_blank">点击这里查看</a>
 
 ## Control Bits
 
@@ -162,7 +162,7 @@ If the ACK control bit is set this field contains the value of the next sequence
 
 ## 流程图
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/tcp_handshake_wave.png)
+![image](/images/posts/tcp_handshake_wave.png)
 
 ## 知识点整理
 

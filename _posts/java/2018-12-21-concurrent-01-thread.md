@@ -207,7 +207,7 @@ Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。
 
 图示如下:
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/thread_state.png)
+![image](/images/posts/thread_state.png)
 
 > 特别说明，关于 `BLOCKED` 状态，阻塞状态是线程阻塞在进入 `synchronized` 关键字修饰的方法或代码块（获取锁）时的状态，但是阻塞在 `java.concurrent` 包中 `Lock` 接口的线程状态却是等待状态，因为 `java.concurrent`包中 `Lock` 接口对于阻塞的实现均使用了 `LockSupport` 类中的相关方法。
 
@@ -259,7 +259,7 @@ private static class Runner implements Runnable {
 >
 > 任意线程对 Object（Object由synchronized保护）的访问，首先要获得 Object 的监视器。如果获取失败，线程进入同步队列，线程状态变为 BLOCKED。当访问 Object 的前驱（获得了锁的线程）释放了锁，则该释放操作唤醒阻塞在同步队列中的线程，使其重新尝试对监视器的获取。
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/object_monitor.png)
+![image](/images/posts/object_monitor.png)
 
 #### 等待通知机制
 
@@ -289,7 +289,7 @@ private static class Runner implements Runnable {
 >
 > 从上述细节中可以看到，等待/通知机制依托于同步机制，其目的就是确保等待线程从 `wait()` 方法返回时**能够感知到通知线程对变量做出的修改**。
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/thread_wait_notify.png)
+![image](/images/posts/thread_wait_notify.png)
 
 > 在图中，WaitThread 首先获取了对象的锁，然后调用对象的 `wait()` 方法，从而放弃了锁并进入了对象的等待队列 WaitQueue 中，进入等待状态。由于 WaitThread 释放了对象的锁，NotifyThread 随后获取了对象的锁，并调用对象的 `notify()` 方法，将 WaitThread 从 WaitQueue 移到 SynchronizedQueue 中，此时 WaitThread 的状态变为阻塞状态。NotifyThread 释放了锁之后，WaitThread 再次获取到锁并从 wait() 方法返回继续执行。
 

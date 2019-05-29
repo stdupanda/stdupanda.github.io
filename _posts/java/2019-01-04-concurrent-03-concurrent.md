@@ -559,7 +559,7 @@ public ThreadPoolExecutor(int corePoolSize,
 
 > `ThreadPoolExecutor` 在执行 `execute()` 方法提交任务时，逻辑大意如下：
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/thread_pool_executor.png)
+![image](/images/posts/thread_pool_executor.png)
 
 > ThreadPoolExecutor 执行 `execute()` 方法分下面 4 种情况。
 >
