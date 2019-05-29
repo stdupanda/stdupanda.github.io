@@ -44,7 +44,7 @@ keywords: Java, java, jdk, openjdk
 
 如图：
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/jvm.jpg)
+![image](/images/posts/jvm.jpg)
 
 ## 类加载器 ClassLoader
 
@@ -96,13 +96,13 @@ jdk 内置了一个 `URLClassLoader`，用户只需要传递规范的网络路�
 
 ### 总结
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_order2.png)
+![image](/images/posts/classloader_order2.png)
 
 ## `ClassLoader` 运行机制
 
 ### 校验加载顺序
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_order.png)
+![image](/images/posts/classloader_order.png)
 
 ### 双亲委派机制
 
@@ -263,6 +263,6 @@ private void initClassLoaders() {
 
 3. 热部署。
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/classloader_tomcat.png)
+![image](/images/posts/classloader_tomcat.png)
 
 建议访问 Oracle [官网链接](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/findingclasses.html) 以进一步掌握类加载流程。

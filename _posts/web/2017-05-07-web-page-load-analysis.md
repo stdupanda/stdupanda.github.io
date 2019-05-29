@@ -29,7 +29,7 @@ keywords: web, tcp, ip, tcpip, http, HTTP
 6. 如果用的是转发模式，此 DNS 服务器就会把请求转发至上一级 DNS 服务器，由上一级服务器进行解析，上一级服务器如果不能解析，或找根 DNS 或把转请求转至上上级，以此循环。不管是本地 DNS 服务器用是是转发，还是根提示，最后都是把结果返回给本地 DNS 服务器，由此 DNS 服务器再返回给客户机。
 7. 可以使用 `nslookup <xx.com>` 或者 `dig +trace <xx.com>` 分析解析过程
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/dns_analysis.jpg)
+![image](/images/posts/dns_analysis.jpg)
 
 ## 关于 DNS 加速
 - 可使用 cdn 加速，例如可以根据每台机器的负载量，该机器离用户地理位置的距离等返回给不同用户不同 IP 地址。这种过程就是 DNS 负载均衡，又叫做 DNS 重定向。大家耳熟能详的 CDN(Content Delivery Network)就是利用 DNS 的重定向技术，DNS 服务器会返回一个跟用户最接近的点的 IP 地址给用户，CDN 节点的服务器负责响应用户的请求，提供所需的内容。

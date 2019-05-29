@@ -203,7 +203,7 @@ HotSpot 会在特定的位置，即安全点（Safepoint)，让线程停顿下�
 
 如下是各个垃圾回收器搭配说明：
 
-![各垃圾回收器搭配说明](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/different_gc.png)
+![各垃圾回收器搭配说明](/images/posts/different_gc.png)
 
 连线的两个收集器说明可以搭配使用。
 

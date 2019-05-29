@@ -99,4 +99,4 @@ keywords: 生活, 人生低谷
 
 全文如下：
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/walk-out-from-trough.png)
+![image](/images/posts/walk-out-from-trough.png)

@@ -16,7 +16,7 @@ keywords: Spring, java
 - 轻量级，非侵入性
 - 丰富模块，整理如下：
 
-![image](https://github.com/stdupanda/stdupanda.github.io/raw/master/images/posts/springmodules.png)
+![image](/images/posts/springmodules.png)
 
 # IOC基础
 
