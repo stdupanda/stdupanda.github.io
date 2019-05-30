@@ -8,7 +8,8 @@ keywords: database, mysql
 
 整理 mysql 清理重复数据
 
-# 单列去重
+## 单列去重
+
 `school_name` 为存在重复的列, `school_id` 是主键.
 
 ```sql
@@ -25,7 +26,7 @@ DELETE FROM test
                          HAVING COUNT(*) > 1);
 ```
 
-# 多列去重
+## 多列去重
 
 ```sql
 -- 多列去重
@@ -44,11 +45,18 @@ DELETE p1 from TABLE p1, TABLE p2
 https://www.zhihu.com/question/33189744
 
 3、查找表中多余的重复记录（多个字段）
+
+```sql
 select * from vitae a
 where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1)
+```
+
 4、删除表中多余的重复记录（多个字段），只留有rowid最小的记录
+
+```sql
 delete from vitae a
 where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1)
 and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)>1)
+```
 
 http://www.jb51.net/article/23964.htm
