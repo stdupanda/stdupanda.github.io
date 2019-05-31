@@ -6,15 +6,9 @@ description: Spring 简介
 keywords: Spring, java
 ---
 
-# 特色
+整理 Spring 框架原理以及常见使用问题。
 
-- J2EE without EJB
-- IOC/DI & AOP(aspect oriented programming)
-- light weight
-- container,容器,包含并管理对象声明周期
-- framework,框架
-- 轻量级，非侵入性
-- 丰富模块，整理如下：
+# 特色
 
 ![image](/images/posts/springmodules.png)
 
