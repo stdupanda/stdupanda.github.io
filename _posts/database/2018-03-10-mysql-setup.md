@@ -1,12 +1,12 @@
 ---
 layout: post
-title: mysql 常用问题整理
+title: mysql 常见使用问题整理
 categories: Database
-description: mysql 常用问题整理
+description: mysql 常见使用问题整理
 keywords: database, mysql
 ---
 
-整理 mysql 日常问题。
+整理 mysql 日常使用问题。
 
 ## 安装
 
@@ -89,27 +89,3 @@ max_connections=12345
 ```
 
 重启 `mysql` 即可。
-
-## 常见运维问题
-
-常见运维问题整理如下：
-
-## `sql` 文件内使用双引号出现问题
-
-比如 navicat 导出的 `sql` 在导入其他库时出现问题。
-
-```sql
-SET SESSION SQL_MODE=ANSI_QUOTES;
-```
-
-# 常见 sql 用法
-
-整理常见 sql 使用场景：
-
-### 按天/月/星期等统计
-
-```sql
-select DATE_FORMAT(create_time,'%Y%m%d') days,count(caseid) count from tc_case group by days;
-select DATE_FORMAT(create_time,'%Y%u') weeks,count(caseid) count from tc_case group by weeks;
-select DATE_FORMAT(create_time,'%Y%m') months,count(caseid) count from tc_case group by months;
-```

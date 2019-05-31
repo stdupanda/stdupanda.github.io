@@ -1,14 +1,36 @@
 ---
 layout: post
-title: mysql 去除重复记录
+title: mysql 使用整理
 categories: Database
-description: mysql 去除重复记录
+description: mysql 使用整理
 keywords: database, mysql
 ---
 
+record mysql common usages.
+
+## 使用问题
+
+### `sql` 文件内使用双引号出现问题
+
+比如使用 Navicat 导出的 sql 里有双引号，在导入其他库时出现问题。
+
+```sql
+SET SESSION SQL_MODE=ANSI_QUOTES;
+```
+
+## 统计/筛选
+
+### 按天/月/星期等统计
+
+```sql
+select DATE_FORMAT(create_time,'%Y%m%d') days,count(caseid) count from tc_case group by days;
+select DATE_FORMAT(create_time,'%Y%u') weeks,count(caseid) count from tc_case group by weeks;
+select DATE_FORMAT(create_time,'%Y%m') months,count(caseid) count from tc_case group by months;
+```
+
 整理 mysql 清理重复数据
 
-## 单列去重
+## 去重
 
 `school_name` 为存在重复的列, `school_id` 是主键.
 
@@ -44,16 +66,12 @@ DELETE p1 from TABLE p1, TABLE p2
 
 https://www.zhihu.com/question/33189744
 
-3、查找表中多余的重复记录（多个字段）
-
 ```sql
+-- 查找表中多余的重复记录（多个字段）
 select * from vitae a
 where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1)
-```
 
-4、删除表中多余的重复记录（多个字段），只留有rowid最小的记录
-
-```sql
+-- 删除表中多余的重复记录（多个字段），只留有rowid最小的记录
 delete from vitae a
 where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1)
 and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)>1)
