@@ -3,7 +3,7 @@ layout: post
 title: Spring 使用整理
 categories: Spring
 description: Spring 使用
-keywords: Spring, java
+keywords: spring, java, test, mock, springmvc, mvc, ie11, json
 ---
 
 This article records the spring framework usages that are frequently used in usual programs.
@@ -117,8 +117,8 @@ public class RedisBaseDao<K, V> {
 
 ## mock 测试
 
-- EasyMock [link](http://easymock.org/ "link")
-- Mockito [link](http://easymock.org/ "link")
+- EasyMock [link](http://easymock.org/)
+- Mockito [link](http://easymock.org/)
 
 ```java
 package cn.xz.test;
