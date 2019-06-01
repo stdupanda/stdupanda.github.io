@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Design Patterns
+title: java Design Patterns 设计模式整理
 categories: Java
-description: Design Patterns
+description: java Design Patterns 设计模式
 keywords: Java, Design Patterns, 设计模式
 ---
 
