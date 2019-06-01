@@ -67,7 +67,7 @@ spring 源码中搜索 `circular references`.
 
   属性注入的循环依赖可以解决，构造器注入的循环依赖不可以解决，即构造器初始化不可延后，因为无法创建对象。prototype 类型的循环依赖无法解决。
 
-  分析源码 `org.springframework.beans.factory.support.DefaultSingletonBeanRegistry`，内部有一个 `singletonsCurrentlyInCreation` 集合保存了正在创建过程中的 bean 们。同时内部定义了 `singletonObjects`、`earlySingletonObjects`、`singletonFactories` 三个缓存。
+  分析源码 `org.springframework.beans.factory.support.DefaultSingletonBeanRegistry`，内部有一个 `singletonsCurrentlyInCreation` 集合保存了正在创建过程中的 bean 们。同时内部定义了 `singletonObjects`、`earlySingletonObjects`、`singletonFactories` 三个缓存（一二三级缓存）。
 
   - A 创建过程中需要 B，于是 A 将自己放到 singletonFactories，去实例化 B
   - B 首先从 singletonObjects 中获取 A
@@ -79,4 +79,17 @@ spring 源码中搜索 `circular references`.
 
   这样就解决了循环依赖。
 
-singletonFactories、earlySingletonObjects、singletonFactories 又被称为一二三级缓存。
+## 使用的设计模式
+
+其实 spring 将常用设计模式都实现了。这个问题实际就是在问 java 的设计模式们。
+
+- 工厂，单例，代理
+- 适配器
+- 装饰者
+- 观察者
+- 策略
+- 模板方法
+- builder 模式
+- 责任链
+
+更多设计模式，可访问：[java设计模式整理](/2017/03/29/design_paterns) 查看。
