@@ -9,16 +9,16 @@ keywords: Java, Design Patterns, 设计模式
 ## 单例模式 singleton
 
 ```java
-//省略饿汉模式
-//考虑并发的饱汉
 public class Tool {
     private volatile static Tool instance;
+
+    private Tool(){}
+
     public static Tool getInstance() {
         if (null == instance) {
-            synchronized (Tool.class) {
+            synchronized {
                 if (null == instance) {
                     instance = new Tool();
-                    instance.init();
                 }
             }
         }
