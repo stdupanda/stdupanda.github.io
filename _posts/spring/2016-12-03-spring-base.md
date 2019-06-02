@@ -93,3 +93,68 @@ spring 源码中搜索 `circular references`.
 - 责任链
 
 更多设计模式，可访问：[java设计模式整理](/2017/03/29/design_paterns) 查看。
+
+## Spring AOP
+
+参考官方文档：[Aspect Oriented Programming with Spring](https://docs.spring.io/spring/docs/4.3.24.RELEASE/spring-framework-reference/htmlsingle/#aop)
+
+面向切面编程就是将交叉业务逻辑封装成切面，利用 AOP 的功能将切面织入到主业务逻辑中。交叉业务逻辑是指通用的、与主业务逻辑无关的代码，如安全检查、事务、日志等，若不使用 AOP 则会出现交叉业务逻辑与主业务逻辑混合在一起，会使主业务逻辑变的混杂不清。
+
+Spring 默认采用 JDK 动态代理机制实现 AOP，当 JDK 动态代理不可用时（代理类无接口）会使用 CGlib 机制。但 Spring 的 AOP 有一定的缺点，第一只能对方法进行切入，不能对接口，字段，静态代码块进行切入（切入接口的某个方法，则该接口下所有实现类的该方法将被切入）；第二同类中的互相调用方法将不会使用代理类。因为要使用代理类必须从 Spring 容器中获取 Bean。第三性能不是最好的。
+
+主要概念和使用注解如下：
+
+- Aspect
+  - 切面，共有功能的实现，横切多个对象
+- Join point
+  - 拦截点，程序在运行过程中能够插入切面的地点。例如，方法调用、异常抛出或字段修改等。
+- Advice
+  - 切面的具体实现，以目标方法为参照点，根据放置的地方不同，可分为 5 种：
+  - @Before
+    - 前置增强：在目标方法执行前，增加执行逻辑。
+  - @AfterReturning
+    - 后置增强：在目标方法执行后，增加执行逻辑（若目标方法抛出异常，则不执行增强逻辑）。
+  - @AfterThrowing
+    - 后置增强：和 @AfterReturning 增强相对应，只会在目标方法抛出异常时执行。
+  - @After
+    - 后置增强：增强始终会被执行（不管目标方法是否抛出异常）。
+  - @Around
+    - 环绕增强：在目标方法执行前和执行后，增加执行逻辑。
+- @Pointcut
+  - 切点：简单理解就是一个匹配规则，与切点函数组合使用。
+  - 一个 Pointcut 对应多个 Join point。
+- Weaving
+  - 将切面应用到目标对象从而创建一个新的代理对象的过程。
+  - 这个过程可以发生在编译期、类装载期及运行期。
+
+大致使用流程如下：
+
+- 使用 @Aspect 注解一个 bean
+
+  ```java
+  @Component
+  @Aspect
+  @Order(0) //设置切面的优先级  0-2147483647 数字越小优先级越高
+  public class MyAopBean{
+  ```
+
+- 指定切点
+
+  ```java
+  @Pointcut("execution(* com.demo.service..*.*(..))")
+  public void myPointcut(){}
+  ```
+
+- 配置 advice
+
+  ```java
+  @Before("myPointcut()")
+  public void doBeforeAdvice(JoinPoint joinPoint){
+    // 具体的逻辑，比如安全检查、日志记录、耗时检测等等
+  }
+  ```
+
+- spring 初始化完切面之后，IOC 容器就会为切面相匹配的 bean 创建代理。
+- 当运行对应的切面业务运行时就会被织入对应逻辑
+
+
