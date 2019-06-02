@@ -51,11 +51,11 @@ keywords: Spring, java
 
 ![image](/images/posts/spring_bean_lifecycle.png)
 
-以上就是主要的 bean 生命周期，实际上还有很多的细节没有列出，比如 BeanClassLoaderAware、EnvironmentAware、EmbeddedValueResolverAware、ResourceLoaderAware、ApplicationEventPublisherAware、MessageSourceAware、ServletContextAware、DestructionAwareBeanPostProcessor 等等特别多的过程，某种程度上实现了 spring 框架的良好可拓展性。
+以上就是主要的 bean 生命周期，实际上还有很多的细节没有列出，比如 BeanClassLoaderAware、EnvironmentAware、EmbeddedValueResolverAware、ResourceLoaderAware、ApplicationEventPublisherAware、MessageSourceAware、ServletContextAware、DestructionAwareBeanPostProcessor 等等特别多的过程，某种程度上实现了 Spring 框架的良好可拓展性。
 
-### 循环依赖解决
+## 循环依赖解决
 
-spring 源码中搜索 `circular references`.
+Spring 源码中搜索 `circular references`.
 
 - 循环依赖的检测
 
@@ -81,7 +81,7 @@ spring 源码中搜索 `circular references`.
 
 ## 使用的设计模式
 
-其实 spring 将常用设计模式都实现了。这个问题实际就是在问 java 的设计模式们。
+其实 Spring 将常用设计模式都实现了。这个问题实际就是在问 java 的设计模式们。
 
 - 工厂，单例，代理
 - 适配器
@@ -154,7 +154,74 @@ Spring 默认采用 JDK 动态代理机制实现 AOP，当 JDK 动态代理不�
   }
   ```
 
-- spring 初始化完切面之后，IOC 容器就会为切面相匹配的 bean 创建代理。
+- Spring 初始化完切面之后，IOC 容器就会为切面相匹配的 bean 创建代理。
 - 当运行对应的切面业务运行时就会被织入对应逻辑
 
+### AOP & 动态代理
 
+打开源码的 `org.springframework.aop.framework.DefaultAopProxyFactory` 类：
+
+```java
+public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
+
+  @Override
+  public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
+    if (config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config)) {
+      Class<?> targetClass = config.getTargetClass();
+      if (targetClass == null) {
+        throw new AopConfigException("TargetSource cannot determine target class: " +
+            "Either an interface or a target is required for proxy creation.");
+      }
+      if (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) {
+        return new JdkDynamicAopProxy(config);
+      }
+      return new ObjenesisCglibAopProxy(config);
+    }
+    else {
+      return new JdkDynamicAopProxy(config);
+    }
+  }
+```
+
+结合上述源码，Spring AOP 生成代理对象的流程为：
+
+- 创建容器对象的时候，根据切入点表达式拦截的类，生成代理对象。
+- 如果目标对象有实现接口，使用 jdk 代理。如果目标对象没有实现接口，则使用 cglib 代理。
+- 从容器获取代理后的对象，在运行期植入"切面"类的方法。
+
+### 事务 & AOP & 动态代理
+
+- jdk 原生事务操作
+
+  jdk 操作事务就是在 `java.sql.Connection` 内部：
+
+  ```java
+  setAutoCommit(boolean autoCommit)
+  commit()
+  rollback()
+  ```
+  即可实现事务的开启、提交和回滚。
+
+- Spring 中的事务操作
+
+  Spring 使用 AOP 实现事务。当扫描到 `@Transactional` 注解或者 `tx` 标签对应的类和方法，则会创建对应的 AOP 代理对象；在调用对应对象和方法时进行判断进而调用 AOP 代理对象，也就会执行 AOP 对应的逻辑。
+
+  可以想到，生成代理的过程就是在 BeanPostProcessor 中实现的，实现了对 bean 的加工增强。
+
+- Spring 事务的特殊性
+
+  要求声明事务事务的方法必须为 `public`；
+  
+  默认 checked exceptions 抛出异常会自动回滚；  
+  
+  > Spring’s TransactionInterceptor allows any checked application exception to be thrown with the callback code, while TransactionTemplate is restricted to unchecked exceptions within the callback. TransactionTemplate triggers a rollback in case of an unchecked application exception, or if the transaction is marked rollback-only by the application (via TransactionStatus). TransactionInterceptor behaves the same way by default but allows configurable rollback policies per method.
+
+  > In its default configuration, the Spring Framework’s transaction infrastructure code only marks a transaction for rollback in the case of runtime, unchecked exceptions; that is, when the thrown exception is an instance or subclass of RuntimeException. ( Errors will also - by default - result in a rollback). Checked exceptions that are thrown from a transactional method do not result in rollback in the default configuration.
+  > 建议设置 rollBackFor
+  当在 `@Transactional` 标注的类内部，普通方法 A 调用已标注 `@Transactional` 的事务方法 B 时，事务不生效，原因如下：
+
+  - Spring 检测到类标记了事务注解，会创建代理对象，以及这个类的实例 bean
+  - 业务代码执行到 A 时，因为 A 未被标记事务，Spring 会调用类的实例 bean 的 A 方法
+  - 实例 bean 的 A 方法内部即便调用了 B 方法，也无法执行事务，因为实例 bean 不具备增强的事务功能
+
+  Spring 的事务机制是通过增强的 AOP 代理实现，当业务代码被标注为声明了事务，Spring 才会调用增强的 AOP 代理 bean 去执行事务方法，复杂的事务隔离级别、传播机制都是建立在增强的 AOP 之上。
