@@ -6,7 +6,7 @@ description: mysql 使用整理
 keywords: database, mysql
 ---
 
-record mysql common usages.
+整理记录 mysql 常见问题。
 
 ## 使用问题
 
