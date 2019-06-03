@@ -6,7 +6,7 @@ description: mysql 常见使用问题整理
 keywords: database, mysql
 ---
 
-整理 mysql 日常使用问题。
+整理 mysql 安装部署优化记录。
 
 ## 安装
 
