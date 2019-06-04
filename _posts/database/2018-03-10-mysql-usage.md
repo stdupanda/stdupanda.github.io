@@ -1,12 +1,12 @@
 ---
 layout: post
-title: mysql 使用整理
+title: MySQL 使用整理
 categories: Database
-description: mysql 使用整理
-keywords: database, mysql
+description: MySQL 使用整理
+keywords: database, mysql, MySQL
 ---
 
-整理记录 mysql 常见问题。
+整理记录 MySQL 常见问题。
 
 ## 使用问题
 
@@ -48,7 +48,7 @@ AND LENGTH(@pv := concat(@pv, ',', id));
 
 MySQL8开始支持递归查询：
 
-[MySQL | Recursive CTE (Common Table Expressions)](https://www.geeksforgeeks.org/mysql-recursive-cte-common-table-expressions/)、[SQK Fiddle](http://sqlfiddle.com/#!9/d74210/1)、[How to create a MySQL hierarchical recursive query](https://stackoverflow.com/questions/20215744/how-to-create-a-mysql-hierarchical-recursive-query)、[A Definitive Guide To MySQL Recursive CTE](http://www.mysqltutorial.org/mysql-recursive-cte/)
+[MySQL Recursive CTE (Common Table Expressions)](https://www.geeksforgeeks.org/mysql-recursive-cte-common-table-expressions/)、[SQK Fiddle](http://sqlfiddle.com/#!9/d74210/1)、[How to create a MySQL hierarchical recursive query](https://stackoverflow.com/questions/20215744/how-to-create-a-mysql-hierarchical-recursive-query)、[A Definitive Guide To MySQL Recursive CTE](http://www.mysqltutorial.org/mysql-recursive-cte/)
 
 ```sql
 /* 表 products 结构如下：
@@ -84,7 +84,7 @@ select DATE_FORMAT(create_time,'%Y%u') weeks,count(caseid) count from tc_case gr
 select DATE_FORMAT(create_time,'%Y%m') months,count(caseid) count from tc_case group by months;
 ```
 
-整理 mysql 清理重复数据
+整理 MySQL 清理重复数据
 
 ## 去重
 
