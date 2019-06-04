@@ -20,6 +20,62 @@ SET SESSION SQL_MODE=ANSI_QUOTES;
 
 ## 统计/筛选
 
+### 无限级联查询
+
+MySQL8 之前：
+
+```sql
+/*
+-- 表结构：
+CREATE TABLE `tb` (
+`id`  int(11) NOT NULL AUTO_INCREMENT ,
+`pid`  int(11) NOT NULL ,
+`id_info`  varchar(8) NOT NULL DEFAULT '' ,
+PRIMARY KEY (`id`)
+)
+*/
+-- 查询语句：
+SELECT
+  id,
+  pid
+FROM
+  (SELECT * FROM tb ORDER BY pid, id) s,
+  (SELECT @pv :=0) t
+WHERE
+  FIND_IN_SET(pid, @pv)
+AND LENGTH(@pv := concat(@pv, ',', id));
+```
+
+MySQL8开始支持递归查询：
+
+[MySQL | Recursive CTE (Common Table Expressions)](https://www.geeksforgeeks.org/mysql-recursive-cte-common-table-expressions/)、[SQK Fiddle](http://sqlfiddle.com/#!9/d74210/1)、[How to create a MySQL hierarchical recursive query](https://stackoverflow.com/questions/20215744/how-to-create-a-mysql-hierarchical-recursive-query)、[A Definitive Guide To MySQL Recursive CTE](http://www.mysqltutorial.org/mysql-recursive-cte/)
+
+```sql
+/* 表 products 结构如下：
+id | name        | parent_id
+19 | category1   | 0
+20 | category2   | 19
+21 | category3   | 20
+22 | category4   | 21
+*/
+-- 查询语句如下：
+WITH RECURSIVE cte (id, name, parent_id) as (
+  SELECT     id,
+             name,
+             parent_id
+  FROM       products
+  WHERE      parent_id = 0
+  UNION ALL
+  SELECT     p.id,
+             p.name,
+             p.parent_id
+  FROM       products p
+  INNER JOIN cte
+          ON p.parent_id = cte.id
+)
+SELECT * FROM cte;
+```
+
 ### 按天/月/星期等统计
 
 ```sql
