@@ -1,12 +1,12 @@
 ---
 layout: post
-title: mysql 常见使用问题整理
+title: MySQL 常见运维问题整理
 categories: Database
-description: mysql 常见使用问题整理
-keywords: database, mysql
+description: MySQL 常见运维问题整理
+keywords: database, mysql, MySQL
 ---
 
-整理 mysql 安装部署优化记录。
+整理 MySQL 安装部署运维问题解决优化记录。
 
 ## 安装
 
@@ -88,4 +88,4 @@ SHOW VARIABLES LIKE "max_connections";
 max_connections=12345
 ```
 
-重启 `mysql` 即可。
+重启 MySQL 即可。
