@@ -79,9 +79,9 @@ SELECT * FROM cte;
 ### 按天/月/星期等统计
 
 ```sql
-select DATE_FORMAT(create_time,'%Y%m%d') days,count(caseid) count from tc_case group by days;
-select DATE_FORMAT(create_time,'%Y%u') weeks,count(caseid) count from tc_case group by weeks;
-select DATE_FORMAT(create_time,'%Y%m') months,count(caseid) count from tc_case group by months;
+SELECT DATE_FORMAT(create_time,'%Y%m%d') days,COUNT(caseid) count FROM tc_case GROUP BY days;
+SELECT DATE_FORMAT(create_time,'%Y%u') weeks,COUNT(caseid) count FROM tc_case GROUP BY weeks;
+SELECT DATE_FORMAT(create_time,'%Y%m') months,COUNT(caseid) count FROM tc_case GROUP BY months;
 ```
 
 整理 MySQL 清理重复数据
@@ -108,13 +108,13 @@ DELETE FROM test
 
 ```sql
 -- 多列去重
-delete from test
- where id not in (select name, email, max(id)
-                    from test
-                   group by name, email
-                  having id is not null);
+DELETE FROM test
+ WHERE id NOT IN (SELECT name, email, max(id)
+                    FROM test
+                   GROUP BY name, email
+                  HAVING id IS NOT NULL);
 -- 新思路
-DELETE p1 from TABLE p1, TABLE p2
+DELETE p1 FROM TABLE p1, TABLE p2
  WHERE p1.name = p2.name
    AND p1.email = p2.email
    AND p1.id < p2.id;
@@ -128,9 +128,9 @@ select * from vitae a
 where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1)
 
 -- 删除表中多余的重复记录（多个字段），只留有rowid最小的记录
-delete from vitae a
-where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1)
-and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)>1)
+DELETE FROM vitae a
+WHERE (a.peopleId,a.seq) IN (SELECT peopleId,seq FROM vitae GROUP BY peopleId,seq HAVING COUNT(*) > 1)
+AND rowid NOT IN (SELECT MIN(rowid) FROM vitae GROUP BY peopleId,seq HAVING COUNT(*)>1)
 ```
 
 http://www.jb51.net/article/23964.htm
