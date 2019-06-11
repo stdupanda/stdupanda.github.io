@@ -1,8 +1,8 @@
 ---
 layout: post
-title: java并发基础03-并发类
+title: java并发基础03-并发类库
 categories: Java
-description: java并发基础03-并发类
+description: java并发基础03-并发类库
 keywords: Java, java, jdk, openjdk, concurrent, lock
 ---
 
@@ -559,7 +559,7 @@ public ThreadPoolExecutor(int corePoolSize,
 
 > `ThreadPoolExecutor` 在执行 `execute()` 方法提交任务时，逻辑大意如下：
 
-![image](/images/posts/thread_pool_executor.png)
+![image](/images/posts/threadpoolexecutor_process.png)
 
 > ThreadPoolExecutor 执行 `execute()` 方法分下面 4 种情况。
 >
