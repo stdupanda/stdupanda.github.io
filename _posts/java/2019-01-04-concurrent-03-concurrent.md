@@ -3,10 +3,10 @@ layout: post
 title: java并发基础03-并发类库
 categories: Java
 description: java并发基础03-并发类库
-keywords: Java, java, jdk, openjdk, concurrent, lock
+keywords: java, 并发, concurrent, lock
 ---
 
-整理总结常用 java 并发类库。
+整理 `java.util.concurrent` 并发框架内的常用类库，包括并发容器(Map、Queue、List 等)、原子操作类、
 
 ## 并发容器和框架
 

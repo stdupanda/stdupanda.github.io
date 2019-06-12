@@ -3,10 +3,10 @@ layout: post
 title: java并发基础01-线程
 categories: Java
 description: java并发基础01-线程
-keywords: Java, java, jdk, openjdk, thread, concurrent
+keywords: java, 并发, concurrent, lock, 线程, thread
 ---
 
-整理总结 java 线程基础功能点。
+整理 java 并发编程之线程相关功能点。
 
 ## 线程简介
 
