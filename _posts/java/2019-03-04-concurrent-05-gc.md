@@ -3,7 +3,7 @@ layout: post
 title: java并发基础05-GC
 categories: Java
 description: java并发基础05-GC
-keywords: Java, java, jdk, openjdk, concurrent, lock, JVM, gc, 垃圾回收, 垃圾
+keywords: java, 并发, concurrent, lock, jvm, gc, 垃圾回收
 ---
 
 JVM 以一个进程的身份运行在操作系统上，掌握 JVM 的 GC 机制，有利于更加深入掌握 java 语言。

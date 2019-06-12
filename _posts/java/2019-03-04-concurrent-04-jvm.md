@@ -3,7 +3,7 @@ layout: post
 title: java并发基础04-JVM
 categories: Java
 description: java并发基础04-JVM
-keywords: Java, java, jdk, openjdk, concurrent, lock, JVM, 对象, 加载
+keywords: java, 并发, concurrent, lock, jvm, 对象, 加载
 ---
 
 JVM 以一个进程的身份运行在操作系统上，掌握 JVM 内部组成与运行机制，是深入掌握 java 的基础。

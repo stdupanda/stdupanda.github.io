@@ -3,10 +3,10 @@ layout: post
 title: java并发基础02-锁
 categories: Java
 description: java并发基础02-锁
-keywords: Java, java, jdk, openjdk, concurrent, lock
+keywords: java, 并发, concurrent, lock, 锁
 ---
 
-java 线程相关基础。
+整理 java 体系下的锁。 
 
 ## 锁状态的分类
 
