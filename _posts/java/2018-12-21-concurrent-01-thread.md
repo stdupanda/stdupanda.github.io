@@ -368,6 +368,12 @@ jdk文档中对 `ThreadLocal` 的描述：
 >
 > 既然 Key 是弱引用，那么我们要做的事，就是在调用 ThreadLocal 的 `get()`、`set()` 方法时完成后再调用 **`remove()`** 方法，将 Entry 节点和 Map 的引用关系移除，这样整个 Entry 对象在 GC Roots 分析后就变成不可达了，下次 GC 的时候就可以被回收。否则就有可能发生内存泄露。
 
+#### `ThreadlocalRandom`
+
+`ThreadlocalRandom` 避免了多线程并发时争夺导致性能下降；`Random` 内部是采用了 CAS 实现了并发安全。
+
+用法为 `ThreadLocalRandom.current().nextX(...) (where X is Int, Long, etc).`
+
 ## 经典实例
 
 ### 等待超时
