@@ -34,6 +34,8 @@ keywords: linux
 | `ln -s /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime` | 修改时区 |
 | `ntpdate 1.cn.pool.ntp.org` | 同步时间 |
 | `curl -H "Content-Type: application/json" -X POST --data '{"key":"val"}' http://ip:port/path` | 提交 `json` 请求 |
+| `pv -L 2m file > newFile`| 复制文件并显示操作进度；限制速度为 2mb/s |
+| `pv file | gzip > .file.gz`| 压缩文件并显示进度 |
 
 CentOS 7 相关命令
 
