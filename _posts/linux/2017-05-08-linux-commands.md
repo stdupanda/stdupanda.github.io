@@ -8,6 +8,8 @@ keywords: linux
 
 整理下经常用到的命令备忘。
 
+![image](/images/posts/linux_commands.jpg)
+
 | command                         | desc |
 |:--------------------------------|:------------|
 | `scp -P <port_number> <local_file_paht> <username>@<ip>:<remote_path>`| 上传本地文件到远程主机 |
