@@ -8,7 +8,7 @@ keywords: java, 并发, concurrent, lock, jvm, 对象, 加载
 
 JVM 以一个进程的身份运行在操作系统上，掌握 JVM 内部组成与运行机制，是深入掌握 java 的基础。
 
-本文主要介绍 JVM 的组成。关于 GC 部分请[点击查看](https://stdupanda.github.io/2019/03/04/concurrent-05-gc)。
+本文主要介绍 JVM 的组成。关于 GC 部分请[点击查看](/concurrent-05-gc)。
 
 ## JVM 内存区域划分
 

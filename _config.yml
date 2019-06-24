@@ -63,7 +63,7 @@ paginate: 9
 lsi: false
 quiet: false
 excerpt_separator: "\n\n"
-permalink: /:year/:month/:day/:title/
+permalink: /:title
 gems:
   - rouge
 #     - jekyll-html-pipeline
@@ -83,8 +83,8 @@ collections:
 github_username: stdupanda
 #douban_username: stdupanda
 #facebook_username: stdupanda
-weibo_username: stdupanda
-zhihu_username: stdupanda
+#weibo_username: stdupanda
+#zhihu_username: stdupanda
 #twitter_username: stdupanda
 
 # ---------------- #
