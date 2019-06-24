@@ -8,7 +8,7 @@ keywords: java, 并发, concurrent, lock, jvm, gc, 垃圾回收
 
 JVM 以一个进程的身份运行在操作系统上，掌握 JVM 的 GC 机制，有利于更加深入掌握 java 语言。
 
-本文主要讲解 JVM 的垃圾回收机制。关于 JVM 组成请[点击查看](https://stdupanda.github.io/2019/03/04/concurrent-04-jvm)。
+本文主要讲解 JVM 的垃圾回收机制。关于 JVM 组成请[点击查看](/concurrent-04-jvm)。
 
 ## 垃圾回收判定
 
