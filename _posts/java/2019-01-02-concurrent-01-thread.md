@@ -1,8 +1,8 @@
 ---
 layout: post
-title: java并发基础01-线程
+title: java 并发基础 01 线程
 categories: Java
-description: java并发基础01-线程
+description: java 并发基础 01 线程
 keywords: java, 并发, concurrent, lock, 线程, thread
 ---
 

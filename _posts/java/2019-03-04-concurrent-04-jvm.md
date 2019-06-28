@@ -1,8 +1,8 @@
 ---
 layout: post
-title: java并发基础04-JVM
+title: java 并发基础 04 JVM
 categories: Java
-description: java并发基础04-JVM
+description: java 并发基础 04 JVM
 keywords: java, 并发, concurrent, lock, jvm, 对象, 加载
 ---
 

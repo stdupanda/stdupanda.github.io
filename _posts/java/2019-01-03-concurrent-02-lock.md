@@ -1,8 +1,8 @@
 ---
 layout: post
-title: java并发基础02-锁
+title: java 并发基础 02 锁
 categories: Java
-description: java并发基础02-锁
+description: java 并发基础 02 锁
 keywords: java, 并发, concurrent, lock, 锁
 ---
 

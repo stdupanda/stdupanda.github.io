@@ -1,8 +1,8 @@
 ---
 layout: post
-title: java并发基础05-GC
+title: java 并发基础 05 GC
 categories: Java
-description: java并发基础05-GC
+description: java 并发基础 05 GC
 keywords: java, 并发, concurrent, lock, jvm, gc, 垃圾回收
 ---
 
