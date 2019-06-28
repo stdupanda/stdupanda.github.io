@@ -2,7 +2,7 @@
 layout: post
 title: jvm 问题分析和优化
 categories: Java
-description: jvm问题分析和优化
+description: jvm 问题分析和优化
 keywords: Java, java, jdk, openjdk, JVM
 ---
 
