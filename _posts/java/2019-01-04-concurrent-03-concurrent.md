@@ -443,8 +443,6 @@ public class SemaphoreTest {
 
 支持分阶段并发，一个可重用的同步屏障，功能上类似 CyclicBarrier 和 CountDownLatch，但是支持更灵活的使用方式。
 
-- Registration
-
 和其他屏障工具类不同，随着时间变化注册到 Phaser 上的同步线程会变化，任何时候都任务可以注册到 Phaser 并且可以随意解除注册。
 
 A Phaser may be used instead of a CountDownLatch to control a one-shot action serving a variable number of parties. The typical idiom is for the method setting this up to first register, then start the actions, then deregister, as in: 
@@ -534,44 +532,46 @@ void build(Task[] tasks, int lo, int hi, Phaser ph) {
 }}
 ```
 
-### `Exchanger` 线程间数据交换
+### Exchanger 线程间数据交换
 
 Exchanger（交换者）是一个用于线程间协作的工具类。Exchanger 用于进行线程间的数据交换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程通过 `exchange` 方法交换数据，如果第一个线程先执行 `exchange` 方法，它会一直等待第二个线程也执行 `exchange` 方法，当两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产出来的数据传递给对方。
 
-Exchanger 可以用于遗传算法，遗传算法里需要选出两个人作为交配对象，这时候会交换两人的数据，并使用交叉规则得出 2 个交配结果。Exchanger 也可以用于校对工作，比如我们需要将纸制银行流水通过人工的方式录入成电子银行流水，为了避免错误，采用 AB 岗两人进行录入，录入到 Excel 之后，系统需要加载这两个 Excel，并对两个 Excel 数据进行校对，看看是否录入一致，代码如下：
+Exchanger 可以用于遗传算法，遗传算法里需要选出两个人作为交配对象，这时候会交换两人的数据，并使用交叉规则得出 2 个交配结果。
 
-> ```java
-> public class ExchangerTest {
->     private static final Exchanger<String> exgr = new Exchanger<String>();
->
->     private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
->
->     public static void main(String[] args) {
->         threadPool.execute(new Runnable() {
->             @Override
->             public void run() {
->                 try {
->                     String A = "银行流水A";// A录入银行流水数据
->                     exgr.exchange(A);
->                 } catch (InterruptedException e) {
->                 }
->             }
->         });
->         threadPool.execute(new Runnable() {
->             @Override
->             public void run() {
->                 try {
->                     String B = "银行流水B";// B录入银行流水数据
->                     String A = exgr.exchange("B");
->                     System.out.println("A和B数据是否一致：" + A.equals(B) + "，A录入的是：" + A + "，B录入是：" + B);
->                 } catch (InterruptedException e) {
->                 }
->             }
->         });
->         threadPool.shutdown();
->     }
-> }
-> ```
+Exchanger 也可以用于校对工作，比如我们需要将纸制银行流水通过人工的方式录入成电子银行流水，为了避免错误，采用 AB 岗两人进行录入，录入到 Excel 之后，系统需要加载这两个 Excel，并对两个 Excel 数据进行校对，看看是否录入一致，代码如下：
+
+```java
+public class ExchangerTest {
+    private static final Exchanger<String> exgr = new Exchanger<String>();
+
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
+
+    public static void main(String[] args) {
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String A = "银行流水A";// A录入银行流水数据
+                    exgr.exchange(A);
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String B = "银行流水B";// B录入银行流水数据
+                    String A = exgr.exchange(B);
+                    System.out.println("A和B数据是否一致：" + A.equals(B) + "，A录入的是：" + A + "，B录入是：" + B);
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+        threadPool.shutdown();
+    }
+}
+```
 
 如果两个线程有一个没有执行 `exchange()` 方法，则会一直等待，如果担心有特殊情况发生，避免一直等待，可以使用 `exchange（V x，longtimeout，TimeUnit unit）` 设置最大等待时长。
 
@@ -579,42 +579,15 @@ Exchanger 可以用于遗传算法，遗传算法里需要选出两个人作为�
 
 ### 优点
 
-> - 降低资源消耗
-> - 提高响应速度
-> - 提高线程可管理性，拒绝野生线程
+- 降低资源消耗
+- 提高响应速度
+- 提高线程可管理性，拒绝野生线程
 
 ### 任务执行流程
 
 使用 `ThreadPoolExecutor` 创建一个线程池：
 
 ```java
-/**
- * Creates a new {@code ThreadPoolExecutor} with the given initial
- * parameters.
- *
- * @param corePoolSize the number of threads to keep in the pool, even
- *        if they are idle, unless {@code allowCoreThreadTimeOut} is set
- * @param maximumPoolSize the maximum number of threads to allow in the
- *        pool
- * @param keepAliveTime when the number of threads is greater than
- *        the core, this is the maximum time that excess idle threads
- *        will wait for new tasks before terminating.
- * @param unit the time unit for the {@code keepAliveTime} argument
- * @param workQueue the queue to use for holding tasks before they are
- *        executed.  This queue will hold only the {@code Runnable}
- *        tasks submitted by the {@code execute} method.
- * @param threadFactory the factory to use when the executor
- *        creates a new thread
- * @param handler the handler to use when execution is blocked
- *        because the thread bounds and queue capacities are reached
- * @throws IllegalArgumentException if one of the following holds:<br>
- *         {@code corePoolSize < 0}<br>
- *         {@code keepAliveTime < 0}<br>
- *         {@code maximumPoolSize <= 0}<br>
- *         {@code maximumPoolSize < corePoolSize}
- * @throws NullPointerException if {@code workQueue}
- *         or {@code threadFactory} or {@code handler} is null
- */
 public ThreadPoolExecutor(int corePoolSize,
                           int maximumPoolSize,
                           long keepAliveTime,
@@ -623,6 +596,7 @@ public ThreadPoolExecutor(int corePoolSize,
                           ThreadFactory threadFactory,
                           RejectedExecutionHandler handler){
 }
+// 具体参数含义详见 jdk 文档！
 ```
 
 - 用于保存任务的 `workQueue` 队列主要类型
@@ -650,14 +624,14 @@ public ThreadPoolExecutor(int corePoolSize,
 
 ![image](/images/posts/threadpoolexecutor_process.png)
 
-> ThreadPoolExecutor 执行 `execute()` 方法分下面 4 种情况。
->
-> - 1）如果当前运行的线程（即便是 idle 状态）少于 corePoolSize，则创建新线程来执行任务（这一步骤需要获取全局锁）。
-> - 2）如果运行的线程等于或多于 corePoolSize，则将任务加入 BlockingQueue。
-> - 3）如果无法将任务加入 BlockingQueue（队列已满），则创建新的线程来处理任务（这一步骤需要获取全局锁）。
-> - 4）如果创建新线程将使当前运行的线程超出 maximumPoolSize，任务将被拒绝，并调用 `RejectedExecutionHandler.rejectedExecution()` 方法。
->
-> ThreadPoolExecutor 采取上述步骤的总体设计思路，是为了在执行 `execute()` 方法时，尽可能地避免获取全局锁带来的性能瓶颈。在 ThreadPoolExecutor 完成预热之后（当前运行的线程数大于等于 corePoolSize），几乎所有的 `execute()` 方法调用都是执行步骤 2，以尽量避免获取全局锁。
+ThreadPoolExecutor 执行 `execute()` 方法分下面 4 种情况。
+
+- 1）如果当前运行的线程（即便是 idle 状态）少于 corePoolSize，则创建新线程来执行任务（这一步骤需要获取全局锁）。
+- 2）如果运行的线程等于或多于 corePoolSize，则将任务加入 BlockingQueue。
+- 3）如果无法将任务加入 BlockingQueue（队列已满），则创建新的线程来处理任务（这一步骤需要获取全局锁）。
+- 4）如果创建新线程将使当前运行的线程超出 maximumPoolSize，任务将被拒绝，并调用 `RejectedExecutionHandler.rejectedExecution()` 方法。
+
+ThreadPoolExecutor 采取上述步骤的总体设计思路，是为了在执行 `execute()` 方法时，尽可能地避免获取全局锁带来的性能瓶颈。在 ThreadPoolExecutor 完成预热之后（当前运行的线程数大于等于 corePoolSize），几乎所有的 `execute()` 方法调用都是执行步骤 2，以尽量避免获取全局锁。
 
 - 任务提交和执行流程
   - ThreadPoolExecutor 内部类 Worker 用于执行具体任务
