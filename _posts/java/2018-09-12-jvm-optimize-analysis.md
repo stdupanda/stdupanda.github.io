@@ -59,7 +59,8 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-Xms6G`| initial size (in bytes) of the heap|
 |`-Xmx80m`| maximum size (in bytes) of the memory allocation pool 同 `-XX:MaxHeapSize=80m`，建议和 `-XX:InitialHeapSize` 设置相同大小|
 |`-XX:MaxDirectMemorySize=6m`| maximum total size (in bytes) of the New I/O (the java.nio package) direct-buffer allocations.|
-
+|`-XX:MaxMetaspaceSize=50m -XX:MetaspaceSize=50m`| Sets the maximum amount of native memory that can be allocated for class metadata. By default, the size is not limited. The amount of metadata for an application depends on the application itself, other running applications, and the amount of memory available on the system. 可以将初始值和最大值设置为相同大小减少动态分配时间 |
+|`-XX:MaxPermSize=size`|deprecated in JDK 8, and superseded by the -XX:MaxMetaspaceSize option.|
 - gc 日志记录相关
 
 |参数|说明|
@@ -75,7 +76,7 @@ keywords: Java, java, jdk, openjdk, JVM
 
 推荐阅读文档：[https://blog.gceasy.io/2016/11/15/rotating-gc-log-files/](https://blog.gceasy.io/2016/11/15/rotating-gc-log-files/)
 
-GC 日志分析工具有：[GCeasy](https://gceasy.io/)、[GCViewer](https://github.com/chewiebug/GCViewer) 
+GC 日志分析工具有：[GCeasy](https://gceasy.io/)、[GCViewer](https://github.com/chewiebug/GCViewer)
 
 - Serviceability 相关参数
 
@@ -109,11 +110,11 @@ GC 日志分析工具有：[GCeasy](https://gceasy.io/)、[GCViewer](https://git
 `-XX:G1MixedGCCountTarget=8`|Sets the target number of mixed garbage collections after a marking cycle to collect old regions with at most G1MixedGCLIveThresholdPercent live data. The default is 8 mixed garbage collections. The goal for mixed collections is to be within this target number.|
 `-XX:G1OldCSetRegionThresholdPercent=10`|Sets an upper limit on the number of old regions to be collected during a mixed garbage collection cycle. The default is 10 percent of the Java heap.|
 `-XX:G1ReservePercent=10`|Sets the percentage of reserve memory to keep free so as to reduce the risk of to-space overflows. The default is 10 percent. When you increase or decrease the percentage, make sure to adjust the total Java heap by the same amount.|
- 
+
 ### Recommendations
 
 When you evaluate and fine-tune G1 GC, keep the following recommendations in mind:
- 
+
 - Young Generation Size
 
 **Avoid explicitly setting young generation size** with the `-Xmn` option or any or other **related** option such as `-XX:NewRatio`. Fixing the size of the young generation overrides the target pause-time goal.
@@ -317,7 +318,7 @@ However, large pages page memory can negatively affect system performance. For e
 ```
 jinfo <pid>                   # Prints both command-line flags and system property name-value pairs.
 jinfo <pid> -sysprops         # Prints Java system properties as name-value pairs.
-jinfo <pid> -flag name        # Prints the name and value of the specified command-line flag. 
+jinfo <pid> -flag name        # Prints the name and value of the specified command-line flag.
 jinfo <pid> -flag [+|-]name   # enables or disables the specified Boolean command-line flag.
 jinfo <pid> -flag name=value  # Sets the specified command-line flag to the specified value.
 ```
@@ -329,7 +330,7 @@ jinfo <pid> -flag name=value  # Sets the specified command-line flag to the spec
 ```
 # Prints a heap summary of the garbage collection used, the head configuration, and generation-wise heap usage.
 # In addition, the number and size of interned Strings are printed.
-jmap -heap <pid> 
+jmap -heap <pid>
 jmap -F -dump:[live,] format=b,file=filename <pid>
 ```
 
