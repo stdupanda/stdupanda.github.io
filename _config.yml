@@ -106,6 +106,7 @@ gitalk:
   repo: ghpage_issue
   owner: stdupanda
   admin: stdupanda
+  status: disable
 
 # ---------------- #
 #    Analytics     #
