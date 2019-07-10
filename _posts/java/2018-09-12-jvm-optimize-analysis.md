@@ -61,6 +61,7 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-XX:MaxDirectMemorySize=6m`| maximum total size (in bytes) of the New I/O (the java.nio package) direct-buffer allocations.|
 |`-XX:MaxMetaspaceSize=50m -XX:MetaspaceSize=50m`| Sets the maximum amount of native memory that can be allocated for class metadata. By default, the size is not limited. The amount of metadata for an application depends on the application itself, other running applications, and the amount of memory available on the system. 可以将初始值和最大值设置为相同大小减少动态分配时间 |
 |`-XX:MaxPermSize=size`|deprecated in JDK 8, and superseded by the -XX:MaxMetaspaceSize option.|
+
 - gc 日志记录相关
 
 |参数|说明|
