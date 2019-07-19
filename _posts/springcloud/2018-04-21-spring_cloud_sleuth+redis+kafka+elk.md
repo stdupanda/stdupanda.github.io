@@ -10,11 +10,11 @@ keywords: web, micro, design, service
 
 整理流程如下：
 
-# linux 设置
+## Linux 系统设置
 
 需要 jdk1.8 及以上
 
-linxu 参数调优如下：
+Linux 系统参数调优如下：
 
 ```shell
 vi /etc/security/limits.d/90-nproc.conf # 改为如下
@@ -49,8 +49,9 @@ su elk
 - [logstash-6.2.4](https://artifacts.elastic.co/downloads/logstash/logstash-6.2.4.tar.gz)
 - [kibana-6.2.4-linux-x86_64](https://artifacts.elastic.co/downloads/kibana/kibana-6.2.4-linux-x86_64.tar.gz)
 
-# ELK 安装
-## Elasticsearch
+## ELK 安装
+
+### Elasticsearch
 
 ```shell
 cd elasticsearch-6.2.4
@@ -70,7 +71,7 @@ bootstrap.system_call_filter: false
 
 以上即完成了单实例的 Elasticsearch。
 
-## Logstash
+### Logstash
 
 官网教程链接:
 
@@ -82,7 +83,7 @@ bootstrap.system_call_filter: false
 
 [https://www.elastic.co/guide/en/logstash/current/index.html](https://www.elastic.co/guide/en/logstash/current/index.html "官网教程链接")
 
-### logstash 处理 redis, kafka, rabbitmq 输入源
+#### logstash 处理 redis, kafka, rabbitmq 输入源
 
 推荐使用**Beats**扫描采集文件并发送到 logstash
 
@@ -145,7 +146,7 @@ output {
 
 以上即配置 redis/kafka/rabbitmq 为总日志信息来源，elasticsearch 为 日志采集后发送的目的地。
 
-### logstash agent 采集日志文件
+#### logstash agent 采集日志文件
 
 ```shell
 vi config/my_logstash_agent.conf # 写入以下内容
@@ -174,15 +175,15 @@ output {
     password => "rabbitmq"
     port => 5672
     durable => true
-	exchange => ""
-	exchange_type => "direct"
+  exchange => ""
+  exchange_type => "direct"
     key => "zipkin"
     vhost => "/"
   }
 }
 ```
 
-## Kibana
+### Kibana
 
 ```shell
 cd kibana-6.2.4-linux-x86_64
@@ -213,7 +214,7 @@ curl http://localhost:5601
 </appender>
 ```
 
-## ELK 启动 sh 脚本
+### ELK 启动 sh 脚本
 
 ```shell
 vi run_elk.sh
@@ -225,12 +226,12 @@ nohup sh /home/elk/logstash-6.2.4/bin/logstash -f /home/elk/my_logstash.conf > /
 echo "done startting elk."
 ```
 
-# Kafka & Zookeeper
+## Kafka & Zookeeper
 
 - [kafka_2.11-1.1.0](http://mirrors.tuna.tsinghua.edu.cn/apache/kafka/1.1.0/kafka_2.11-1.1.0.tgz)
 - [zookeeper-3.4.10](http://mirrors.shu.edu.cn/apache/zookeeper/stable/zookeeper-3.4.10.tar.gz)
 
-## 配置 Zookeeper
+### 配置 Zookeeper
 
 ```shell
 # 使用外置 zookeeper
@@ -256,7 +257,7 @@ clientPort=2181
 /home/elk/kafka_2.11-1.1.0/bin/zookeeper-server-start.sh /home/elk/kafka_2.11-1.1.0/config/zookeeper.properties
 ```
 
-## 配置 Kafka
+### 配置 Kafka
 
 ```shell
 cp config/consumer.properties config/consumer.properties-bak
@@ -311,9 +312,9 @@ JMX_PORT=9999 nohup sh /home/elk/kafka_2.11-1.1.0/bin/kafka-server-start.sh /hom
 echo "done startting zookeeper,kafka ."
 ```
 
-## Kafka 监控工具
+### Kafka 监控工具
 
-### KafkaOffsetMonitor
+#### KafkaOffsetMonitor
 
 社区提供 [KafkaOffsetMonitor](https://github.com/quantifind/KafkaOffsetMonitor/releases)
 
@@ -321,7 +322,7 @@ echo "done startting zookeeper,kafka ."
 
 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=666 -Djava.rmi.server.hostname=192.168.1.100
 
-### kafka-manager
+#### kafka-manager
 
 Yahoo 开源 [github地址](https://github.com/yahoo/kafka-manager)
 
@@ -335,13 +336,13 @@ kafka-manager.zkhosts="localhost:2181"
 bin/kafka-manager -Dconfig.file=/path/to/application.conf -Dhttp.port=8080
 ```
 
-### kafkatool
+#### kafkatool
 
 [kafkatool](http://www.kafkatool.com/) 一个 java 桌面应用
 
-# 应用集成
+## 应用集成
 
-## Spring Cloud Sleuth 支持
+### Spring Cloud Sleuth 支持
 
 ```yml
 spring:
