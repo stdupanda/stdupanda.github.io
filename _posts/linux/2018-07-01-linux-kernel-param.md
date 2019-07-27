@@ -139,3 +139,23 @@ net.ipv4.tcp_max_tw_buckets = 5000
 |`net.ipv4.tcp_abort_on_overflow`|设置该参数为 1 时，当系统在短时间内收到了大量的请求，而相关的应用程序未能处理时，就会发送 Reset 包直接终止这些链接。建议通过优化应用程序的效率来提高处理能力，而不是简单地 Reset。默认值： 0。|
 |`net.core.somaxconn`|该参数定义了系统中每一个端口最大的监听队列的长度，是个全局参数。该参数和 `net.ipv4.tcp_max_syn_backlog` 有关联，后者指的是还在三次握手的半连接的上限，该参数指的是处于 `ESTABLISHED` 的数量上限。若您的 ECS 实例业务负载很高，则有必要调高该参数。listen 函数中的参数 backlog 同样是指明监听的端口处于 `ESTABLISHED` 的数量上限，当 backlog 大于 `net.core.somaxconn` 时，以 `net.core.somaxconn` 参数为准。|
 |`net.core.netdev_max_backlog`|当内核处理速度比网卡接收速度慢时，这部分多出来的包就会被保存在网卡的接收队列上，而该参数说明了这个队列的数量上限。|
+
+## 禁用 swap
+
+参考 [阿里云 ECS 虚拟内存说明](https://help.aliyun.com/knowledge_detail/40645.html)
+
+> 从SWAP分区读取数据的操作会导致额外的IO开销，特别是，如果内存使用率已经非常高，而同时IO性能也不是很好的情况下，该机制其实会起到相反的效果：不仅系统性能提升较小（因为内存使用率已经非常高了），而且由于频繁的内存到SWAP的切换操作，会导致产生大量额外的IO操作，导致IO性能进一步降低，最终反而降低了系统总体性能。
+
+`cat /proc/sys/vm/swappiness` 查看对应的值
+
+禁用方式如下：
+
+```shell
+vim /etc/sysctl.conf
+# 设置 vm.swappiness=0 表示内存占满后才使用 swap
+sysctl -p
+swapoff -a # 禁用交换分区
+vim /etc/fstab # 注释掉交换分区这一行
+```
+
+这样重启后仍可禁用 swap
