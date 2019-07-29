@@ -155,6 +155,7 @@ vim /etc/sysctl.conf
 # 设置 vm.swappiness=0 表示内存占满后才使用 swap
 sysctl -p
 swapoff -a # 禁用交换分区
+swapoff /mnt/swap # 关闭 swap
 vim /etc/fstab # 注释掉交换分区这一行
 ```
 
