@@ -710,7 +710,7 @@ final void runWorker(Worker w) {
 如果在系统中大量使用线程池，则有必要对线程池进行监控，方便在出现问题时，可以根据线程池的使用状况快速定位问题。可以通过线程池提供的参数进行监控，在监控线程池的时候可以使用以下属性。
 
 - taskCount：线程池需要执行的任务数量。
-- completedTaskCount：线程池在运行过程中已完成的任务数量，小于或等于taskCount。
+- completedTaskCount：线程池在运行过程中已完成的任务数量，小于或等于 taskCount。
 - largestPoolSize：线程池里曾经创建过的最大线程数量。通过这个数据可以知道线程池是否曾经满过。如该数值等于线程池的最大大小，则表示线程池曾经满过。
 - getPoolSize：线程池的线程数量。如果线程池不销毁的话，线程池里的线程不会自动销毁，所以这个大小只增不减。
 - getActiveCount：获取活动的线程数。
@@ -721,12 +721,12 @@ final void runWorker(Worker w) {
 
 ### Executors
 
-Executor 框架最核心的类是 `ThreadPoolExecutor`，它是线程池的实现类，主要由下列4个组件构成。
+Executor 框架最核心的类是 `ThreadPoolExecutor`，它是线程池的实现类，主要由下列 4 个组件构成。
 
 - corePoolSize：核心线程池的大小。
 - maximumPoolSize：最大线程池的大小。
 - BlockingQueue：用来暂时保存任务的工作队列。
-- RejectedExecutionHandler：当 ThreadPoolExecutor 已经关闭或已经饱和时（达到了最大线程池大小且工作队列已满），execute()方法将要调用的 Handler。
+- RejectedExecutionHandler：当 ThreadPoolExecutor 已经关闭或已经饱和时（达到了最大线程池大小且工作队列已满），execute() 方法将要调用的 Handler。
 
 ### 分类
 
@@ -741,6 +741,6 @@ Executor 框架最核心的类是 `ThreadPoolExecutor`，它是线程池的实�
 
 在实际业务编码中建议手动构建 `ThreadPoolExecutor` 对象，掌握每一个参数的含义，避免采用 `Executors` 生成，减少出错机会。
 
-```
+---
 
  (゜-゜)つロ *参考并致谢《Java并发编程的艺术》*
