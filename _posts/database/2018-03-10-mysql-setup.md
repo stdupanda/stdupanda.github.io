@@ -45,7 +45,7 @@ systemctl start mysqld.service
 ```sql
 -- 修改表
 use mysql;
-pdate user set host = '%' where user = 'root';
+update user set host = '%' where user = 'root';
 select host, user from user;
 -- GRANT授权
 GRANT ALL PRIVILEGES ON *.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword' WITH GRANT OPTION;
@@ -57,6 +57,9 @@ FLUSH   PRIVILEGES;
 ### 修改密码
 
 ```sql
+SET GLOBAL validate_password_policy=0;
+SET GLOBAL validate_password_length=1;
+ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpass');
 FLUSH PRIVILEGES;
 -- 或者该
