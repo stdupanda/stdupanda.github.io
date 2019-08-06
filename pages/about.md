@@ -8,7 +8,7 @@ menu: 关于
 permalink: /about/
 ---
 
-> 天下风云出我辈，一入江湖岁月催，
+> 天下风云出我辈，一入江湖岁月催。
 >
 > 皇图霸业谈笑中，不胜人生一场醉。
 >
@@ -16,7 +16,7 @@ permalink: /about/
 >
 > 尘事如潮人如水，只叹江湖几人回。
 >
-> ——黄霑
+> ————*黄霑*
 
 使用 github page 记录自己工作和生活的点点滴滴。
 
@@ -25,26 +25,3 @@ permalink: /about/
 * GitHub：[@stdupanda](https://github.com/stdupanda)
 * 博客：[{{ site.title }}]({{ site.url }})
 * QQ：1197591680
-
-## Skill Keywords
-
-#### Software Engineer Keywords
-<div class="btn-inline">
-    {% for keyword in site.skill_software_keywords %}
-    <button class="btn btn-outline" type="button">{{ keyword }}</button>
-    {% endfor %}
-</div>
-
-#### Mobile Developer Keywords
-<div class="btn-inline">
-    {% for keyword in site.skill_mobile_app_keywords %}
-    <button class="btn btn-outline" type="button">{{ keyword }}</button>
-    {% endfor %}
-</div>
-
-#### Windows Developer Keywords
-<div class="btn-inline">
-    {% for keyword in site.skill_windows_keywords %}
-    <button class="btn btn-outline" type="button">{{ keyword }}</button>
-    {% endfor %}
-</div>
