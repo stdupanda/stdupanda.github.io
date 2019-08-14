@@ -6,11 +6,9 @@ description: 分析网页加载过程
 keywords: web, security, xss, csrf, sql, http
 ---
 
-整理常见的 web 安全问题。
+常见的 web 安全问题介绍。
 
 ## 简介
-
-web 服务在公共的网络环境下存在很多的潜在的或者暴露的问题。常见的 web 安全问题可以简单分为前段和后端。
 
 ### http 报文结构
 
