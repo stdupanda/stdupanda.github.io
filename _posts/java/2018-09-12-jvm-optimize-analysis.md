@@ -89,9 +89,11 @@ GC 日志分析工具有：[GCeasy](https://gceasy.io/)、[GCViewer](https://git
 |`-XX:HeapDumpPath=path`|默认是 `/java_pid%p.hprof`|
 |`-XX:LogFile=path`|默认是 `./hotspot.log`|
 
-## G1 相关设置
+## **G1 相关设置**
 
 官网详情可参看 [java启动参数详解](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html#BABFAFAE)
+
+重点介绍下 G1 回收器。这应该是较长时间内的主力配置了。
 
 `-XX:+UseG1GC` 开启 G1 收集器。
 
@@ -205,15 +207,11 @@ public class JavaMethodAreaOOM {
 
 SWAP 和 GC 同时发生会导致 GC 时间很长，JVM 严重卡顿，极端的情况下会导致服务崩溃。原因如下：
 
-JVM 进行 GC 时要对已用堆内存进行遍历；若此时堆的一部分被交换到 SWAP 中，遍历这部分数据的时候就需要将其交换回内存；
+> JVM 进行 GC 时要对已用堆内存进行遍历；若此时堆的一部分被交换到 SWAP 中，遍历这部分数据的时候就需要将其交换回内存；但由于内存空间不足，就需要把内存中堆的另外一部分换到 SWAP 中去；极端情况下可能会把整个堆分区轮流往 SWAP 写一遍。
+>
+> Linux 对 SWAP 的回收是滞后的，我们就会看到大量 SWAP 占用。
 
-但由于内存空间不足，就需要把内存中堆的另外一部分换到 SWAP 中去；极端情况下可能会把整个堆分区轮流往 SWAP 写一遍。
-
-Linux 对 SWAP 的回收是滞后的，我们就会看到大量 SWAP 占用。
-
-此类问题可尝试用减小堆大小或者增加物理内存等方式解决；部署 Java 服务的 Linux 要避免SWAP的使用；
-
--XX:+DisableExplicitGC
+此类问题可尝试用减小堆大小或者增加物理内存等方式解决；部署 Java 服务的 Linux 要避免使用 SWAP；
 
 ## Lage Page
 
