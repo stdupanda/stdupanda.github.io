@@ -38,6 +38,10 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-X`|打印 `-X` 相关参数的帮助信息|
 |`-XX:ErrorFile=filename`|默认是 `./hs_err_pid%p.log`|
 
+- 某些 experimental 参数需要先解锁才可以配置
+
+`-XX:+UnlockExperimentalVMOptions`
+
 - 类加载相关参数
 
 |参数|说明|
