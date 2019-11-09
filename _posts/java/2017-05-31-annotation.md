@@ -8,26 +8,26 @@ keywords: Java, java, annotation, Annotation
 
 自 Java5.0 版本引入注解之后极大方便了应用开发，本文整理注解的基础知识以及使用方法。
 
-> Annotation是一种应用于类、方法、参数、变量、构造器及包声明中的特殊修饰符。它是一种由 JSR-175 标准选择用来描述元数据的一种工具。
+Annotation 是一种应用于类、方法、参数、变量、构造器及包声明中的特殊修饰符。它是一种由 JSR-175 标准选择用来描述元数据的一种工具。
 
 ## 作用
 
-> - 生成文档，如 `javadoc` 规范中的 `@param` `@return` 等
-> - 实现代码依赖 如 `spring` 的注解
-> - 编译检查格式 如 `@Override` 等
+- 生成文档，如 `javadoc` 规范中的 `@param` `@return` 等
+- 实现代码依赖 如 `spring` 的注解
+- 编译检查格式 如 `@Override` 等
 
 ## `JDK` 四个元注解
 
-可在 `java.lang.annotation` 包中查看
+可在 `java.lang.annotation` 包中查看：
 
-> - @Target     注解用于什么地方，定义此 Annotation 所修饰的范围
-> - @Retention  什么时候使用该注解，定义此 Annotation 应该被保留的时间长短
-> - @Documented 注解是否将包含在JavaDoc中，定义此 Annotation 会将此注解包含在 javadoc 中
-> - @Inherited  是否允许子类继承该注解
+- `@Target`     注解用于什么地方，定义此 Annotation 所修饰的范围
+- `@Retention`  什么时候使用该注解，定义此 Annotation 应该被保留的时间长短
+- `@Documented` 注解是否将包含在 JavaDoc 中，定义此 Annotation 会将此注解包含在 javadoc 中
+- `@Inherited`  是否允许子类继承该注解
 
 ## 说明
 
-详情参见 `jdk`，常用整理如下：
+详情参见 jdk，常用整理如下：
 
 ### `@Target`
 
