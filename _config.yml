@@ -18,8 +18,8 @@ side_bar_repo_limit: 3
 #      Author      #
 # ---------------- #
 author: stdupanda
-organization: CECurs
-organization_url: http://www.cecpay.com
+organization: JD Digits
+organization_url: https://www.jddglobal.com/
 location: Beijing, China
 email: cafebabe4fun@gmail.com
 
@@ -39,9 +39,9 @@ navs:
     href: /wiki/
     label: 维基
 
- # -
- #   href: /links/
- #   label: 链接
+#  -
+#    href: /links/
+#    label: 链接
 
   -
     href: /about/
