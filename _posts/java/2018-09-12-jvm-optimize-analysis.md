@@ -142,14 +142,21 @@ Experiment with the following options when you tune mixed garbage collections. S
 >
 > `-XX:G1MixedGCCountTarget` and `-XX:G1OldCSetRegionThresholdPercent`: Use to adjust the CSet for old regions.
 
-### Overflow and Exhausted Log Messages
-
-- gc 日志的 `to-space exhausted` 或者 `to-space overflow` 问题
-  - Increase `-XX:G1ReservePercent` option (and the total heap accordingly) to increase the amount of reserve memory for "to-space".
-  - Start the marking cycle earlier by reducing the value of -XX:InitiatingHeapOccupancyPercent.
-  - Increase `-XX:ConcGCThreads` option to increase the number of parallel marking threads.
-
 ## JVM 问题排查整理
+
+### G1 full gc 问题
+
+#### GC concurrent-mark-abort
+
+mix gc 之前老年代就被填满，可以尝试增加堆大小，调整周期，修改线程数 `-XX:ConcGCThreads`
+
+#### G1 日志 Overflow and Exhausted Log Messages
+
+启用 G1 后 gc 日志中出现  `to-space exhausted` 或者 `to-space overflow` 问题，即晋升失败。可能是由于：G1 完成标记后开始混合式垃圾回收清理 s1，但在 s1 清理出足够空间前内存就被耗尽；大对象分配失败；
+
+- Increase `-XX:G1ReservePercent` option (and the total heap accordingly) to increase the amount of reserve memory for"to-space".
+- Start the marking cycle earlier by reducing the value of -XX:InitiatingHeapOccupancyPercent.
+- Increase `-XX:ConcGCThreads` option to increase the number of parallel marking threads.
 
 ### OOM 问题
 
@@ -170,7 +177,7 @@ public class OOMTest {
 
 - 动态代理创建对象
 - 方法区溢出
-  - 上面程序使用了的 CGLib 字节码增强和动态语言
+  - 程序使用了 CGLib 字节码增强和动态语言
   - 大量 JSP 或动态产生 JSP 文件的应用（JSP 第一次运行时需要编译为 Java 类）
   - 基于 OSGi 的应用（即使是同一个类文件，被不同的加载器加载也会视为不同的类）
 
