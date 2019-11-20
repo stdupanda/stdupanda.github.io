@@ -12,7 +12,7 @@ keywords: 架构, architect, cache, 缓存, redis, lock, 分布式, 分布式事
 
 CAP 定理由加州大学伯克利分校 Eric Brewer 教授提出来的，他指出WEB服务无法同时满足以下 3 个属性：
 
-|||
+|特性|描述|
 |:---|:---|:---|
 |一致性(Consistency) | 客户端知道一系列的操作都会同时发生(生效)             |
 |可用性(Availability) | 每个操作都必须以可预期的响应结束                    |
@@ -22,7 +22,7 @@ CAP 定理由加州大学伯克利分校 Eric Brewer 教授提出来的，他指
 
 BASE 理论是对 CAP 定理的进一步扩充，其含义为：
 
-|||
+||描述|
 |:---|:---|:---|
 |Basically Available|基本可用|
 |Soft state|软状态|
