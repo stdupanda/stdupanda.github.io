@@ -22,7 +22,7 @@ CAP 定理由加州大学伯克利分校 Eric Brewer 教授提出来的，他指
 
 BASE 理论是对 CAP 定理的进一步扩充，其含义为：
 
-||描述|
+|特性|描述|
 |:---|:---|:---|
 |Basically Available|基本可用|
 |Soft state|软状态|
