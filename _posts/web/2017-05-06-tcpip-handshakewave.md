@@ -216,7 +216,7 @@ If the ACK control bit is set this field contains the value of the next sequence
 
 - server 端 socket 编程时设置 `SO_REUSEADDR` 实现重用端口
 - socket 编程时判断连接状态， read() 为 -1 的情况、try...catch 保证 close()
-- 进行内核调整，参考另一篇文章： [Linux 内核参数](/_posts/linux/2018-07-01-linux-kernel-param.md)
+- 进行内核调整，参考另一篇文章： [Linux 内核参数](/linux-kernel-param.md)
 
 简单整理如下：
 
