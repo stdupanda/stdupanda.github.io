@@ -12,35 +12,29 @@ keywords: database, mysql, MySQL
 
 平台为 centos7
 
-### rpm 包安装
+### 安装
 
 ```shell
+# rpm 包安装
 yum install wget
 wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.21-1.el6.x86_64.rpm-bundle.tar
 wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-5.7.21-1.el6.x86_64.rpm-bundle.tar
 #解压到某个路径，安装全部的 rpm 包
 yum install mysql-*.rpm
-```
 
-### yum 安装
-
-```shell
+# yum 安装
 # 可参考官网切换版本 https://dev.mysql.com/downloads/repo/yum/
 wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
 rpm -ivh mysql57-community-release-el7-9.noarch.rpm
 yum install mysql-server
 systemctl start mysqld.service
 ```
+### 账户登录
 
-常用配置如下：
-
-### 初次登录密码
-
-安装过程若无提示密码则尝试查看日志： `grep password /var/log/mysqld.log` 即可。
-
-### 允许远程登录
+初次登录时，若安装过程中无提示密码则尝试查看日志： `grep password /var/log/mysqld.log` 即可。
 
 ```sql
+-- 允许 root 远程登录
 -- 修改表
 use mysql;
 update user set host = '%' where user = 'root';
@@ -50,25 +44,21 @@ GRANT ALL PRIVILEGES ON *.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword' WITH GRAN
 FLUSH   PRIVILEGES;
 GRANT ALL PRIVILEGES ON dk.* TO 'myuser'@'192.168.1.3' IDENTIFIED BY 'mypassword' WITH GRANT OPTION;
 FLUSH   PRIVILEGES;
-```
 
-### 修改密码
-
-```sql
+-- 修改密码
 SET GLOBAL validate_password_policy=0;
 SET GLOBAL validate_password_length=1;
 ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpass');
 FLUSH PRIVILEGES;
--- 或者该
+-- 或者
 use mysql;
 UPDATE user SET Password = PASSWORD('newpass') WHERE user = 'root';
 ```
 
-### 丢失密码启动
-
 ```shell
-mysqld_safe --skip-grant-tables&
+# 丢失密码启动
+mysqld_safe --skip-grant-tables &
 ```
 
 ### 调优
