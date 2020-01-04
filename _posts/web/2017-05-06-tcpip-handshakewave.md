@@ -8,7 +8,9 @@ keywords: web, tcp, ip, tcpip, shake, wave
 
 整理 TCP/IP 常见问题。
 
-## TCP Header Format
+## TCP 报文结构
+
+### TCP Header Format
 
 详细可参见  [RFC793](https://tools.ietf.org/html/rfc793 "RFC793")、[rfc-editor 上的 RFC793](https://www.rfc-editor.org/rfc/rfc793.txt)。
 
@@ -34,7 +36,7 @@ keywords: web, tcp, ip, tcpip, shake, wave
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-## TCP Connection State
+### TCP Connection State
 
 - LISTEN 
 
@@ -80,7 +82,7 @@ represents waiting for enough time to pass to be sure the remote TCP received th
 
 represents no connection state at all.
 
-## TCP Connection State Diagram
+### TCP Connection State Diagram
 
 ```
                                     
@@ -132,7 +134,7 @@ represents no connection state at all.
 
 图片版请<a href="/images/posts/tcp_connection_state_diagram.png" target="_blank">点击这里查看</a>
 
-## Control Bits
+### Control Bits
 
 - URG:  Urgent Pointer field significant
 - ACK:  Acknowledgment field significant
@@ -141,32 +143,29 @@ represents no connection state at all.
 - SYN:  Synchronize sequence numbers
 - FIN:  No more data from sender
 
-
-## Sequence Number
-
-The sequence number of the first data octet in this segment (except when SYN is present). If SYN is present the sequence number is the initial sequence number (ISN) and the first data octet is ISN+1.
-
-## Acknowledgment Number
-
-If the ACK control bit is set this field contains the value of the next sequence number the sender of the segment is expecting to receive.  Once a connection is established this is always sent.
-
-## 标志位 ACK SYN FIN
-
 |标志位|名称|含义|
 |:------|:------|:------|
 |ACK|确认位|只有 ACK = 1 时 ack 才起作用。正常通讯时 ACK 为 1（第一次发起请求时因为没有需要确认接收的数据所以 ACk 为 0）|
 |SYN|同步位|用于在建立连接时同步序号。<br/>初始建立连接时并无历史接收数据，所以 ack 也无法设置。当接收端收到 SYN = 1 的报文时就会直接将 ack 设置为接收到的 seq + 1，注意这里的值并不是校验后设置的，而是根据 SYN 直接设置的，所以 SYN 叫做同步位。<br/>需注意的是，SYN 在前两次握手时都为 1，因为通信的双方都需要设置一个初始值。|
 |FIN|终止位|用于在数据传输完毕后释放连接|
 
+### Sequence Number
+
+The sequence number of the first data octet in this segment (except when SYN is present). If SYN is present the sequence number is the initial sequence number (ISN) and the first data octet is ISN+1.
+
+### Acknowledgment Number
+
+If the ACK control bit is set this field contains the value of the next sequence number the sender of the segment is expecting to receive.  Once a connection is established this is always sent.
+
 ## 连接建立和释放
 
 先说一个概念，MSL（maximum segment lifetime）报文最大生存时间，超过这个时间就被丢弃；在一般的实现中取 30 秒，有些按照 RFC 793 规范采用 2 分钟。
 
-## 流程图
+### 流程图
 
 ![image](/images/posts/tcp_handshake_wave.png)
 
-## 详细流程
+### 详细流程
 
 关于可靠传输
 
