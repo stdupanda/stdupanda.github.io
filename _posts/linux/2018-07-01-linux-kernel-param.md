@@ -86,9 +86,9 @@ net.ipv4.tcp_max_tw_buckets=5000
 # sysctl -p #使配置生效。
 ```
 
-### Linux 实例中 FIN_WAIT2 状态的 TCP 链接过多
+### 大量 FIN_WAIT2 状态的 TCP 连接
 
-**问题**：`FIN_WAIT2` 状态的 TCP 链接过多
+**问题**：`FIN_WAIT2` 状态的 TCP 连接过多
 
 **原因**：HTTP 服务中，Server 由于某种原因会主动关闭连接，例如 KEEPALIVE 超时的情况下。作为主动关闭连接的 Server 就会进入 `FIN_WAIT2` 状态。TCP/IP 协议栈中，存在半连接的概念，`FIN_WAIT2` 状态不算做超时，如果 Client 不关闭，`FIN_WAIT_2` 状态将保持到系统重启，越来越多的 `FIN_WAIT_2` 状态会致使内核 Crash。建议调小 `net.ipv4.tcp_fin_timeout` 参数，减少这个数值以便加快系统关闭处于 `FIN_WAIT2` 状态的 TCP 连接。
 
@@ -105,13 +105,13 @@ net.ipv4.tcp_max_tw_buckets = 5000
 
 注意：由于 `FIN_WAIT2` 状态的 TCP 连接会进入 `TIME_WAIT` 状态，请同时参阅上述的 time wait bucket table overflow 报错。
 
-### Linux 实例中出现大量 CLOSE_WAIT 状态的 TCP 连接
+### 大量 CLOSE_WAIT 状态的 TCP 连接
 
 **问题**：执行命令 `netstat -atn|grep CLOSE_WAIT|wc -l` 发现当前系统中处于 `CLOSE_WAIT` 状态的 TCP 连接非常多。
 
 **原因**：关闭 TCP 连接时，TCP 连接的两端都可以发起关闭连接的请求，若对端发起了关闭连接，但本地没有关闭连接，那么该连接就会处于 CLOSE_WAIT 状态。虽然该连接已经处于半开状态，但是已经无法和对端通信，需要及时的释放掉该链接。建议从业务层面及时判断某个连接是否已经被对端关闭，即在程序逻辑中对连接及时关闭检查。
 
-**解决**：编程语言中对应的读、写函数一般包含了检测 CLOSE_WAIT TCP 连接功能，例如：
+**解决**：编程语言中对应的读、写函数一般包含了检测 CLOSE_WAIT 状态的 TCP 连接功能，例如：
 
 - Java 语言
   - 通过 read 方法来判断 I/O 。当 read 方法返回 -1 时则表示已经到达末尾。
@@ -144,7 +144,7 @@ net.ipv4.tcp_max_tw_buckets = 5000
 
 参考 [阿里云 ECS 虚拟内存说明](https://help.aliyun.com/knowledge_detail/40645.html)
 
-> 从SWAP分区读取数据的操作会导致额外的IO开销，特别是，如果内存使用率已经非常高，而同时IO性能也不是很好的情况下，该机制其实会起到相反的效果：不仅系统性能提升较小（因为内存使用率已经非常高了），而且由于频繁的内存到SWAP的切换操作，会导致产生大量额外的IO操作，导致IO性能进一步降低，最终反而降低了系统总体性能。
+> 从 SWAP 分区读取数据的操作会导致额外的 IO 开销，特别是，如果内存使用率已经非常高，而同时 IO 性能也不是很好的情况下，该机制其实会起到相反的效果：不仅系统性能提升较小（因为内存使用率已经非常高了），而且由于频繁的内存到 SWAP 的切换操作，会导致产生大量额外的 IO 操作，导致 IO 性能进一步降低，最终反而降低了系统总体性能。
 
 `cat /proc/sys/vm/swappiness` 查看对应的值
 

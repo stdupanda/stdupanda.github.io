@@ -152,19 +152,23 @@ If the ACK control bit is set this field contains the value of the next sequence
 
 ## 标志位 ACK SYN FIN
 
-|标志位|含义|
-|:------|:------|
-|ACK|确认位，只有 ACK=1 时 ack 才起作用。正常通讯时 ACK 为1（第一次发起请求时因为没有需要确认接收的数据所以 ACk 为0）|
-|SYN|同步位，用于在建立连接时同步序号。初始建立连接时并无历史接收数据，所以 ack 也无法设置，此时按照正常的机制就无法运行了，SYN 的作用就是来解决此问题：当接收端收到 SYN=1 的报文时就会直接将 ack 设置为接收到的 seq+1 值，注意这里的值并不是校验后设置的，而是根据 SYN 直接设置的，这样正常的机制就可以运行了，所以 SYN 叫做同部位。需注意的是，SYN 在前两次握手时都为1，因为通信的双方都需要设置一个初始值。|
-|FIN|终止位，用于在数据传输完毕后释放连接|
+|标志位|名称|含义|
+|:------|:------|:------|
+|ACK|确认位|只有 ACK = 1 时 ack 才起作用。正常通讯时 ACK 为 1（第一次发起请求时因为没有需要确认接收的数据所以 ACk 为 0）|
+|SYN|同步位|用于在建立连接时同步序号。<br/>初始建立连接时并无历史接收数据，所以 ack 也无法设置。当接收端收到 SYN = 1 的报文时就会直接将 ack 设置为接收到的 seq + 1，注意这里的值并不是校验后设置的，而是根据 SYN 直接设置的，所以 SYN 叫做同步位。<br/>需注意的是，SYN 在前两次握手时都为 1，因为通信的双方都需要设置一个初始值。|
+|FIN|终止位|用于在数据传输完毕后释放连接|
 
 ## 连接建立和释放
+
+先说一个概念，MSL（maximum segment lifetime）报文最大生存时间，超过这个时间就被丢弃；在一般的实现中取 30 秒，有些按照 RFC 793 规范采用 2 分钟。
 
 ## 流程图
 
 ![image](/images/posts/tcp_handshake_wave.png)
 
-## 知识点整理
+## 详细流程
+
+关于可靠传输
 
 - 可靠传输的工作原理
   - 停止等待协议
@@ -177,22 +181,63 @@ If the ACK control bit is set this field contains the value of the next sequence
     - 接收方采用累积确认方式（只需对按序到达的最后一个分组发送确认，即确认了所有分组）
   - 超时重传
   - 选择确认
-- 利用滑动窗口实现流量控制
+
+关于流控：基于滑动窗口实现流量控制
+
 - 拥塞控制
   - 慢开始，设置较小的发送窗口
   - 拥塞避免，逐渐增大发送窗口
   - 快重传，让发送方尽早知道报文丢失
   - 快恢复，重传丢失的报文
-- 三次握手（三报文握手）
-  - 前两次可以保证 B 可以正确接收并放回请求，后两次可以保证 A 可以正确接收并返回请求
+
+建立连接时的三次握手（三报文握手）
+
+- 三次握手
+  - RFC793 中对此简单说明：引入三次握手的主要原因是为了避免过时的重复连接在再次建连时造成的混乱
+  - 前两次可以保证 B 可以正常收发消息，后两次可以保证 A 可以正常收发消息
   - 防止 B 接收到已失效的 A 的连接请求报文后建立连接，浪费资源
-  - 若 A 故意不进行第三次通讯，B 会一直发送最多 5 次，浪费自身资源。这就是 DDOS 攻击中的 SYN Flood 攻击。
+  - 指定初始化序列号
+  - 若 A 故意不进行第三次通讯，B 会一直发送最多 5 次，打满半连接队列浪费自身资源。这就是 DDOS 攻击中的 SYN Flood 攻击。
+  - 第三次握手就可以携带业务数据了
+
+断开连接时的四次挥手
+
 - 四次挥手
   - B 收到 A 的断开请求后响应一个确认报文；此时 A 已没有要发送的数据了；
-  - A 经过 2 MSL(maximum segment lifetime) 后才进入到 CLOSED 状态；
+  - A 经过 2MSL 后才进入到 CLOSED 状态；
     - 保证 A 发送的最后一个 ACK 报文能到达 B，否则 B 无法正常关闭
     - 保证 B 能来得及把所有数据发给 A
-  - B 端有保活机制，2h 未收到 A 数据后，会每隔 75s 发送最多 10 次检测报文后关闭连接
+  - B 端有保活机制，2h（内核参数默认值） 未收到 A 数据后，会每隔 75s 发送最多 10 次检测报文后关闭连接
+
+《UNIX 网络编程》 关于 2MSL 后进入 CLOSED状态的描述：
+
+> Since the duration of the TIME_WAIT state is twice the MSL, this allows MSL seconds for packet in one direction to be lost, and another MSL seconds for the reply to be lost. By enforcing this rule, we are guaranteed that when we successfully establish a TCP connecton, all old duplicates from previous incarnations of the connection have expired in the network.
+
+联系四次挥手过程，服务端大量 `time_wait` 状态的端口问题如何处理
+
+- server 端 socket 编程时设置 `SO_REUSEADDR` 实现重用端口
+- socket 编程时判断连接状态， read() 为 -1 的情况、try...catch 保证 close()
+- 进行内核调整，参考另一篇文章： [Linux 内核参数](/_posts/linux/2018-07-01-linux-kernel-param.md)
+
+简单整理如下：
+
+```shell
+net.ipv4.tcp_keepalive_time = 1200 
+#表示当keepalive起用的时候，TCP发送keepalive消息的频度。缺省是2小时，改为20分钟。
+
+net.ipv4.ip_local_port_range = 1024 65000 
+#表示用于向外连接的端口范围。缺省情况下很小：32768到61000，改为1024到65000。
+
+net.ipv4.tcp_max_syn_backlog = 8192 
+#表示SYN队列的长度，默认为1024，加大队列长度为8192，可以容纳更多等待连接的网络连接数。
+
+net.ipv4.tcp_max_tw_buckets = 5000 
+#表示系统同时保持TIME_WAIT套接字的最大数量，如果超过这个数字，TIME_WAIT套接字将立刻被清除并打印警告信息。
+#默认为180000，改为5000。对于Apache、Nginx等服务器，上几行的参数可以很好地减少TIME_WAIT套接字数量，但是对于 Squid，效果却不大。此项参数可以控制TIME_WAIT套接字的最大数量，避免Squid服务器被大量的TIME_WAIT套接字拖死。
+```
+
+关于 TCP 报文的粘包拆包
+
 - 粘包/拆包问题
   - 消息定长
   - 固定分隔符
