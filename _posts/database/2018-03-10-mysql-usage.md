@@ -10,7 +10,7 @@ keywords: database, mysql, MySQL
 
 ## 使用问题
 
-### `sql` 文件内使用双引号出现问题
+### sql脚本里有双引号
 
 比如使用 Navicat 导出的 sql 里有双引号，在导入其他库时出现问题。
 
@@ -22,7 +22,7 @@ SET SESSION SQL_MODE=ANSI_QUOTES;
 
 ### 无限级联查询
 
-MySQL8 之前：
+MySQL 8 之前：
 
 ```sql
 /*
@@ -46,7 +46,7 @@ WHERE
 AND LENGTH(@pv := concat(@pv, ',', id));
 ```
 
-MySQL8开始支持递归查询：
+MySQL8 开始支持递归查询：
 
 [MySQL Recursive CTE (Common Table Expressions)](https://www.geeksforgeeks.org/mysql-recursive-cte-common-table-expressions/)、[SQK Fiddle](http://sqlfiddle.com/#!9/d74210/1)、[How to create a MySQL hierarchical recursive query](https://stackoverflow.com/questions/20215744/how-to-create-a-mysql-hierarchical-recursive-query)、[A Definitive Guide To MySQL Recursive CTE](http://www.mysqltutorial.org/mysql-recursive-cte/)
 
