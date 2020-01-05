@@ -173,13 +173,13 @@ Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。
 
 参考 jdk1.8 源码，详解如下：
 
-#### `BLOCKED`
+- `BLOCKED`
 
 > Thread state for a thread blocked waiting for a monitor lock.
 >
 > A thread in the blocked state is waiting for a monitor lock to enter a synchronized block/method or reenter a synchronized block/method after calling `Object.wait`.
 
-#### `WAITING`
+- `WAITING`
 
 > Thread state for a waiting thread. A thread is in the waiting state due to calling one of the following methods:
 >
@@ -191,7 +191,7 @@ Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。
 >
 > For example, a thread that has called `Object.wait()` on an object is waiting for another thread to call `Object.notify()` or `Object.notifyAll()` on that object. A thread that has called  `Thread.join()` is waiting for a specified thread to terminate.
 
-#### `TIMED_WAITING`
+- `TIMED_WAITING`
 
 > Thread state for a waiting thread with a specified waiting time.
 >
@@ -203,7 +203,7 @@ Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。
 > - `LockSupport.parkNanos`
 > - `LockSupport.parkUntil`
 
-#### 状态转换总结
+- 状态转换总结
 
 图示如下:
 
@@ -334,13 +334,18 @@ synchronized(obj){
 
 ## `Threadlocal`
 
-jdk 文档中对 `ThreadLocal` 的描述：
+jdk 文档中对 `ThreadLocal` 的描述如下：
 
 > Each thread holds an implicit reference to its copy of a thread-local variable as long as the thread is alive and the ThreadLocal instance is accessible; after a thread goes away, all of its copies of thread-local instances are subject to garbage collection (unless other references to these copies exist).
 
-每个线程内部有一个 `ThreadLocalMap` 类型的成员变量，用于保存线程私有的 `ThreadLocal<T>` 对象，T 类实例对象值存储在 `Entry[]` 数组中，key 为 `ThreadLocal<T>` 对象，通过其成员变量与 `0x61c88647` 累加运算得出 `Entry[]` 数组的 index。需要说明的是，`Entry` 类是继承自 `WeakReference<ThreadLocal<?>>`，目的是为了优化系统 GC。也就是说 key 会被 gc，但值可能不会被 gc。
+每个线程内部有一个 `ThreadLocalMap` 类型的成员变量，用于保存线程私有的 `ThreadLocal<T>` 对象，T 类实例对象值存储在 `Entry[]` 数组中，key 为 `ThreadLocal<T>` 对象，通过其成员变量与 `0x61c88647` 累加运算得出 `Entry[]` 数组的 index。需要说明的是：
 
-> 和 `HashMap` 的最大的不同在于，ThreadLocalMap 结构非常简单，没有 next 引用，也就是说 ThreadLocalMap 中解决 Hash 冲突的方式并非链表的方式，而是采用**线性探测**的方式，所谓线性探测，就是根据初始 key 的 hashcode 值确定元素在 table 数组中的位置，如果发现这个位置上已经有其他 key 值的元素被占用，则利用**固定的算法**寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
+- `Entry` 类是继承自 `WeakReference<ThreadLocal<?>>`，目的是为了优化系统 GC。也就是说 key 会被 gc，但值可能不会被 gc。
+- key 是`ThreadLocal<T>` 对象，但取值时是根据 `threadLocalHashCode` 与数组长度进行 & 运算得出数组位置
+- `ThreadLocalMap` 内数组长度是 2 的 N 次幂
+  - 这与 fibonacci hashing（斐波那契散列法）以及黄金分割有关
+
+> 和 `HashMap` 的最大的不同在于，`ThreadLocalMap` 没有使用链表方式解决 Hash 冲突，而是采用**线性探测**（linear-probe）的方式，即根据初始 key 的 hashcode 值确定元素在 table 数组中的位置，如果发现这个位置上已经有其他 key 值的元素被占用，则利用**固定的算法**寻找一定步长的下个位置，依次判断，直至找到能够存放的位置。
 >
 > ThreadLocalMap 解决 Hash 冲突的方式就是简单的步长加 1 或减 1，寻找下一个相邻的位置。
 >
@@ -362,11 +367,24 @@ jdk 文档中对 `ThreadLocal` 的描述：
 >
 > 显然 ThreadLocalMap 采用线性探测的方式解决 Hash 冲突的效率很低，如果**有大量不同的 ThreadLocal 对象放入 map 中时更容易发送冲突，或者发生二次冲突**。
 >
-> 所以这里引出的良好建议是：每个线程只存一个变量，这样的话所有的线程存放到 map 中的 Key 都是相同的 ThreadLocal。如果一个线程要保存多个变量，就需要创建多个 ThreadLocal，多个 ThreadLocal 放入 Map 中就容易造成 Hash 冲突。
+> 所以这里引出的良好建议是：*每个线程只存一个变量*，这样的话所有的线程存放到 map 中的 Key 都是相同的 ThreadLocal。如果一个线程要保存多个变量，就需要创建多个 ThreadLocal，多个 ThreadLocal 放入 Map 中就容易造成 Hash 冲突。
 >
 > 由于 ThreadLocalMap 的 **key 是弱引用，而 value 是强引用**。这就导致了一个问题，ThreadLocal 在没有外部对象强引用时，发生 GC 时弱引用 Key 会被回收，而 Value 不会回收，如果创建 ThreadLocal 的线程一直持续运行，那么这个 Entry 对象中的 value 就有可能一直得不到回收，发生内存泄露。
 >
-> 既然 Key 是弱引用，那么我们要做的事，就是在调用 ThreadLocal 的 `get()`、`set()` 方法时完成后再调用 **`remove()`** 方法，将 Entry 节点和 Map 的引用关系移除，这样整个 Entry 对象在 GC Roots 分析后就变成不可达了，下次 GC 的时候就可以被回收。否则就有可能发生内存泄露。
+> 既然 Key 是弱引用，那么我们要做的事，就是在调用 ThreadLocal 的 `get()`、`set()` 方法时完成后再调用 `remove()` 方法，将 Entry 节点和 Map 的引用关系移除，这样整个 Entry 对象在 GC Roots 分析后就变成不可达了，下次 GC 的时候就可以被回收。否则就有可能发生内存泄露。
+
+实际推荐用法是定义为：
+
+```java
+private static final ThreadLocal<Integer> threadId =
+         new ThreadLocal<Integer>() {
+             @Override protected Integer initialValue() {
+                 return nextId.getAndIncrement();
+         }
+     };
+// 使用完毕后释放对象引用 help gc
+threadId.remove();
+```
 
 ### `ThreadlocalRandom`
 
