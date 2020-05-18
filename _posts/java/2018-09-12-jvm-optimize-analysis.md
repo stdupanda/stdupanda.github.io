@@ -37,6 +37,8 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-javaagent:<path>`||
 |`-X`|打印 `-X` 相关参数的帮助信息|
 |`-XX:ErrorFile=filename`|默认是 `./hs_err_pid%p.log`|
+|`-XX:+PrintFlagsInitial`|打印各个参数默认值|
+|`-XX:+PrintFlagsFinal`|打印出各个运行时生效的选项配置|
 
 - 某些 experimental 参数需要先解锁才可以配置
 
@@ -57,11 +59,10 @@ keywords: Java, java, jdk, openjdk, JVM
 |:---|:---|
 |`-XX:+DisableExplicitGC`|`System.gc()`|
 |`-Xnoclassgc`|不允许 gc|
-|`-XX:InitialHeapSize=6m`|建议和 `-Xmx80m`/`-XX:MaxHeapSize=80m` 设置相同大小|
+|`-XX:InitialHeapSize=6m`(`-Xms6m`)|initial size (in bytes) of the heap,建议和 `-Xmx80m`/`-XX:MaxHeapSize=80m` 设置相同大小|
+|`-XX:MaxHeapSize=80m`(`-Xmx80m`)| maximum size (in bytes) of the memory allocation pool，建议和 `-XX:InitialHeapSize` 设置相同大小|
 |`-Xss1m`| thread stack size (in bytes) 同 `-XX:ThreadStackSize=1m` 64 位 linux 默认是 1m|
 |`-Xmn6G`|initial and maximum size (in bytes) of the heap for the young generation。 建议是 between a half and a quarter of the overall heap size|
-|`-Xms6G`| initial size (in bytes) of the heap|
-|`-Xmx80m`| maximum size (in bytes) of the memory allocation pool 同 `-XX:MaxHeapSize=80m`，建议和 `-XX:InitialHeapSize` 设置相同大小|
 |`-XX:MaxDirectMemorySize=6m`| maximum total size (in bytes) of the New I/O (the java.nio package) direct-buffer allocations.|
 |`-XX:MaxMetaspaceSize=50m -XX:MetaspaceSize=50m`| Sets the maximum amount of native memory that can be allocated for class metadata. By default, the size is not limited. The amount of metadata for an application depends on the application itself, other running applications, and the amount of memory available on the system. 可以将初始值和最大值设置为相同大小减少动态分配时间 |
 |`-XX:MaxPermSize=size`|deprecated in JDK 8, and superseded by the -XX:MaxMetaspaceSize option.|
