@@ -72,6 +72,8 @@ keywords: Java, java, jdk, openjdk, JVM
 |参数|说明|
 |:---|:---|
 |`-XX:+PrintGCDetails`||
+|`-XX:+PrintHeapAtGC`|每次gc(yonggc,fullgc) 都会输出gc前后堆详情（Eden区域、from区、to区、old区、Metaspace区 、Class space等）|
+|`-verbose:gc`|每次gc(yonggc,fullgc) 输出前后结果信息|
 |`-Xloggc:/home/log/gc-%t.log`|将 GC 日志记录到指定文件中|
 |`-XX:+PrintGCDateStamps`|记录详细时间，如：`2014-02-28T23:58:42.314+0800`|
 |`-XX:+PrintGCTimeStamps`|记录时间戳|
