@@ -77,7 +77,8 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-Xloggc:/home/log/gc-%t.log`|将 GC 日志记录到指定文件中|
 |`-XX:+PrintGCDateStamps`|记录详细时间，如：`2014-02-28T23:58:42.314+0800`|
 |`-XX:+PrintGCTimeStamps`|记录时间戳|
-|`-XX:+PrintGCApplicationStoppedTime`||
+|`-XX:+PrintGCApplicationStoppedTime`|输出gc引起的停顿时间|
+|`-XX:+PrintReferenceGC`|打印强软虚引用清理结果|
 |`-XX:+UseGCLogFileRotation`|注意重启后日志文件的影响|
 |`-XX:NumberOfGCLogFiles=6`||
 |`-XX:GCLogFileSize=6M`||
