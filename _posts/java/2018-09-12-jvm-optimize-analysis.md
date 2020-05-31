@@ -3,20 +3,20 @@ layout: post
 title: jvm 问题分析和优化
 categories: Java
 description: jvm 问题分析和优化
-keywords: Java, java, jdk, openjdk, JVM
+keywords: Java, java, jdk, openjdk, JVM, gc
 ---
 
 整理常见 JVM 异常问题缘由、排查定位技巧、相关工具用法。
 
 置顶区：
 
-[1] Oracle 官方帮助文档入口：[Java Platform, Standard Edition Documentation](https://docs.oracle.com/en/java/javase/index.html)
+[1] Oracle 官方帮助文档入口：[Java Platform, Standard Edition Documentation](https://docs.oracle.com/en/java/javase/index.html)、官方问题排查手册[Troubleshooting Guide](https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/)
 
 [2] java 命令行参数（遇到奇怪的 `-XX` 时可以参考这里）： [java command line options](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html)
 
 [3] Oracle 官方文档： [JVM 优化 guide](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/toc.html)
 
-[4] G1 优化 guide： [点击打开默认是 G1 介绍部分](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/g1_gc.html#garbage_first_garbage_collection)
+[4] G1 优化 guide： [点击打开默认是 G1 介绍部分](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/g1_gc.html#garbage_first_garbage_collection)、G1 介绍[The Garbage-First Garbage Collector](https://www.oracle.com/technetwork/java/javase/tech/g1-intro-jsp-135488.html)
 
 [5] 为什么 heap 总有一部分内存“不被使用”： [HotSpot JVM throwing OOM even when there is memory available](https://blogs.oracle.com/poonam/hotspot-jvm-throwing-oom-even-when-there-is-memory-available-v2)
 
@@ -53,7 +53,7 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-XX:+TraceClassResolution`||
 |`-XX:+TraceClassUnloading`||
 
-- GC 和内存分配相关参数
+- 常用 G1 参数
 
 |参数|说明|
 |:---|:---|
@@ -79,6 +79,7 @@ keywords: Java, java, jdk, openjdk, JVM
 |`-XX:+PrintGCTimeStamps`|记录时间戳|
 |`-XX:+PrintGCApplicationStoppedTime`|输出gc引起的停顿时间|
 |`-XX:+PrintReferenceGC`|打印强软虚引用清理结果|
+|`-XX:+PrintTenuringDistribution`|打印分代情况|
 |`-XX:+UseGCLogFileRotation`|注意重启后日志文件的影响|
 |`-XX:NumberOfGCLogFiles=6`||
 |`-XX:GCLogFileSize=6M`||
@@ -109,18 +110,20 @@ GC 日志分析工具有：[GCeasy](https://gceasy.io/)、[GCViewer](https://git
 
 |Option and Default Value|Option|
 |:---|:---|
-|`-XX:G1HeapRegionSize=n`|Sets the size of a G1 region. The value will be a power of two and can range from 1 MB to 32 MB. The goal is to have around 2048 regions based on the minimum Java heap size.|
-|`-XX:MaxGCPauseMillis=200`|Sets a target value for desired maximum pause time. The default value is 200 milliseconds. The specified value does not adapt to your heap size.|
+|`-XX:G1HeapRegionSize=n`|Sets the size of a G1 region. The value will be a power of two and can range from 1 MB to 32 MB. The goal is to have around 2048 regions based on the minimum Java heap size 不超过 2048 个 region|
+|`-XX:MaxGCPauseMillis=200`|Sets a target value for desired maximum pause time. The default value is 200 milliseconds. 目标值，不保证达到|
 |`-XX:G1NewSizePercent=5`|Sets the percentage of the heap to use as the minimum for the young generation size. The default value is 5 percent of your Java heap. This is an experimental flag. See How to Unlock Experimental VM Flags for an example. This setting replaces the -XX:DefaultMinNewGenPercent setting.|
 |`-XX:G1MaxNewSizePercent=60`|Sets the percentage of the heap size to use as the maximum for young generation size. The default value is 60 percent of your Java heap. This is an experimental flag. See How to Unlock Experimental VM Flags for an example. This setting replaces the -XX:DefaultMaxNewGenPercent setting.|
 |`-XX:ParallelGCThreads=n`|Sets the value of the STW worker threads. Sets the value of n to the number of logical processors. The value of n is the same as the number of logical processors up to a value of 8. If there are more than eight logical processors, sets the value of n to approximately 5/8 of the logical processors. This works in most cases except for larger SPARC systems where the value of n can be approximately 5/16 of the logical processors.|
-`-XX:ConcGCThreads=n`|Sets the number of parallel marking threads. Sets n to approximately 1/4 of the number of parallel garbage collection threads (ParallelGCThreads).|
-`-XX:InitiatingHeapOccupancyPercent=45`|Sets the Java heap occupancy threshold that triggers a marking cycle. The default occupancy is 45 percent of the entire Java heap.|
-`-XX:G1MixedGCLiveThresholdPercent=85`|Sets the occupancy threshold for an old region to be included in a mixed garbage collection cycle. The default occupancy is 85 percent. This is an experimental flag. See How to Unlock Experimental VM Flags for an example. This setting replaces the -XX:G1OldCSetRegionLiveThresholdPercent setting.|
-`-XX:G1HeapWastePercent=5`|Sets the percentage of heap that you are willing to waste. The Java HotSpot VM does not initiate the mixed garbage collection cycle when the reclaimable percentage is less than the heap waste percentage. The default is 5 percent.|
-`-XX:G1MixedGCCountTarget=8`|Sets the target number of mixed garbage collections after a marking cycle to collect old regions with at most G1MixedGCLIveThresholdPercent live data. The default is 8 mixed garbage collections. The goal for mixed collections is to be within this target number.|
-`-XX:G1OldCSetRegionThresholdPercent=10`|Sets an upper limit on the number of old regions to be collected during a mixed garbage collection cycle. The default is 10 percent of the Java heap.|
-`-XX:G1ReservePercent=10`|Sets the percentage of reserve memory to keep free so as to reduce the risk of to-space overflows. The default is 10 percent. When you increase or decrease the percentage, make sure to adjust the total Java heap by the same amount.|
+|`-XX:ConcGCThreads=n`|Sets the number of parallel marking threads. Sets n to approximately 1/4 of the number of parallel garbage collection threads (ParallelGCThreads).|
+|`-XX:InitiatingHeapOccupancyPercent=45`|Sets the Java heap occupancy threshold that triggers a marking cycle. The default occupancy is 45 percent of the entire Java heap.总堆内存占用百分比达到此值后执行gc；0则一直循环gc，默认为45|
+|`-XX:G1MixedGCLiveThresholdPercent=85`|Sets the occupancy threshold for an old region to be included in a mixed garbage collection cycle. The default occupancy is 85 percent. This is an experimental flag. See How to Unlock Experimental VM Flags for an example. This setting replaces the -XX:G1OldCSetRegionLiveThresholdPercent setting.|
+|`-XX:G1HeapWastePercent=5`|Sets the percentage of heap that you are willing to waste. The Java HotSpot VM does not initiate the mixed garbage collection cycle when the reclaimable percentage is less than the heap waste percentage. The default is 5 percent.|
+|`-XX:G1MixedGCCountTarget=8`|Sets the target number of mixed garbage collections after a marking cycle to collect old regions with at most G1MixedGCLIveThresholdPercent live data. The default is 8 mixed garbage collections. The goal for mixed collections is to be within this target number.|
+|`-XX:G1OldCSetRegionThresholdPercent=10`|Sets an upper limit on the number of old regions to be collected during a mixed garbage collection cycle. The default is 10 percent of the Java heap.|
+|`-XX:G1ReservePercent=10`|Sets the percentage of reserve memory to keep free so as to reduce the risk of to-space overflows. The default is 10 percent. When you increase or decrease the percentage, make sure to adjust the total Java heap by the same amount.|
+|`-XX:+ParallelRefProcEnabled`|并行处理Reference，加快处理速度，缩短耗时|
+|`-XX:GCPauseIntervalMillis=200`|target for collection time space|
 
 ### Recommendations
 
@@ -145,6 +148,8 @@ Experiment with the following options when you tune mixed garbage collections. S
 > `-XX:G1MixedGCLiveThresholdPercent` and `-XX:G1HeapWastePercent`: Use to change the mixed garbage collection decisions.
 >
 > `-XX:G1MixedGCCountTarget` and `-XX:G1OldCSetRegionThresholdPercent`: Use to adjust the CSet for old regions.
+
+当要求为 low latency 的时候，尝试仅赋值 `-XX:MaxGCPauseMillis=3` 和 `-XX:GCPauseIntervalMillis=1000`，保证 `Xms=Xmx`，观察效果。
 
 ## JVM 问题排查整理
 
