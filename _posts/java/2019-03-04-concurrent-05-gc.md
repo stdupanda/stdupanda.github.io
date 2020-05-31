@@ -262,8 +262,8 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时�
 G1（Garbage-First）收集器具备如下特点：
 
 - 并行与并发
-
-G1 能充分使用多个CPU（CPU或者CPU核心）来缩短 Stop-The-World 停顿的时间，甚至能通过并发的方式避免某些 GC 造成的业务线程停顿。
+  - 充分利用多 CPU 来缩短 Stop-The-World 停顿的时间
+  - 甚至能通过并发的方式避免某些 GC 造成的业务线程停顿
 
 - 分代收集
   - 仍采用分代概念
@@ -277,18 +277,28 @@ G1 能充分使用多个CPU（CPU或者CPU核心）来缩短 Stop-The-World 停�
 
 允许指定在 M 毫秒内 GC 最多消耗 N 毫秒。
 
-G1 将整个Java堆等分为多个独立区域（Region），新生代和老年代不再是物理隔离的，是一部分 Region（不需要连续）的集合。
+G1 将整个堆内存等分为多个独立区域（Region），新生代和老年代不再是物理隔离的，是一部分 Region（不需要连续）的集合。
 
 G1 收集器之所以能建立可预测的停顿时间模型，是因为它可以有计划地避免在整个 Java 堆中进行全区域的垃圾收集。
 
 G1 跟踪各个 Region 里面的垃圾堆积的价值大小（回收所获得的空间大小以及回收所需时间的经验值），并在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大的 Region（这也就是 Garbage-First 名称的来由）。这种使用 Region 划分内存空间以及有优先级的区域回收方式，保证了 G1 收集器在有限的时间内可以获取尽可能高的收集效率。
 
+Young 区的回收仍旧采用 STW 的方式进行，通过将对象从一个区域复制到另一个区域实现垃圾回收，避免了内存碎片；
+
+若一个对象空间超过了 Region 的一半则会被分配到老年代；若其为短期存在则将其存放在 Humongous 区，此过程可能会启动 FullGC 来分配连续的 Humongous 区。
+
 - 提供了 3 种模式
-  - young gc ：新生代空间不足时
-  - mixed gc ：对象晋升到老年代速度太快时（回收整个新生代以及一部分老年代）
+  - young gc
+    - Eden 空间不足时，将 Eden 内数据移动到 Survivor 或晋升到 Old
+    - 会 STW
+  - mixed gc
+    - 对象晋升到老年代速度太快时（回收整个新生代以及一部分老年代）
+    - 三色标记法
   - full gc ： 老年代空间不足时（是一种 serial gc）
 
-也可以看这里：[Getting Started with the G1 Garbage Collector](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/G1GettingStarted/index.html)
+建议看这里：[Getting Started with the G1 Garbage Collector](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/G1GettingStarted/index.html)
+
+
 
 ### ZGC 收集器
 
