@@ -233,7 +233,7 @@ SWAP 和 GC 同时发生会导致 GC 时间很长，JVM 严重卡顿，极端的
 
 此类问题可尝试用减小堆大小或者增加物理内存等方式解决；部署 Java 服务的 Linux 要避免使用 SWAP；
 
-## Lage Page
+## Large Page
 
 Also known as huge pages, large pages are memory pages that are significantly larger than the standard memory page size (which varies depending on the processor and operating system). Large pages optimize processor Translation-Lookaside Buffers.
 
