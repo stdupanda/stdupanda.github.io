@@ -260,3 +260,35 @@ public static void lock(long time, TimeUnit timeUnit) throws Exception {
 add key flags exptime bytes [noreply]
 value
 ```
+
+## 测试实例
+
+```java
+// 模拟初始化 Concurrency 个线程，并同时执行相同的 task
+public void invokeAllTask(ConcurrencyRequest request, Runnable task) {
+    final CountDownLatch startCountDownLatch = new CountDownLatch(1);
+    final CountDownLatch endCountDownLatch = new CountDownLatch(request.getConcurrency());
+    for (int i = 0; i < request.getConcurrency(); i++) {
+        Thread t = new Thread(() -> {
+            try {
+                startCountDownLatch.await();
+                try {
+                    task.run();
+                } finally {
+                    endCountDownLatch.countDown();
+                }
+            } catch (Exception ex) {
+                log.error("异常", ex);
+            }
+        });
+        t.start();
+    }
+    startCountDownLatch.countDown();
+    try {
+        endCountDownLatch.await();
+    } catch (InterruptedException ex) {
+        log.error("线程异常中断", ex);
+    }
+}
+
+```
