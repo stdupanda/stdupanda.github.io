@@ -8,19 +8,19 @@ keywords: web, tcp, ip, tcpip, http, HTTP
 
 HTTP 是应用层协议，在 TCP/IP 协议收到数据后需要按照 HTTP 协议进行解析。此文整理 HTTP 协议报文结构等。
 
-# 报文分类
+## 报文分类
 
 HTTP 报文分为请求报文 request message 和 响应报文 response message。
 
-# 报文结构
+## 报文结构
 
 请求报文和响应报文都包括三部分： `首行、头部、主体`
 
-## 首行
+### 首行
 
 请求报文和响应报文的首行差异如下：
 
-### 请求报文首行
+#### 请求报文首行
 
 格式：`method/URL/HTTP version`
 
@@ -30,7 +30,7 @@ HTTP 报文分为请求报文 request message 和 响应报文 response message�
 
 请求报文首行举例：`GET/HTTP/1.1`
 
-### 响应报文首行
+#### 响应报文首行
 
 格式：`HTTP version/status code/info`
 
@@ -38,7 +38,7 @@ HTTP 报文分为请求报文 request message 和 响应报文 response message�
 - `status code` 响应状态码
 - `info` 简短原因，可无
 
-#### 状态码分类
+##### 状态码分类
 
 - `1xx` 信息性
 - `2xx` 成功，如 `200` 表示成功
@@ -92,11 +92,11 @@ HTTP 报文分为请求报文 request message 和 响应报文 response message�
 
 响应报文首行举例：`HTTP/1.1 200 OK`
 
-## 头部 headers
+### 头部 headers
 
 保存一些键值对格式的属性，用冒号分隔，如：
 
-```
+```text
 Host: www.baidu.com
 Connection: keep-alive
 Pragma: no-cache
@@ -109,7 +109,7 @@ Accept-Language: zh-CN,zh;q=0.8
 Cookie: BAIDUID=B2B5102089D00E736D0363BA9CF5870C:FG=1; BIDUPSID=B2B5102089D00E736D0363BA9CF5870C; PSTM=1486961211; Hm_lvt_12423ecbc0e2ca965d84259063d35238=1492074218; BD_UPN=12314353; MCITY=-131%3A
 ```
 
-### `Content-Type`
+#### `Content-Type`
 
 `Content-Type` 表示后面的文档属于什么MIME类型。格式为： `Content-Type: [type]/[subtype]`。
 
@@ -128,6 +128,6 @@ response.setHeader("Content-Disposition", "attachment;filename="+filename);//设
 response.setHeader("Content-Length", fileLength);//设置下载文件大小
 ```
 
-## 主体 body
+### 主体 body
 
 请求报文的主体主要保存 `POST`类型的参数，响应报文的主体主要保存响应内容数据。
