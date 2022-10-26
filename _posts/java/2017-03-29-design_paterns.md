@@ -25,4 +25,32 @@ public class Tool {
         return instance;
     }
 }
+
+public class ToolFactory {
+    public static class Tool {
+        void fun() {
+        }
+    }
+
+    public static Tool getTool() {
+        return InnerToolFactory.toolIns;
+    }
+
+    // 利用内部类延迟加载
+    private static class InnerToolFactory {
+        public static final Tool toolIns;
+
+        static {
+            System.out.println("初始化Tool实例");
+            toolIns = new Tool();
+        }
+    }
+
+    @Test
+    public void test() {
+        System.out.println("开始");
+        Tool tool = ToolFactory.getTool();
+        System.out.println(tool);
+    }
+}
 ```
