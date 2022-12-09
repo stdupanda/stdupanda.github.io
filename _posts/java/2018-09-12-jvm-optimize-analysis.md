@@ -153,6 +153,19 @@ Experiment with the following options when you tune mixed garbage collections. S
 
 ## JVM 问题排查整理
 
+### CPU利用率高
+
+```bash
+# 1. 输入命令后按 P 按照进程CPU使用率排序，找到进程对应的 pid，如 666
+top -c
+# 2. 继续按 P 找到占用CPU最多的线程 pid 如 10804
+top -Hp 666
+# 3. 将线程 pid 转为 16 进制数字
+printf "%x\n" 10804
+# 4. 查看 jvm 堆栈，找到对应问题线程，及其正在执行的代码
+jstack 666 | grep '0x2a34' -C5 --color
+```
+
 ### G1 full gc 问题
 
 #### GC concurrent-mark-abort
@@ -334,7 +347,7 @@ However, large pages page memory can negatively affect system performance. For e
 
 详情参看 [https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jinfo.html](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jinfo.html)
 
-```
+```bash
 jinfo <pid>                   # Prints both command-line flags and system property name-value pairs.
 jinfo <pid> -sysprops         # Prints Java system properties as name-value pairs.
 jinfo <pid> -flag name        # Prints the name and value of the specified command-line flag.
@@ -346,7 +359,7 @@ jinfo <pid> -flag name=value  # Sets the specified command-line flag to the spec
 
 详情参看 [https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jmap.html](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jmap.html)
 
-```
+```bash
 # Prints a heap summary of the garbage collection used, the head configuration, and generation-wise heap usage.
 # In addition, the number and size of interned Strings are printed.
 jmap -heap <pid>
@@ -357,6 +370,6 @@ jmap -F -dump:[live,] format=b,file=filename <pid>
 
 详情参看 [https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstack.html](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstack.html)
 
-```
+```bash
 jstack -F -l <pid> > t.log
 ```
