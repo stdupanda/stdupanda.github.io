@@ -410,6 +410,10 @@ public synchronized Object get(long mills) throws InterruptedException {
 }
 ```
 
+### `FastThreadLocal`
+
+使用这个的原因
+
 ### 线程池
 
 请参考开源 jdbc 连接池的实现代码分析。
