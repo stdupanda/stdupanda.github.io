@@ -33,3 +33,17 @@ tomcat使用如下方式进行启动jpda：
 ### eclipse
 
 `Debug Configurations,Remote Java Application,Project,Host,Port,Source`，在项目源码中加上断点，访问断点所在代码即可进入断点 debug 了。
+
+### 其他方式
+
+如果使用 `./catalina.sh jpda start` 方式启动不生效，可以尝试：在tomcat启动参数JAVA_OPTS里增加：
+
+```shell
+-agentlib:jdwp=transport=dt_socket,address=8088,suspend=n,server=y
+```
+
+然后在 idea 中新建 debug 配置，指定 host 和端口号，然后启动即可。
+
+如果端口连接失败且确认网络，尝试修改为 `address=*:8088` 后重试。
+
+> Before Java 5.0, use -Xdebug and -Xrunjdwp arguments. These options will still work in later versions, but it will run in interpreted mode instead of JIT, which will be slower.
