@@ -10,6 +10,8 @@ keywords: Java, java, jdk, openjdk, JVM, gc
 
 置顶区：
 
+[0] gceasy 出品的 G1 调优手册：[Simple & effective Java G1 GC tuning tips](https://blog.gceasy.io/2020/06/02/simple-effective-g1-gc-tuning-tips/)
+
 [1] Oracle 官方帮助文档入口：[Java Platform, Standard Edition Documentation](https://docs.oracle.com/en/java/javase/index.html)、官方问题排查手册[Troubleshooting Guide](https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/)
 
 [2] java 命令行参数（遇到奇怪的 `-XX` 时可以参考这里）： [java command line options](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html)
