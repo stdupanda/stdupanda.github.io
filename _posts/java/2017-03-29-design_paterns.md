@@ -8,6 +8,8 @@ keywords: Java, Design Patterns, 设计模式
 
 ## 单例模式 singleton
 
+https://mp.weixin.qq.com/s/9KV5CRyiLIn957ROr_KAZQ
+
 ```java
 public class Tool {
     private volatile static Tool instance;

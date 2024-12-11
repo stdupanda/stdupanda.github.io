@@ -375,3 +375,16 @@ jmap -F -dump:[live,] format=b,file=filename <pid>
 ```bash
 jstack -F -l <pid> > t.log
 ```
+### MAT
+
+Memory Analyzer Tool 是基于 eclipse 的一款强大的 java 内存分析工具，可以检测内存泄漏，分析 JVM 的堆转储文件 (.hprof) 。
+
+#### 工具用语
+
+outgoing references : 引用的对象
+
+incoming references：被引用的对象
+
+shallow heap: 浅堆，代表自身直接占用的内存
+
+retained heap: 深堆，代表自身向下引用链上的每个对象占用内存之和（包含自身占用内存）
