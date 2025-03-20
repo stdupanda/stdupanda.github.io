@@ -57,7 +57,12 @@ net.netfilter.nf_conntrack_max = 655350
 net.netfilter.nf_conntrack_tcp_timeout_established = 1200
 sysctl -p # 使配置生效
 ```
+### TCP 连接数超多
 
+```shell
+# 统计各个状态的数量
+netstat -na | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+```
 ### Time wait bucket table overflow 报错
 
 **问题**：Linux 实例 `/var/log/message` 日志全是类似 `kernel: TCP: time wait bucket table overflow` 的报错信息，提示 `time wait bucket table` 溢出，如下：
@@ -80,10 +85,14 @@ Feb 18 12:28:59 i-*** kernel: printk: 319 messages suppressed.
 **解决**：执行以下命令
 
 ```shell
-netstat -anp |grep tcp |wc -l # 统计 TCP 连接数。
+# 统计 TCP 连接数。
+netstat -anp |grep tcp |wc -l
+
 vi /etc/sysctl.conf
 net.ipv4.tcp_max_tw_buckets=5000
-# sysctl -p #使配置生效。
+
+# 使配置生效
+sysctl -p
 ```
 
 ### 大量 FIN_WAIT2 状态的 TCP 连接
